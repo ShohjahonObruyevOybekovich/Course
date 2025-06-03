@@ -1,0 +1,14 @@
+1. start --- user
+2. user data --- user
+3. course informs --- user
+4. payment processing --- user ---> admins
+5. lessons data for courses --- user ----> admins
+6. every days notifications and video lessons --- user ---> sender system celery
+7. user learning stats --- user
+
+1. user --- admin
+2. users payment information system checking --- admin
+3. users learning checking --- admin
+4. users learning dashboards --- admin mini app
+5. integration or parsing data from web --- user and admin
+
