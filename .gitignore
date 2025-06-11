@@ -182,7 +182,6 @@ celerybeat-schedule-wal
 locales
 utils
 /data/
-tg_bot
 
 
 docker-compose.yaml
