@@ -61,11 +61,8 @@ def my_course_navigation_buttons(index: int, total: int, course_id: int):
 
     status_button = InlineKeyboardButton(text=status_text, callback_data=f"my_payment_{course_id}")
 
-    nav_row = []
-    if index > 0:
-        nav_row.append(left)
-    if index < total - 1:
-        nav_row.append(right)
+    # Always show both navigation buttons (like course_navigation_buttons)
+    nav_row = [left, right]
 
     return InlineKeyboardMarkup(inline_keyboard=[
         nav_row,

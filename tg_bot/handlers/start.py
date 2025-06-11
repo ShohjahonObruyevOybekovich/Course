@@ -3,7 +3,7 @@ from datetime import datetime
 from aiogram import Bot, F
 from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
-from aiogram.types import Message, CallbackQuery, FSInputFile
+from aiogram.types import Message, CallbackQuery, FSInputFile, InputMediaPhoto
 from decouple import config
 from icecream import ic
 
@@ -20,6 +20,8 @@ from transaction.models import Transaction
 
 bot = Bot(token=TOKEN)
 
+card_number = config("CARD_NUMBER")
+card_name = config("CARD_NAME")
 
 # /start handler
 @dp.message(F.text == "/start")
@@ -82,6 +84,7 @@ async def handle_phone_number(message: Message, state: FSMContext) -> None:
                          )
     await state.clear()
 
+
 @dp.message(lambda message : message.text=="📝 Kurslar")
 async def get_courses(message: Message, state: FSMContext) -> None:
     courses = Course.objects.all()
@@ -94,7 +97,7 @@ async def get_courses(message: Message, state: FSMContext) -> None:
     await state.set_state(User.browsing_courses)
 
 
-async def send_course(chat_id: int, index: int):
+async def send_course(chat_id: int, index: int, message_to_edit=None):
     courses = list(Course.objects.all())
     course = courses[index]
 
@@ -110,20 +113,86 @@ async def send_course(chat_id: int, index: int):
         try:
             photo_path = course.photo.file.path
             photo = FSInputFile(photo_path)
-            await bot.send_photo(chat_id, photo, caption=caption, reply_markup=keyboard, parse_mode="HTML")
+
+            if message_to_edit:
+                # Try to edit existing message
+                try:
+                    if message_to_edit.photo:
+                        # Edit photo message
+                        await bot.edit_message_media(
+                            chat_id=chat_id,
+                            message_id=message_to_edit.message_id,
+                            media=InputMediaPhoto(media=photo, caption=caption, parse_mode="HTML"),
+                            reply_markup=keyboard
+                        )
+                    else:
+                        # Delete text message and send photo
+                        await message_to_edit.delete()
+                        await bot.send_photo(chat_id, photo, caption=caption, reply_markup=keyboard, parse_mode="HTML")
+                except Exception as e:
+                    # If editing fails, delete and send new
+                    await message_to_edit.delete()
+                    await bot.send_photo(chat_id, photo, caption=caption, reply_markup=keyboard, parse_mode="HTML")
+            else:
+                # Send new photo message
+                await bot.send_photo(chat_id, photo, caption=caption, reply_markup=keyboard, parse_mode="HTML")
+
         except Exception as e:
-            await bot.send_message(chat_id, f"{caption}\n\n(Rasmni yuklab bo‘lmadi)", reply_markup=keyboard, parse_mode="HTML")
+            # Handle photo loading error
+            if message_to_edit:
+                try:
+                    if message_to_edit.photo:
+                        # Delete photo message and send text
+                        await message_to_edit.delete()
+                        await bot.send_message(chat_id, f"{caption}\n\n(Rasmni yuklab bo'lmadi)", reply_markup=keyboard,
+                                               parse_mode="HTML")
+                    else:
+                        # Edit text message
+                        await bot.edit_message_text(
+                            chat_id=chat_id,
+                            message_id=message_to_edit.message_id,
+                            text=f"{caption}\n\n(Rasmni yuklab bo'lmadi)",
+                            reply_markup=keyboard,
+                            parse_mode="HTML"
+                        )
+                except Exception as edit_error:
+                    await message_to_edit.delete()
+                    await bot.send_message(chat_id, f"{caption}\n\n(Rasmni yuklab bo'lmadi)", reply_markup=keyboard,
+                                           parse_mode="HTML")
+            else:
+                await bot.send_message(chat_id, f"{caption}\n\n(Rasmni yuklab bo'lmadi)", reply_markup=keyboard,
+                                       parse_mode="HTML")
     else:
-        await bot.send_message(chat_id, caption, reply_markup=keyboard, parse_mode="HTML")
+        # No photo
+        if message_to_edit:
+            try:
+                if message_to_edit.photo:
+                    # Delete photo message and send text
+                    await message_to_edit.delete()
+                    await bot.send_message(chat_id, caption, reply_markup=keyboard, parse_mode="HTML")
+                else:
+                    # Edit text message
+                    await bot.edit_message_text(
+                        chat_id=chat_id,
+                        message_id=message_to_edit.message_id,
+                        text=caption,
+                        reply_markup=keyboard,
+                        parse_mode="HTML"
+                    )
+            except Exception as e:
+                await message_to_edit.delete()
+                await bot.send_message(chat_id, caption, reply_markup=keyboard, parse_mode="HTML")
+        else:
+            await bot.send_message(chat_id, caption, reply_markup=keyboard, parse_mode="HTML")
 
-card_number = config("CARD_NUMBER")
-card_name = config("CARD_NAME")
 
-@dp.callback_query(lambda c: c.data.startswith(("left_", "right_", "back")))
+@dp.callback_query(lambda c: c.data.startswith(("left_", "right_","payment_", "back")))
 async def handle_course_navigation(call: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     index = data.get("course_index", 0)
     total = Course.objects.count()
+
+    ic(call.data)
 
     if call.data.startswith("left_"):
         if index > 0:
@@ -146,6 +215,32 @@ async def handle_course_navigation(call: CallbackQuery, state: FSMContext):
         await state.update_data(course=course_id)
 
         course = Course.objects.filter(id=course_id).first()
+
+        check =  StudentCourse.objects.filter(course__id=course_id,user__chat_id=call.from_user.id).first()
+
+        ic("payment -------")
+        if check:
+            transaction = Transaction.objects.filter(
+                user__chat_id=call.from_user.id,
+                course=course
+            ).first()
+
+            # Properly handle None transaction
+            if transaction:
+                status = "Tasdiqlangan" if transaction.status == "Accepted" else "Kutilmoqda" if transaction.status == "Pending" else "Rad etilgan"
+            else:
+                status = "Ma'lumot topilmadi"
+
+            await call.message.delete()
+            await call.message.answer(
+                f"<b>{course.name}</b> uchun siz oldin to'lov checki yuborgansiz va hozirda holati <b>{status}</b>.",
+                parse_mode="HTML",
+                reply_markup=user_menu()
+            )
+            await state.clear()
+            return  # Important: return here to prevent further execution
+
+
         if course:
             await call.message.answer(
                 f"💵 Siz {course.name} kursini tanladingiz.\n\n"
@@ -169,7 +264,6 @@ async def handle_course_navigation(call: CallbackQuery, state: FSMContext):
         await state.clear()
 
 
-from datetime import datetime
 
 @dp.message(StateFilter(User.payment))
 async def handle_payment(message: Message, state: FSMContext):
@@ -263,23 +357,22 @@ async def handle_payment(message: Message, state: FSMContext):
     await state.clear()
 
 
-
-@dp.message(lambda message: message.text =="📝 Mening kurslarim")
-async def my_courses(message: Message,state: FSMContext):
-    courses = StudentCourse.objects.filter(user__chat_id=message.from_user.id,status="Inactive")
+@dp.message(lambda message: message.text == "📝 Mening kurslarim")
+async def my_courses(message: Message, state: FSMContext):
+    courses = StudentCourse.objects.filter(user__chat_id=message.from_user.id, status="Inactive")
     if not courses.exists():
         await message.answer("❗️ Kurslar mavjud emas.")
         return
 
-    await state.update_data(course_index=0)
-    await send_course(message.chat.id, 0)
+    await state.update_data(course_index1=0)  # Use course_index1 for my courses
+    await send_my_course(message.chat.id, 0)
     await state.set_state(User.browsing_my_courses)
 
 
-async def send_my_course_from_call(call: CallbackQuery, index: int):
-    chat_id = call.message.chat.id
+async def send_my_course(chat_id: int, index: int, message_to_edit=None):
     courses = list(StudentCourse.objects.filter(user__chat_id=chat_id, status="Inactive"))
-    course = courses[index]
+    student_course = courses[index]
+    course = student_course.course
 
     caption = (
         f"<b>{course.name}</b>\n\n"
@@ -289,42 +382,126 @@ async def send_my_course_from_call(call: CallbackQuery, index: int):
 
     keyboard = my_course_navigation_buttons(index, len(courses), course.id)
 
-    try:
-        if course.photo and course.photo.file:
+    if course.photo and course.photo.file:
+        try:
             photo_path = course.photo.file.path
             photo = FSInputFile(photo_path)
-            await bot.send_photo(chat_id, photo, caption=caption, reply_markup=keyboard, parse_mode="HTML")
+
+            if message_to_edit:
+                try:
+                    if message_to_edit.photo:
+                        # Edit photo message
+                        await bot.edit_message_media(
+                            chat_id=chat_id,
+                            message_id=message_to_edit.message_id,
+                            media=InputMediaPhoto(media=photo, caption=caption, parse_mode="HTML"),
+                            reply_markup=keyboard
+                        )
+                    else:
+                        # Delete text message and send photo
+                        await message_to_edit.delete()
+                        await bot.send_photo(chat_id, photo, caption=caption, reply_markup=keyboard, parse_mode="HTML")
+                except Exception as e:
+                    await message_to_edit.delete()
+                    await bot.send_photo(chat_id, photo, caption=caption, reply_markup=keyboard, parse_mode="HTML")
+            else:
+                await bot.send_photo(chat_id, photo, caption=caption, reply_markup=keyboard, parse_mode="HTML")
+
+        except Exception as e:
+            if message_to_edit:
+                try:
+                    if message_to_edit.photo:
+                        await message_to_edit.delete()
+                        await bot.send_message(chat_id, f"{caption}\n\n(Rasmni yuklab bo'lmadi)", reply_markup=keyboard,
+                                               parse_mode="HTML")
+                    else:
+                        await bot.edit_message_text(
+                            chat_id=chat_id,
+                            message_id=message_to_edit.message_id,
+                            text=f"{caption}\n\n(Rasmni yuklab bo'lmadi)",
+                            reply_markup=keyboard,
+                            parse_mode="HTML"
+                        )
+                except Exception as edit_error:
+                    await message_to_edit.delete()
+                    await bot.send_message(chat_id, f"{caption}\n\n(Rasmni yuklab bo'lmadi)", reply_markup=keyboard,
+                                           parse_mode="HTML")
+            else:
+                await bot.send_message(chat_id, f"{caption}\n\n(Rasmni yuklab bo'lmadi)", reply_markup=keyboard,
+                                       parse_mode="HTML")
+    else:
+        if message_to_edit:
+            try:
+                if message_to_edit.photo:
+                    await message_to_edit.delete()
+                    await bot.send_message(chat_id, caption, reply_markup=keyboard, parse_mode="HTML")
+                else:
+                    await bot.edit_message_text(
+                        chat_id=chat_id,
+                        message_id=message_to_edit.message_id,
+                        text=caption,
+                        reply_markup=keyboard,
+                        parse_mode="HTML"
+                    )
+            except Exception as e:
+                await message_to_edit.delete()
+                await bot.send_message(chat_id, caption, reply_markup=keyboard, parse_mode="HTML")
         else:
-            await call.message.answer(caption, reply_markup=keyboard, parse_mode="HTML")
-    except Exception as e:
-        await call.message.answer(f"{caption}\n\n(Rasmni yuklab bo‘lmadi)", reply_markup=keyboard, parse_mode="HTML")
+            await bot.send_message(chat_id, caption, reply_markup=keyboard, parse_mode="HTML")
 
 
 @dp.callback_query(lambda c: c.data.startswith(("my_left_", "my_right_", "my_payment_", "my_back")))
-async def handle_course_navigation(call: CallbackQuery, state: FSMContext):
+async def handle_my_course_navigation(call: CallbackQuery, state: FSMContext):
     data = await state.get_data()
-    index = data.get("course_index", 0)
-    chat_id = call.message.chat.id
+    index = data.get("course_index1", 0)  # Use course_index1 for my courses
+    chat_id = call.from_user.id  # Use call.from_user.id instead of call.message.chat.id
     courses = list(StudentCourse.objects.filter(user__chat_id=chat_id, status="Inactive"))
     total = len(courses)
 
     if call.data.startswith("my_left_"):
-        if index > 0:
-            index -= 1
-            await state.update_data(course_index=index)
-            await send_my_course_from_call(call, index)
+        new_index = index - 1
+        if new_index < 0:
+            await call.answer("Kurs topilmadi", show_alert=True)
+            return
+
+        await state.update_data(course_index1=new_index)
+        await call.message.delete()
+        await send_my_course(chat_id, new_index)
 
     elif call.data.startswith("my_right_"):
-        if index < total - 1:
-            index += 1
-            await state.update_data(course_index=index)
-            await send_my_course_from_call(call, index)
+        new_index = index + 1
+        if new_index >= total:
+            await call.answer("Kurs topilmadi", show_alert=True)
+            return
+
+        await state.update_data(course_index1=new_index)
+        await call.message.delete()
+        await send_my_course(chat_id, new_index)
+
+    elif call.data.startswith("my_payment_"):
+        # Handle payment status display
+        course_id = call.data.split("_")[2]
+        course = Course.objects.filter(id=course_id).first()
+        transaction = Transaction.objects.filter(
+            user__chat_id=chat_id,
+            course_id=course_id
+        ).first()
+
+        if transaction:
+            status = (
+                "✅ Tasdiqlangan" if transaction.status == "Accepted"
+                else "⏳ Tasdiqlanishi kutilmoqda" if transaction.status == "Pending"
+                else "❌ Bekor qilingan"
+            )
+        else:
+            status = "Holat mavjud emas"
+
+        await call.answer(f"To'lov holati: {status}", show_alert=True)
 
     elif call.data == "my_back":
         await call.message.edit_reply_markup(reply_markup=None)
         await call.message.answer("🔙 Asosiy menyuga qaytdingiz.", reply_markup=user_menu())
         await state.clear()
-
 
 
 @dp.message(F.text == "👨‍🏫 Adminlar bilan aloqa")
