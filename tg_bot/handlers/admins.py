@@ -119,6 +119,7 @@ async def handle_admin_decision(callback: CallbackQuery):
 
         course = StudentCourse.objects.filter(user=user,status="Inactive").first()
         course.status = "Active"
+        course.save()
 
         # Notify user
         await bot.send_message(

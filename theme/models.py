@@ -1,5 +1,6 @@
 from django.db import models
 
+from account.models import CustomUser
 from upload.models import File
 from course.models import Course
 from command.models import BaseModel
@@ -17,3 +18,20 @@ class Theme(BaseModel):
 
     def __str__(self):
         return self.name
+
+
+class ThemeAttendance(BaseModel):
+    user : "CustomUser" = models.ForeignKey("account.CustomUser", on_delete=models.SET_NULL,
+                                            null=True, blank=True,related_name="themes_attendance")
+    theme : "Theme" = models.ForeignKey("theme.Theme", on_delete=models.SET_NULL,
+                                        null=True, blank=True,related_name="themes_attendance_themes")
+
+    is_attendance = models.BooleanField(default=False)
+
+    is_complete_test = models.BooleanField(default=False)
+
+    ball = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.user.full_name}  {self.ball}"
+

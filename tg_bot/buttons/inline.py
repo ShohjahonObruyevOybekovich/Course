@@ -1,6 +1,8 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
 from decouple import config
 
+from studentcourse.models import StudentCourse
+from theme.models import Theme, ThemeAttendance
 from transaction.models import Transaction
 
 
@@ -45,12 +47,13 @@ def admin_accept(chat_id):
 
 
 
-def my_course_navigation_buttons(index: int, total: int, course_id: int):
+def my_course_navigation_buttons(index: int, total: int, course_id: int, user):
     left = InlineKeyboardButton(text="⬅️", callback_data=f"my_left_{index}")
     right = InlineKeyboardButton(text="➡️", callback_data=f"my_right_{index}")
     back = InlineKeyboardButton(text="🔙 Ortga", callback_data="my_back")
 
-    transaction = Transaction.objects.filter(course_id=course_id).first()
+    # Payment status check
+    transaction = Transaction.objects.filter(course_id=course_id, user=user).first()
     status_text = "Holat mavjud emas"
     if transaction:
         status_text = (
@@ -61,11 +64,56 @@ def my_course_navigation_buttons(index: int, total: int, course_id: int):
 
     status_button = InlineKeyboardButton(text=status_text, callback_data=f"my_payment_{course_id}")
 
-    # Always show both navigation buttons (like course_navigation_buttons)
-    nav_row = [left, right]
+    # Check if the user has active course
+    start_lesson_button = None
+    student_course = StudentCourse.objects.filter(course_id=course_id, user=user, status="Active").first()
+    if student_course:
+        start_lesson_button = InlineKeyboardButton(text="📘 Darsni boshlash", callback_data=f"start_lesson_{course_id}")
 
-    return InlineKeyboardMarkup(inline_keyboard=[
-        nav_row,
+    # Build keyboard layout
+    keyboard = [
+        [left, right],
         [status_button],
-        [back],
-    ])
+    ]
+
+    if start_lesson_button:
+        keyboard.append([start_lesson_button])
+
+    keyboard.append([back])
+
+    return InlineKeyboardMarkup(inline_keyboard=keyboard)
+
+
+def themes_attendance(course_id, user):
+    themes = Theme.objects.filter(course__id=course_id).all()
+    keyboard = []
+
+    row = []
+    for i, theme in enumerate(themes, start=1):
+        # Check if user attended the theme
+        attendance = ThemeAttendance.objects.filter(user=user, theme=theme, is_attendance=True).first()
+        check_icon = " ✅" if attendance else ""
+
+        button = InlineKeyboardButton(
+            text=f"{i}-dars{check_icon}",
+            callback_data=f"my_left_{theme.id}"
+        )
+        row.append(button)
+
+        # Add row when it reaches 6 buttons
+        if len(row) == 6:
+            keyboard.append(row)
+            row = []
+
+    # Add the last row if not empty
+    if row:
+        keyboard.append(row)
+
+    return InlineKeyboardMarkup(keyboard)
+
+
+def get_theme_buttons(theme_id: int) -> InlineKeyboardMarkup:
+    over = InlineKeyboardButton(text="✅ Darsni tugatdim", callback_data=f"finish_theme_{theme_id}")
+    back = InlineKeyboardButton(text="🔙 Ortga", callback_data="back")
+
+    return InlineKeyboardMarkup(inline_keyboard=[[over], [back]])

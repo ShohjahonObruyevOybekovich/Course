@@ -3,7 +3,8 @@ from datetime import datetime
 from aiogram import Bot, F
 from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
-from aiogram.types import Message, CallbackQuery, FSInputFile, InputMediaPhoto
+from aiogram.types import Message, CallbackQuery, FSInputFile, InputMediaPhoto, InlineKeyboardButton, \
+    InlineKeyboardMarkup
 from decouple import config
 from icecream import ic
 
@@ -11,11 +12,13 @@ from account.models import CustomUser
 from course.models import Course
 from dispatcher import dp, TOKEN
 from studentcourse.models import StudentCourse
-from tg_bot.buttons.inline import course_navigation_buttons, admin_accept, my_course_navigation_buttons
+from tg_bot.buttons.inline import course_navigation_buttons, admin_accept, my_course_navigation_buttons, \
+    get_theme_buttons
 from tg_bot.buttons.reply import phone_number_btn, results, admin, user_menu, back
 from tg_bot.buttons.text import start_txt, natija_txt
 from tg_bot.state.main import User
 from tg_bot.utils import format_phone_number
+from theme.models import ThemeAttendance, Theme
 from transaction.models import Transaction
 
 bot = Bot(token=TOKEN)
@@ -359,7 +362,7 @@ async def handle_payment(message: Message, state: FSMContext):
 
 @dp.message(lambda message: message.text == "📝 Mening kurslarim")
 async def my_courses(message: Message, state: FSMContext):
-    courses = StudentCourse.objects.filter(user__chat_id=message.from_user.id, status="Inactive")
+    courses = StudentCourse.objects.filter(user__chat_id=message.from_user.id)
     if not courses.exists():
         await message.answer("❗️ Kurslar mavjud emas.")
         return
@@ -370,7 +373,7 @@ async def my_courses(message: Message, state: FSMContext):
 
 
 async def send_my_course(chat_id: int, index: int, message_to_edit=None):
-    courses = list(StudentCourse.objects.filter(user__chat_id=chat_id, status="Inactive"))
+    courses = list(StudentCourse.objects.filter(user__chat_id=chat_id))
     student_course = courses[index]
     course = student_course.course
 
@@ -379,8 +382,8 @@ async def send_my_course(chat_id: int, index: int, message_to_edit=None):
         f"{course.description or ''}\n\n"
         f"💰 Narxi: {course.price} so'm"
     )
-
-    keyboard = my_course_navigation_buttons(index, len(courses), course.id)
+    user = CustomUser.objects.filter(chat_id=chat_id).first()
+    keyboard = my_course_navigation_buttons(index, len(courses), course.id,user=user)
 
     if course.photo and course.photo.file:
         try:
@@ -502,6 +505,43 @@ async def handle_my_course_navigation(call: CallbackQuery, state: FSMContext):
         await call.message.edit_reply_markup(reply_markup=None)
         await call.message.answer("🔙 Asosiy menyuga qaytdingiz.", reply_markup=user_menu())
         await state.clear()
+
+
+@dp.callback_query(lambda c: c.data.startswith("start_lesson_"))
+async def handle_start_lesson(call: CallbackQuery, state: FSMContext):
+    await call.message.edit_reply_markup(reply_markup=None)
+
+    course_id = call.data.split("_")[2]
+    course = Course.objects.filter(id=course_id).first()
+
+    if not course:
+        await call.message.answer("❌ Kurs topilmadi.")
+        return
+
+    # Get first (or next) theme
+    theme = Theme.objects.filter(course=course).order_by("created_at").first()
+
+    if not theme:
+        await call.message.answer("❌ Ushbu kursda hozircha hech qanday dars mavjud emas.")
+        return
+
+    # Mark attendance (optional or in another handler)
+    ThemeAttendance.objects.get_or_create(user__chat_id=call.from_user.id, theme=theme)
+
+    # Build message
+    text = f"📘 <b>{theme.name}</b>\n\n"
+    if theme.description:
+        text += f"{theme.description}\n\n"
+    if theme.link:
+        text += f"🔗 <a href='{theme.link}'>Video havola</a>\n"
+    elif theme.video:
+        text += f"🎥 <a href='{theme.video.file.url}'>Video fayl</a>\n"
+
+    if theme.materials:
+        text += f"📄 <a href='{theme.materials.file.url}'>Material yuklab olish</a>\n"
+
+    reply_markup = get_theme_buttons(theme.id)
+    await call.message.answer(text, reply_markup=reply_markup, parse_mode="HTML", disable_web_page_preview=False)
 
 
 @dp.message(F.text == "👨‍🏫 Adminlar bilan aloqa")
