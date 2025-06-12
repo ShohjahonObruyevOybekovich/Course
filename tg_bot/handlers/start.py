@@ -553,8 +553,10 @@ async def handle_start_lesson(call: CallbackQuery, state: FSMContext):
             theme=theme
         ).first()
         if not theme_att:
+            user = CustomUser.objects.filter(chat_id=call.from_user.id).first()
+
             ThemeAttendance.objects.create(
-                user=call.from_user.id,
+                user=user,
                 theme=theme,
             )
 
