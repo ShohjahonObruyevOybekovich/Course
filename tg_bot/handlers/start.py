@@ -576,7 +576,7 @@ async def handle_start_lesson(call: CallbackQuery, state: FSMContext):
             link = f"https://online.eduzoneuz.uz/course/?link={theme.link}"
             await call.message.answer(
                 text="Mavzu buyicha testlar",
-                reply_markup=start_btn(link)
+                reply_markup=start_btn(theme.link)
             )
 
     except IndexError:
