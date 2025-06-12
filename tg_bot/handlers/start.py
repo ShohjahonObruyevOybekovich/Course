@@ -5,6 +5,7 @@ from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery, FSInputFile, InputMediaPhoto, InlineKeyboardButton, \
     InlineKeyboardMarkup
+from aiogram.utils.chat_action import logger
 from decouple import config
 from icecream import ic
 
@@ -13,7 +14,7 @@ from course.models import Course
 from dispatcher import dp, TOKEN
 from studentcourse.models import StudentCourse
 from tg_bot.buttons.inline import course_navigation_buttons, admin_accept, my_course_navigation_buttons, \
-    get_theme_buttons
+    get_theme_buttons, themes_attendance
 from tg_bot.buttons.reply import phone_number_btn, results, admin, user_menu, back
 from tg_bot.buttons.text import start_txt, natija_txt
 from tg_bot.state.main import User
@@ -510,39 +511,73 @@ async def handle_my_course_navigation(call: CallbackQuery, state: FSMContext):
 @dp.callback_query(lambda c: c.data.startswith("start_lesson_"))
 async def handle_start_lesson(call: CallbackQuery, state: FSMContext):
     await call.message.edit_reply_markup(reply_markup=None)
+    try:
+        course_id = call.data.split("_")[2]
+        user = CustomUser.objects.filter(chat_id=call.from_user.id).first()
 
-    course_id = call.data.split("_")[2]
-    course = Course.objects.filter(id=course_id).first()
+        if not user:
+            await call.message.answer("User not found!")
+            return
 
-    if not course:
-        await call.message.answer("❌ Kurs topilmadi.")
-        return
+        await call.message.answer(
+            text="Kursingizning mavzularidan birini tanlang.",
+            reply_markup=themes_attendance(course_id, user)
+        )
+    except Exception as e:
+        logger.error(f"Error in handle_start_lesson: {e}")
+        await call.message.answer("An error occurred. Please try again.")
 
-    # Get first (or next) theme
-    theme = Theme.objects.filter(course=course).order_by("created_at").first()
 
-    if not theme:
-        await call.message.answer("❌ Ushbu kursda hozircha hech qanday dars mavjud emas.")
-        return
+@dp.callback_query(lambda c: c.data.startswith("lesson_"))
+async def handle_start_lesson(call: CallbackQuery, state: FSMContext):
+    await call.message.edit_reply_markup(reply_markup=None)
 
-    # Mark attendance (optional or in another handler)
-    ThemeAttendance.objects.get_or_create(user__chat_id=call.from_user.id, theme=theme)
+    try:
+        # Extract theme_id directly from callback data "lesson_<theme_id>"
+        theme_id = call.data.split("_")[1]  # Changed from [2] to [1]
 
-    # Build message
-    text = f"📘 <b>{theme.name}</b>\n\n"
-    if theme.description:
-        text += f"{theme.description}\n\n"
-    if theme.link:
-        text += f"🔗 <a href='{theme.link}'>Video havola</a>\n"
-    elif theme.video:
-        text += f"🎥 <a href='{theme.video.file.url}'>Video fayl</a>\n"
+        if not theme_id:
+            await call.message.answer("❌ Mavzu topilmadi.")
+            return
 
-    if theme.materials:
-        text += f"📄 <a href='{theme.materials.file.url}'>Material yuklab olish</a>\n"
+        # Get the theme
+        theme = Theme.objects.filter(id=theme_id).first()
 
-    reply_markup = get_theme_buttons(theme.id)
-    await call.message.answer(text, reply_markup=reply_markup, parse_mode="HTML", disable_web_page_preview=False)
+        if not theme:
+            await call.message.answer("❌ Ushbu kursda hozircha hech qanday dars mavjud emas.")
+            return
 
+        # Mark attendance (optional or in another handler)
+        ThemeAttendance.objects.get_or_create(
+            user__chat_id=call.from_user.id,
+            theme=theme,
+            defaults={'is_attendance': True}
+        )
+
+        # Build message
+        text = f"📘 <b>{theme.name}</b>\n\n"
+        if theme.description:
+            text += f"{theme.description}\n\n"
+        if theme.link:
+            text += f"🔗 <a href='{theme.link}'>Video havola</a>\n"
+        elif theme.video:
+            text += f"🎥 <a href='{theme.video.file.url}'>Video fayl</a>\n"
+
+        if theme.materials:
+            text += f"📄 <a href='{theme.materials.file.url}'>Material yuklab olish</a>\n"
+
+        reply_markup = get_theme_buttons(str(theme.id))
+        await call.message.answer(
+            text,
+            reply_markup=reply_markup,
+            parse_mode="HTML",
+            disable_web_page_preview=False
+        )
+    except IndexError:
+        await call.message.answer("❌ Xato: Noto'g'ri formatdagi so'rov.")
+    except Exception as e:
+        logger.error(f"Error in handle_start_lesson: {e}")
+        await call.message.answer("❌ Xatolik yuz berdi. Iltimos, qayta urinib ko'ring.")
 
 @dp.message(F.text == "👨‍🏫 Adminlar bilan aloqa")
 async def contact_admins(message: Message):

@@ -91,12 +91,16 @@ def themes_attendance(course_id, user):
     row = []
     for i, theme in enumerate(themes, start=1):
         # Check if user attended the theme
-        attendance = ThemeAttendance.objects.filter(user=user, theme=theme, is_attendance=True).first()
+        attendance = ThemeAttendance.objects.filter(
+            user=user,
+            theme=theme,
+            is_attendance=True
+        ).first()
         check_icon = " ✅" if attendance else ""
 
         button = InlineKeyboardButton(
             text=f"{i}-dars{check_icon}",
-            callback_data=f"my_left_{theme.id}"
+            callback_data=f"lesson_{theme.id}"
         )
         row.append(button)
 
@@ -109,10 +113,11 @@ def themes_attendance(course_id, user):
     if row:
         keyboard.append(row)
 
-    return InlineKeyboardMarkup(keyboard)
+    # For aiogram v3.x, use this:
+    return InlineKeyboardMarkup(inline_keyboard=keyboard)
 
 
-def get_theme_buttons(theme_id: int) -> InlineKeyboardMarkup:
+def get_theme_buttons(theme_id: str) -> InlineKeyboardMarkup:
     over = InlineKeyboardButton(text="✅ Darsni tugatdim", callback_data=f"finish_theme_{theme_id}")
     back = InlineKeyboardButton(text="🔙 Ortga", callback_data="back")
 
