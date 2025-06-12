@@ -5,16 +5,93 @@
   <title>Mini App Viewer</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
-    body { margin: 0; font-family: sans-serif; background: #f0f0f0; }
-    iframe { width: 100vw; height: 100vh; border: none; }
-    .error { color: red; padding: 20px; font-size: 18px; text-align: center; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    .container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    iframe {
+      flex: 1;
+      width: 100%;
+      border: none;
+      background: white;
+    }
+    .error {
+      color: #ff3b30;
+      padding: 20px;
+      font-size: 16px;
+      text-align: center;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .toolbar {
+      padding: 10px;
+      background: #ffffff;
+      border-bottom: 1px solid #e5e5ea;
+      display: flex;
+      justify-content: space-between;
+    }
+    .btn {
+      padding: 8px 12px;
+      background: #007aff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
-  {% if error %}
-    <div class="error">{{ error }}</div>
-  {% else %}
-    <iframe src="{{ link }}" allowfullscreen></iframe>
-  {% endif %}
+  <div class="container">
+    {% if error %}
+      <div class="error">
+        <div>
+          <h3>Error Loading Content</h3>
+          <p>{{ error }}</p>
+          <button class="btn" onclick="window.Telegram.WebApp.close()">Close</button>
+        </div>
+      </div>
+    {% else %}
+      <div class="toolbar">
+        <button class="btn" onclick="window.open('{{ link }}', '_blank')">Open in Browser</button>
+        <button class="btn" onclick="window.Telegram.WebApp.close()">Close</button>
+      </div>
+      <iframe
+        src="{{ link }}"
+        allowfullscreen
+        sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+        allow="fullscreen"
+      ></iframe>
+    {% endif %}
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Expand the web app to full viewport
+      window.Telegram.WebApp.expand();
+
+      // Handle back button
+      window.Telegram.WebApp.BackButton.onClick(function() {
+        window.Telegram.WebApp.close();
+      });
+
+      // Show back button if not main page
+      if(!window.location.search.includes('link=')) {
+        window.Telegram.WebApp.BackButton.hide();
+      } else {
+        window.Telegram.WebApp.BackButton.show();
+      }
+    });
+  </script>
 </body>
 </html>
