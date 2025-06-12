@@ -570,7 +570,7 @@ async def handle_start_lesson(call: CallbackQuery, state: FSMContext):
         if theme.materials:
             text += f"📄 <a href='{theme.materials.file.url}'>Material yuklab olish</a>\n"
 
-        reply_markup = get_theme_buttons(str(theme.id),user.chat_id)
+        reply_markup = get_theme_buttons(str(theme.id),call.from_user.id)
         await call.message.answer(
             text,
             reply_markup=reply_markup,
