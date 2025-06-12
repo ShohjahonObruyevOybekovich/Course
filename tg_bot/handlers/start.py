@@ -573,7 +573,7 @@ async def handle_start_lesson(call: CallbackQuery, state: FSMContext):
         )
 
         if theme.link:
-            link = f"https://online.eduzoneuz.uz/course/?link={theme.link}"
+            # link = f"https://online.eduzoneuz.uz/course/?link={theme.link}"
             await call.message.answer(
                 text="Mavzu buyicha testlar",
                 reply_markup=start_btn(theme.link)
@@ -584,6 +584,34 @@ async def handle_start_lesson(call: CallbackQuery, state: FSMContext):
     except Exception as e:
         logger.error(f"Error in handle_start_lesson: {e}")
         await call.message.answer("❌ Xatolik yuz berdi. Iltimos, qayta urinib ko'ring.")
+
+
+@dp.callback_query(lambda c: c.data.startswith("finish_theme_"))
+async def finishing_the_same(call: CallbackQuery, state: FSMContext):
+    await call.message.edit_reply_markup(reply_markup=None)
+    theme_id = call.data.split("_")[2]
+    if theme_id:
+        theme_att = ThemeAttendance.objects.filter(
+            theme__id=theme_id,
+            user__chat_id=call.from_user.id,
+        ).first()
+
+        if not theme_att:
+            call.message.answer(
+                f"👮🏻‍♂️ Siz {theme_att.theme.name} mavzusini hali boshlamagansiz ⁉️",
+                reply_markup=themes_attendance(theme_id, theme_att.user)
+            )
+
+        theme_att.is_complete_test = True
+        theme_att.save()
+
+        call.message.answer(
+            "✅ Siz mavzuni muvaffaqiyatli yakunladingiz!",
+            reply_markup=themes_attendance(theme_id, theme_att.user)
+        )
+
+
+
 
 @dp.message(F.text == "👨‍🏫 Adminlar bilan aloqa")
 async def contact_admins(message: Message):

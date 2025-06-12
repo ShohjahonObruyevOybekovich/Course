@@ -94,7 +94,8 @@ def themes_attendance(course_id, user):
         attendance = ThemeAttendance.objects.filter(
             user=user,
             theme=theme,
-            is_attendance=True
+            is_attendance=True,
+            is_complete_test=True
         ).first()
         check_icon = " ✅" if attendance else ""
 
