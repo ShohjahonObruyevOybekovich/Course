@@ -11,7 +11,7 @@ class OpenMiniAppLinkView(View):
 
         # Optional domain validation
         allowed_domains = ["wordwall.net", "localhost"]
-        if not any(domain in link for domain in allowed_domains):
-            return render(request, self.template_name, {"error": "Invalid link"})
+        # if not any(domain in link for domain in allowed_domains):
+        #     return render(request, self.template_name, {"error": "Invalid link"})
 
         return render(request, self.template_name, {"link": link})
