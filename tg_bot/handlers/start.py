@@ -596,9 +596,11 @@ async def finishing_the_same(call: CallbackQuery, state: FSMContext):
             user__chat_id=call.from_user.id,
         ).first()
 
+        theme = Theme.objects.filter(id=theme_id).first()
+
         if not theme_att:
             call.message.answer(
-                f"👮🏻‍♂️ Siz {theme_att.theme.name} mavzusini hali boshlamagansiz ⁉️",
+                f"👮🏻‍♂️ Siz {theme.name} mavzusini hali boshlamagansiz ⁉️",
                 reply_markup=themes_attendance(theme_id, theme_att.user)
             )
 
