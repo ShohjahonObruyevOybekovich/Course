@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Mini App Viewer</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    body { margin: 0; font-family: sans-serif; background: #f0f0f0; }
+    iframe { width: 100vw; height: 100vh; border: none; }
+    .error { color: red; padding: 20px; font-size: 18px; text-align: center; }
+  </style>
+</head>
+<body>
+  {% if error %}
+    <div class="error">{{ error }}</div>
+  {% else %}
+    <iframe src="{{ link }}" allowfullscreen></iframe>
+  {% endif %}
+</body>
+</html>

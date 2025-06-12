@@ -14,7 +14,7 @@ from course.models import Course
 from dispatcher import dp, TOKEN
 from studentcourse.models import StudentCourse
 from tg_bot.buttons.inline import course_navigation_buttons, admin_accept, my_course_navigation_buttons, \
-    get_theme_buttons, themes_attendance
+    get_theme_buttons, themes_attendance, start_btn
 from tg_bot.buttons.reply import phone_number_btn, results, admin, user_menu, back
 from tg_bot.buttons.text import start_txt, natija_txt
 from tg_bot.state.main import User
@@ -558,8 +558,6 @@ async def handle_start_lesson(call: CallbackQuery, state: FSMContext):
         text = f"📘 <b>{theme.name}</b>\n\n"
         if theme.description:
             text += f"{theme.description}\n\n"
-        if theme.link:
-            text += f"🔗 <a href='{theme.link}'>Video havola</a>\n"
         elif theme.video:
             text += f"🎥 <a href='{theme.video.file.url}'>Video fayl</a>\n"
 
@@ -573,6 +571,14 @@ async def handle_start_lesson(call: CallbackQuery, state: FSMContext):
             parse_mode="HTML",
             disable_web_page_preview=False
         )
+
+        if theme.link:
+            link = f"https://online.eduzoneuz.uz/course/?link={theme.link}"
+            await call.message.answer(
+                text="Mavzu buyicha testlar",
+                reply_markup=start_btn(link)
+            )
+
     except IndexError:
         await call.message.answer("❌ Xato: Noto'g'ri formatdagi so'rov.")
     except Exception as e:

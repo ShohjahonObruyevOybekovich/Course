@@ -16,11 +16,11 @@ def degree():
 MINI_APP_URL = config("MINI_APP_URL")
 
 
-def start_btn():
+def start_btn(link):
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(
             text="🚀 Imtihonni boshlash",
-            web_app=WebAppInfo(url=MINI_APP_URL)  # ← replace with your real Mini App URL
+            url=link # ← replace with your real Mini App URL
         )]
     ])
 
