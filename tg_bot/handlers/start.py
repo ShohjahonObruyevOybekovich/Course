@@ -570,7 +570,7 @@ async def handle_start_lesson(call: CallbackQuery, state: FSMContext):
         if theme.materials:
             text += f"📄 <a href='{theme.materials.file.url}'>Material yuklab olish</a>\n"
 
-        reply_markup = get_theme_buttons(str(theme.id))
+        reply_markup = get_theme_buttons(str(theme.id),user.chat_id)
         await call.message.answer(
             text,
             reply_markup=reply_markup,
@@ -619,6 +619,15 @@ async def finishing_the_same(call: CallbackQuery, state: FSMContext):
         )
 
 
+@dp.callback_query(lambda c: c.data.startswith("theme_already_completed"))
+async def finishing_the_same(call: CallbackQuery, state: FSMContext):
+    await call.message.edit_reply_markup(reply_markup=None)
+    course_id = call.data.split("_")[2]
+
+    await call.message.answer(
+        text="Kursingizning mavzularidan birini tanlang.",
+        reply_markup=themes_attendance(course_id, call.from_user.id)
+    )
 
 
 @dp.message(F.text == "👨‍🏫 Adminlar bilan aloqa")

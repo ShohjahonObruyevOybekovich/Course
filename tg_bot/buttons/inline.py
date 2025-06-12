@@ -118,8 +118,24 @@ def themes_attendance(course_id, user):
     return InlineKeyboardMarkup(inline_keyboard=keyboard)
 
 
-def get_theme_buttons(theme_id: str) -> InlineKeyboardMarkup:
-    over = InlineKeyboardButton(text="✅ Darsni tugatdim", callback_data=f"finish_theme_{theme_id}")
-    back = InlineKeyboardButton(text="🔙 Ortga", callback_data="back")
+def get_theme_buttons(theme_id: str, user_chat_id: int) -> InlineKeyboardMarkup:
+    # Check if theme is already completed
+    theme_att = ThemeAttendance.objects.filter(
+        user__chat_id=user_chat_id,
+        theme__id=theme_id
+    ).first()
 
-    return InlineKeyboardMarkup(inline_keyboard=[[over], [back]])
+    if theme_att and theme_att.is_complete_test:
+        over_button = InlineKeyboardButton(
+            text="✅ Dars bajarilgan",
+            callback_data=f"theme_already_completed_{theme_att.theme.course.id}"
+        )
+    else:
+        over_button = InlineKeyboardButton(
+            text="✅ Darsni tugatdim",
+            callback_data=f"finish_theme_{theme_id}"
+        )
+
+    back_button = InlineKeyboardButton(text="🔙 Ortga", callback_data="back")
+
+    return InlineKeyboardMarkup(inline_keyboard=[[over_button], [back_button]])
