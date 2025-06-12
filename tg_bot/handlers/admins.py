@@ -24,9 +24,10 @@ async def admin_btn(message: Message):
         user.role = "Admin"
         user.save()
         await message.answer(
-            text="Sizning rolingiz <b>Admin<b/> darajasiga oshirildi.",
+            text="Sizning rolingiz <b>Admin</b> darajasiga oshirildi.",
             reply_markup=admin()
         )
+
 
 @dp.message(lambda msg:msg.text == "👥 O'quvchilar ro‘yxati")
 async def handle_users(message: Message, state: FSMContext) -> None:
