@@ -548,11 +548,15 @@ async def handle_start_lesson(call: CallbackQuery, state: FSMContext):
             return
 
         # Mark attendance (optional or in another handler)
-        ThemeAttendance.objects.get_or_create(
+        theme_att = ThemeAttendance.objects.filter(
             user__chat_id=call.from_user.id,
-            theme=theme,
-            defaults={'is_attendance': True}
-        )
+            theme=theme
+        ).first()
+        if not theme_att:
+            ThemeAttendance.objects.create(
+                user__chat_id=call.from_user.id,
+                theme=theme,
+            )
 
         # Build message
         text = f"📘 <b>{theme.name}</b>\n\n"

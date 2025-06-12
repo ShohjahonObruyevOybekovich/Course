@@ -26,7 +26,7 @@ class ThemeAttendance(BaseModel):
     theme : "Theme" = models.ForeignKey("theme.Theme", on_delete=models.SET_NULL,
                                         null=True, blank=True,related_name="themes_attendance_themes")
 
-    is_attendance = models.BooleanField(default=False)
+    is_attendance = models.BooleanField(default=True)
 
     is_complete_test = models.BooleanField(default=False)
 
