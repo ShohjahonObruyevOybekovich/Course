@@ -559,13 +559,20 @@ async def handle_start_lesson(call: CallbackQuery, state: FSMContext):
                 user=user,
                 theme=theme,
             )
+        if theme.video and theme.video.file:
+            await call.bot.send_video(
+                chat_id=call.from_user.id,
+                video=theme.video.file.url,  # or use open(...) if it's local
+                caption=f"🎬 <b>{theme.name}</b> darsining videosi",
+                parse_mode="HTML",
+                protect_content=True
+            )
 
         # Build message
         text = f"📘 <b>{theme.name}</b>\n\n"
         if theme.description:
             text += f"{theme.description}\n\n"
-        elif theme.video:
-            text += f"🎥 <a href='{theme.video.file.url}'>Video fayl</a>\n"
+
 
         if theme.materials:
             text += f"📄 <a href='{theme.materials.file.url}'>Material yuklab olish</a>\n"
