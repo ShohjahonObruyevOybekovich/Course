@@ -561,18 +561,18 @@ async def handle_start_lesson(call: CallbackQuery, state: FSMContext):
             )
         import os
 
-        # Build full path to the file
-        video_path = theme.video.file.path  # This gives the absolute path like /app/media/files/...
+
+        video_path = theme.video.file.path
 
         if os.path.exists(video_path):
-            with open(video_path, "rb") as video_file:
-                await call.bot.send_video(
-                    chat_id=call.from_user.id,
-                    video=video_file,
-                    caption=f"🎬 <b>{theme.name}</b> darsining videosi",
-                    parse_mode="HTML",
-                    protect_content=True
-                )
+            video_file = FSInputFile(video_path)
+            await call.bot.send_video(
+                chat_id=call.from_user.id,
+                video=video_file,
+                caption=f"🎬 <b>{theme.name}</b> darsining videosi",
+                parse_mode="HTML",
+                protect_content=True
+            )
         else:
             await call.message.answer("❌ Video fayl topilmadi.")
 
