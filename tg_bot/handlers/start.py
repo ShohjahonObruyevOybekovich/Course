@@ -561,20 +561,22 @@ async def handle_start_lesson(call: CallbackQuery, state: FSMContext):
             )
         import os
 
+        videos = theme.video.all()
 
-        video_path = theme.video.file.path
-
-        if os.path.exists(video_path):
-            video_file = FSInputFile(video_path)
-            await call.bot.send_video(
-                chat_id=call.from_user.id,
-                video=video_file,
-                caption=f"🎬 <b>{theme.name}</b> darsining videosi",
-                parse_mode="HTML",
-                protect_content=True
-            )
+        if videos.exists():
+            for idx, video in enumerate(videos, start=1):
+                if video.url:
+                    await call.message.answer(
+                        text=(
+                            f"🎬 <b>{theme.name}</b> — {idx}-video\n\n"
+                            f"👉 <a href='{video.url}'>Videoni tomosha qilish</a>\n\n"
+                            f"📌 Diqqat bilan tomosha qiling va topshiriqlarga o'ting!"
+                        ),
+                        parse_mode="HTML",
+                        disable_web_page_preview=False
+                    )
         else:
-            await call.message.answer("❌ Video fayl topilmadi.")
+            await call.message.answer("❌ Ushbu darsga biriktirilgan video topilmadi.")
 
         # Build message
         text = f"📘 <b>{theme.name}</b>\n\n"
