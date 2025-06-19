@@ -7,7 +7,7 @@ from upload.models import File
 class CourseType(BaseModel):
     name = models.CharField(max_length=100)
     def __str__(self):
-        return self.name
+        return f"{self.id} - {self.name}"
 
 class Course(BaseModel):
     name = models.CharField(max_length=100)

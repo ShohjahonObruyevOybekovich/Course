@@ -1,6 +1,7 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
 from decouple import config
 
+from course.models import Course
 from studentcourse.models import StudentCourse
 from theme.models import Theme, ThemeAttendance
 from transaction.models import Transaction
@@ -84,37 +85,87 @@ def my_course_navigation_buttons(index: int, total: int, course_id: int, user):
     return InlineKeyboardMarkup(inline_keyboard=keyboard)
 
 
-def themes_attendance(course_id, user):
-    themes = Theme.objects.filter(course__id=course_id).all()
-    keyboard = []
+def themes_attendance(course_id, user, level_id):
 
+    print(course_id, user,level_id)
+    themes = Theme.objects.filter(
+        course__id=course_id,
+        course_type__id=level_id
+    ).distinct()
+
+    print(themes)
+
+    keyboard = []
     row = []
+
     for i, theme in enumerate(themes, start=1):
-        # Check if user attended the theme
         attendance = ThemeAttendance.objects.filter(
             user=user,
             theme=theme,
             is_attendance=True,
             is_complete_test=True
         ).first()
+
+        print(attendance)
+
+        print(len(f"lesson_{theme.id}"))
+
         check_icon = " ✅" if attendance else ""
 
-        button = InlineKeyboardButton(
+        row.append(InlineKeyboardButton(
             text=f"{i}-dars{check_icon}",
             callback_data=f"lesson_{theme.id}"
-        )
-        row.append(button)
+        ))
 
-        # Add row when it reaches 6 buttons
         if len(row) == 6:
             keyboard.append(row)
             row = []
 
-    # Add the last row if not empty
     if row:
         keyboard.append(row)
 
-    # For aiogram v3.x, use this:
+    keyboard.append([InlineKeyboardButton("⬅️ Orqaga", callback_data=f"start_lesson_{course_id}")])
+
+    return InlineKeyboardMarkup(inline_keyboard=keyboard)
+
+
+def course_levels(course_id):
+    try:
+        course = Course.objects.prefetch_related("course_type").filter(id=course_id).first()
+
+        if not course:
+            raise Course.DoesNotExist
+    except Course.DoesNotExist:
+        return InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="Kurs topilmadi!", callback_data="noop")]
+        ])
+
+    keyboard = []
+    row = []
+
+    course_types = course.course_type.all()
+
+    for i, course_type in enumerate(course_types, start=1):
+        course_type_id = str(course_type.id)
+        course_type_name = str(course_type.name)  # Ensure it's a plain string!
+        data = f"select_level_{course_type_id}"
+        print(data)
+        row.append(
+            InlineKeyboardButton(
+                text=course_type_name,
+                callback_data=data
+            )
+        )
+
+        if i % 2 == 0:
+            keyboard.append(row)
+            row = []
+
+    if row:
+        keyboard.append(row)
+
+    keyboard.append([InlineKeyboardButton(text="⬅️ Back", callback_data="go_back")])
+
     return InlineKeyboardMarkup(inline_keyboard=keyboard)
 
 

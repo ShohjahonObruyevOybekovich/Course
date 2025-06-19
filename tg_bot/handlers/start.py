@@ -14,7 +14,7 @@ from course.models import Course
 from dispatcher import dp, TOKEN
 from studentcourse.models import StudentCourse
 from tg_bot.buttons.inline import course_navigation_buttons, admin_accept, my_course_navigation_buttons, \
-    get_theme_buttons, themes_attendance, start_btn
+    get_theme_buttons, themes_attendance, start_btn, course_levels
 from tg_bot.buttons.reply import phone_number_btn, results, admin, user_menu, back
 from tg_bot.buttons.text import start_txt, natija_txt
 from tg_bot.state.main import User
@@ -508,24 +508,67 @@ async def handle_my_course_navigation(call: CallbackQuery, state: FSMContext):
         await state.clear()
 
 
+
 @dp.callback_query(lambda c: c.data.startswith("start_lesson_"))
 async def handle_start_lesson(call: CallbackQuery, state: FSMContext):
     await call.message.edit_reply_markup(reply_markup=None)
     try:
         course_id = call.data.split("_")[2]
+        ic(course_id)
         user = CustomUser.objects.filter(chat_id=call.from_user.id).first()
+
+        ic(user)
 
         if not user:
             await call.message.answer("User not found!")
             return
 
         await call.message.answer(
-            text="Kursingizning mavzularidan birini tanlang.",
-            reply_markup=themes_attendance(course_id, user)
+            text="📚 Avvalo kurs darajasini tanlang:",
+            reply_markup=course_levels(course_id=course_id),
         )
+
     except Exception as e:
         logger.error(f"Error in handle_start_lesson: {e}")
         await call.message.answer("An error occurred. Please try again.")
+
+
+
+@dp.callback_query(lambda c: c.data.startswith(("select_level_", "go_back")))
+async def handle_select_level(call: CallbackQuery, state: FSMContext):
+    await call.message.edit_reply_markup(reply_markup=None)
+
+    if call.data == "go_back":
+        await call.message.answer("Siz menu bulimiga qaytingiz!",reply_markup=user_menu())
+        await state.clear()
+        return
+
+    try:
+        parts = call.data.split("_")
+        level_id = parts[2]
+        print("level",level_id)
+
+        course = StudentCourse.objects.filter(
+            user__chat_id=call.from_user.id,
+            course__course_type__id=level_id
+        ).first()
+
+        print("course",course.course.id)
+
+        if not course:
+            await call.message.answer("❌ Kurs aniqlanmadi.",reply_markup=course_levels(course_id=course.course.id))
+            return
+
+        await state.update_data(level_id=level_id)
+
+        await call.message.answer(
+            text="📘 Endi mavzuni tanlang:",
+            reply_markup=themes_attendance(course.course.id, call.from_user.id, level_id)
+        )
+
+    except Exception as e:
+        logger.error(f"Error in handle_select_level: {e}")
+        await call.message.answer("❌ Xatolik yuz berdi. Iltimos, qayta urinib ko'ring.")
 
 
 @dp.callback_query(lambda c: c.data.startswith("lesson_"))
