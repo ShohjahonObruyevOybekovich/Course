@@ -2,7 +2,7 @@ from django.db import models
 
 from account.models import CustomUser
 from upload.models import File,Video
-from course.models import Course
+from course.models import Course,CourseType
 from command.models import BaseModel
 
 class Theme(BaseModel):
@@ -11,6 +11,9 @@ class Theme(BaseModel):
     video : "Video" = models.ManyToManyField("upload.Video",related_name="themes_video")
     course : "Course" = models.ForeignKey("course.Course", on_delete=models.SET_NULL,
                                           null=True, blank=True,related_name="themes_course")
+    course_type: "CourseType" = models.ManyToManyField("course.CourseType", related_name="courses_related_themes",
+                                                       verbose_name="Kursning darajalari")
+
     materials: "File" = models.ForeignKey("upload.File", on_delete=models.SET_NULL,
                                           null=True, blank=True,related_name="themes_materials")
     link = models.URLField(null=True, blank=True)

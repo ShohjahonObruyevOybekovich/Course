@@ -14,7 +14,7 @@ class Course(BaseModel):
     description = models.TextField(null=True, blank=True)
     photo : "File" = models.ForeignKey("upload.File", on_delete=models.SET_NULL, null=True, blank=True)
     price = models.FloatField(default=0)
-    course_type : "CourseType" = models.ForeignKey("course.CourseType", on_delete=models.SET_NULL, null=True, blank=True)
+    course_type : "CourseType" = models.ManyToManyField("course.CourseType",related_name="courses_related_types",verbose_name="Kursning darajalari")
 
     def __str__(self):
         return self.name
