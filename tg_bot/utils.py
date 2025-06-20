@@ -42,3 +42,39 @@ def compute_telegram_hash(data_check_string: str):
         msg=data_check_string.encode(),
         digestmod=hashlib.sha256
     ).hexdigest()
+
+from aiogram.exceptions import TelegramBadRequest
+
+async def check_user_in_channel(user_id: int, channel_username: str, bot) -> bool:
+    try:
+        member = await bot.get_chat_member(chat_id=f"@{channel_username}", user_id=user_id)
+        return member.status in ["member", "administrator", "creator"]
+    except TelegramBadRequest:
+        return False
+
+
+
+import mimetypes
+from aiogram.types import InputFile,Message
+
+async def send_theme_material(message: Message, theme):
+    if not theme.materials or not theme.materials.file:
+        return
+
+    file_path = theme.materials.file.path  # assumes file is stored locally
+    file_url = theme.materials.file.url
+
+    mime_type, _ = mimetypes.guess_type(file_path)
+    input_file = InputFile(file_path)
+
+    if mime_type:
+        if mime_type.startswith("image/"):
+            await message.answer_photo(photo=input_file, caption="🖼 Rasm material")
+        elif mime_type.startswith("video/"):
+            await message.answer_video(video=input_file, caption="🎥 Video material")
+        elif mime_type.startswith("audio/"):
+            await message.answer_audio(audio=input_file, caption="🎧 Audio material")
+        else:
+            await message.answer_document(document=input_file, caption="📄 Material yuklab olish")
+    else:
+        await message.answer_document(document=input_file, caption="📎 Material")

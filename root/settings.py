@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'theme',
     'transaction',
     'studentcourse',
+    'channel',
 
     #Installed Libraries
     'rest_framework',

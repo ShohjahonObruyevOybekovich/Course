@@ -10,6 +10,7 @@ from decouple import config
 from icecream import ic
 
 from account.models import CustomUser
+from channel.models import Channel
 from course.models import Course
 from dispatcher import dp, TOKEN
 from studentcourse.models import StudentCourse
@@ -18,7 +19,7 @@ from tg_bot.buttons.inline import course_navigation_buttons, admin_accept, my_co
 from tg_bot.buttons.reply import phone_number_btn, results, admin, user_menu, back
 from tg_bot.buttons.text import start_txt, natija_txt
 from tg_bot.state.main import User
-from tg_bot.utils import format_phone_number
+from tg_bot.utils import format_phone_number, check_user_in_channel, send_theme_material
 from theme.models import ThemeAttendance, Theme
 from transaction.models import Transaction
 
@@ -32,9 +33,31 @@ card_name = config("CARD_NAME")
 async def command_start_handler(message: Message, state: FSMContext) -> None:
     await state.clear()
 
+    # 🔁 Step 1: Check forced channel join
+    channels = Channel.objects.all()
+    not_joined = []
+
+    for channel in channels:
+        joined = await check_user_in_channel(message.from_user.id, channel.username, bot)
+        if not joined:
+            not_joined.append(channel)
+
+    if not_joined:
+        markup = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text=f"➕ {ch.name}", url=f"https://t.me/{ch.username}")]
+            for ch in not_joined
+        ])
+        markup.inline_keyboard.append([InlineKeyboardButton(text="✅ Tekshirish", callback_data="check_channels")])
+
+        await message.answer(
+            "❗️ Davom etishdan oldin quyidagi kanallarga obuna bo‘ling:",
+            reply_markup=markup
+        )
+        return
+
+    # 🔁 Step 2: User registration and role-based greeting
     user = CustomUser.objects.filter(chat_id=message.from_user.id).first()
 
-    # First-time user registration
     if not user:
         CustomUser.objects.create(
             chat_id=message.from_user.id,
@@ -50,8 +73,27 @@ async def command_start_handler(message: Message, state: FSMContext) -> None:
             reply_markup=admin(),
             parse_mode="Markdown"
         )
-    if user and user.role != "Admin":
+    else:
         await message.answer(natija_txt, reply_markup=user_menu())
+
+@dp.callback_query(F.data == "check_channels")
+async def recheck_channels(call: CallbackQuery, state: FSMContext):
+    user_id = call.from_user.id
+    channels = Channel.objects.all()
+    not_joined = []
+
+    for channel in channels:
+        joined = await check_user_in_channel(user_id, channel.username, bot)
+        if not joined:
+            not_joined.append(channel)
+
+    if not_joined:
+        await call.answer("❌ Hali hamma kanallarga obuna emassiz.", show_alert=True)
+    else:
+        await call.message.delete()
+        await call.message.answer(start_txt)
+        await state.set_state(User.full_name)
+
 
 
 @dp.message(User.full_name)
@@ -626,9 +668,9 @@ async def handle_start_lesson(call: CallbackQuery, state: FSMContext):
         if theme.description:
             text += f"{theme.description}\n\n"
 
-
         if theme.materials:
-            text += f"📄 <a href='{theme.materials.file.url}'>Material yuklab olish</a>\n"
+            await send_theme_material(call.message, theme)
+
 
         reply_markup = get_theme_buttons(str(theme.id),call.from_user.id)
         await call.message.answer(
@@ -663,30 +705,37 @@ async def finishing_the_same(call: CallbackQuery, state: FSMContext):
         ).first()
 
         theme = Theme.objects.filter(id=theme_id).first()
-
+        level = theme.level.first().id
         if not theme_att:
             call.message.answer(
-                f"👮🏻‍♂️ Siz {theme.name} mavzusini hali boshlamagansiz ⁉️",
-                reply_markup=themes_attendance(theme_id, theme_att.user)
+                text=f"👮🏻‍♂️ Siz {theme.name} mavzusini hali boshlamagansiz ⁉️",
+                reply_markup=themes_attendance(course_id=theme.course.id, user=theme_att.user,level_id=level)
             )
 
         theme_att.is_complete_test = True
         theme_att.save()
 
         call.message.answer(
-            "✅ Siz mavzuni muvaffaqiyatli yakunladingiz!",
-            reply_markup=themes_attendance(theme_id, theme_att.user)
+            text="✅ Siz mavzuni muvaffaqiyatli yakunladingiz!",
+            reply_markup=themes_attendance(course_id=theme.course.id, user=theme_att.user,level_id=level)
         )
 
 
-@dp.callback_query(lambda c: c.data.startswith("theme_already_completed"))
+@dp.callback_query(lambda c: c.data.startswith("theme_already_completed_"))
 async def finishing_the_same(call: CallbackQuery, state: FSMContext):
     await call.message.edit_reply_markup(reply_markup=None)
-    course_id = call.data.split("_")[2]
+    course_id = call.data.split("_")[3]
+
+    print(course_id)
+
+    course= Course.objects.filter(id=course_id).first()
+    level = course.course_type.first().id
+    user = CustomUser.objects.filter(chat_id=call.from_user.id).first()
+    ic(level)
 
     await call.message.answer(
         text="Kursingizning mavzularidan birini tanlang.",
-        reply_markup=themes_attendance(course_id, call.from_user.id)
+        reply_markup=themes_attendance(course_id, user,level)
     )
 
 

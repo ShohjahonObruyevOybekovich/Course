@@ -124,7 +124,7 @@ def themes_attendance(course_id, user, level_id):
     if row:
         keyboard.append(row)
 
-    keyboard.append([InlineKeyboardButton("⬅️ Orqaga", callback_data=f"start_lesson_{course_id}")])
+    keyboard.append([InlineKeyboardButton(text="⬅️ Orqaga", callback_data=f"start_lesson_{course_id}")])
 
     return InlineKeyboardMarkup(inline_keyboard=keyboard)
 
@@ -164,7 +164,7 @@ def course_levels(course_id):
     if row:
         keyboard.append(row)
 
-    keyboard.append([InlineKeyboardButton(text="⬅️ Back", callback_data="go_back")])
+    keyboard.append([InlineKeyboardButton(text="⬅️ Orqaga", callback_data="go_back")])
 
     return InlineKeyboardMarkup(inline_keyboard=keyboard)
 
@@ -175,6 +175,8 @@ def get_theme_buttons(theme_id: str, user_chat_id: int) -> InlineKeyboardMarkup:
         user__chat_id=user_chat_id,
         theme__id=theme_id
     ).first()
+
+    print(theme_att.theme.id)
 
     if theme_att and theme_att.is_complete_test:
         over_button = InlineKeyboardButton(
