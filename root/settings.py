@@ -45,6 +45,7 @@ CSRF_TRUSTED_ORIGINS = [
 # Application definition
 
 INSTALLED_APPS = [
+    "jazzmin",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -203,3 +204,15 @@ CORS_ALLOW_HEADERS = (
 )
 
 CORS_ALLOW_CREDENTIALS = True
+
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Eduzone Online Course Admin",
+    "site_header": "Eduzone Online Course Dashboard",
+    "site_brand": "Eduzone Online Course",
+    "welcome_sign": "Welcome to Eduzone Online Course Admin",
+    "copyright": "Eduzone Online Course",
+    "search_model": ["auth.User", "auth.Group"],
+    "show_sidebar": True,
+    "navigation_expanded": True,
+}
