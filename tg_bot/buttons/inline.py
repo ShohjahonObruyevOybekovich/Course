@@ -188,7 +188,21 @@ def get_theme_buttons(theme_id: str, user_chat_id: int) -> InlineKeyboardMarkup:
             text="✅ Darsni tugatdim",
             callback_data=f"finish_theme_{theme_id}"
         )
+    schreiben = InlineKeyboardButton(
+        text = "📝 Schreiben topshirish",
+        callback_data=f"schreiben_{theme_id}"
+    )
+    sprechen = InlineKeyboardButton(
+        text="🗣 Sprechen topshirish",
+        callback_data=f"sprechen_{theme_id}"
+    )
 
     back_button = InlineKeyboardButton(text="🔙 Ortga", callback_data="back")
 
-    return InlineKeyboardMarkup(inline_keyboard=[[over_button], [back_button]])
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [schreiben, sprechen],  # One row with two buttons
+            [over_button],  # One row with one button
+            [back_button]  # One row with one button
+        ]
+    )

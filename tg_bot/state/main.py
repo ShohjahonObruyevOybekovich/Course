@@ -9,3 +9,7 @@ class User(StatesGroup):
     browsing_my_courses = State()
     payment = State()
     course = State()
+
+
+class Theme_State(StatesGroup):
+    schreiben=State()
