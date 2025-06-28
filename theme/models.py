@@ -18,6 +18,10 @@ class Theme(BaseModel):
                                           null=True, blank=True,related_name="themes_materials")
     link = models.URLField(null=True, blank=True)
 
+    sprechen = models.TextField(null=True, blank=True,verbose_name="Sprechen mavzusi")
+    schreiben = models.TextField(null=True, blank=True,verbose_name="Schreiben mavzusi")
+
+    youtube = models.URLField(null=True, blank=True)
     def __str__(self):
         return self.name
 
