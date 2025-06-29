@@ -1,0 +1,1484 @@
+[
+    {
+        "model": "account.customuser",
+        "pk": "0dee9fd8-ca36-4a4c-8336-e4da39ea5194",
+        "fields": {
+            "password": "",
+            "last_login": null,
+            "is_superuser": false,
+            "first_name": "",
+            "last_name": "",
+            "email": "",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2025-06-13T06:44:20.973Z",
+            "full_name": "Oybek Abdufattoxov",
+            "phone": "+998954442005",
+            "chat_id": "796519939",
+            "language": null,
+            "role": "User",
+            "has_passed": false,
+            "created_at": "2025-06-13T06:44:20.973Z",
+            "updated_at": "2025-06-13T06:44:32.193Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "account.customuser",
+        "pk": "39f39aed-f963-4867-ab78-4c701ed1cacc",
+        "fields": {
+            "password": "",
+            "last_login": null,
+            "is_superuser": false,
+            "first_name": "",
+            "last_name": "",
+            "email": "",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2025-06-28T12:25:26.601Z",
+            "full_name": "Абдижабборова Лайлогул",
+            "phone": "+998930890826",
+            "chat_id": "1990299181",
+            "language": null,
+            "role": "User",
+            "has_passed": false,
+            "created_at": "2025-06-28T12:25:26.602Z",
+            "updated_at": "2025-06-28T12:25:41.077Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "account.customuser",
+        "pk": "90c141ec-9ee1-482e-b64b-474c88ed5746",
+        "fields": {
+            "password": "pbkdf2_sha256$1000000$2Skd6x2e03gYiWymNWcfUT$N+mI05xF0TG2MCTDHkxd1UBtNdKgZQ34YvdywqCN0BI=",
+            "last_login": "2025-06-29T11:50:23.005Z",
+            "is_superuser": true,
+            "first_name": "",
+            "last_name": "",
+            "email": "",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2025-06-12T11:58:11.273Z",
+            "full_name": null,
+            "phone": "+998901234567",
+            "chat_id": null,
+            "language": null,
+            "role": "User",
+            "has_passed": false,
+            "created_at": "2025-06-12T11:58:12.176Z",
+            "updated_at": "2025-06-12T11:58:12.176Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "account.customuser",
+        "pk": "afc41f29-dfce-4011-9dd9-16bc7ffc5b79",
+        "fields": {
+            "password": "",
+            "last_login": null,
+            "is_superuser": false,
+            "first_name": "",
+            "last_name": "",
+            "email": "",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2025-06-13T06:43:22.476Z",
+            "full_name": "Coder",
+            "phone": "+998948742405",
+            "chat_id": "7515210172",
+            "language": null,
+            "role": "User",
+            "has_passed": false,
+            "created_at": "2025-06-13T06:43:22.477Z",
+            "updated_at": "2025-06-13T06:44:51.194Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "account.customuser",
+        "pk": "b0813f36-3553-49c5-bee3-e81837f55736",
+        "fields": {
+            "password": "",
+            "last_login": null,
+            "is_superuser": false,
+            "first_name": "",
+            "last_name": "",
+            "email": "",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2025-06-13T07:55:52.303Z",
+            "full_name": "Doniyor Ne'matov",
+            "phone": "+998945031147",
+            "chat_id": "1677338531",
+            "language": null,
+            "role": "User",
+            "has_passed": false,
+            "created_at": "2025-06-13T07:55:52.304Z",
+            "updated_at": "2025-06-13T07:56:06.246Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "account.customuser",
+        "pk": "c5ae5bde-fb36-48f1-96c5-d64517460e7c",
+        "fields": {
+            "password": "pbkdf2_sha256$870000$75rCGxwU9QTxafLa0a8Dqy$s2uZK4/dSxhQw7l01i9KSmjQOwhNTEZjpXYaLueLd28=",
+            "last_login": null,
+            "is_superuser": false,
+            "first_name": "",
+            "last_name": "",
+            "email": "",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2025-06-12T11:58:16Z",
+            "full_name": "Shohjahon",
+            "phone": "+998948025101",
+            "chat_id": "5995495508",
+            "language": null,
+            "role": "Admin",
+            "has_passed": false,
+            "created_at": "2025-06-12T11:58:16.805Z",
+            "updated_at": "2025-06-12T12:23:44.315Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "account.customuser",
+        "pk": "c5cee1c3-e467-49cf-b4ed-5a183e65f55a",
+        "fields": {
+            "password": "",
+            "last_login": null,
+            "is_superuser": false,
+            "first_name": "",
+            "last_name": "",
+            "email": "",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2025-06-13T06:31:58.875Z",
+            "full_name": "Farrux Shomuradovich",
+            "phone": "+998935774484",
+            "chat_id": "117741960",
+            "language": null,
+            "role": "User",
+            "has_passed": false,
+            "created_at": "2025-06-13T06:31:58.875Z",
+            "updated_at": "2025-06-13T06:32:07.126Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "account.customuser",
+        "pk": "da03e3db-6958-4e75-8146-8f45e00901e2",
+        "fields": {
+            "password": "",
+            "last_login": null,
+            "is_superuser": false,
+            "first_name": "",
+            "last_name": "",
+            "email": "",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2025-06-12T12:27:06.490Z",
+            "full_name": "Shohjahon Obruyev",
+            "phone": "+998932258150",
+            "chat_id": "6938093751",
+            "language": null,
+            "role": "User",
+            "has_passed": false,
+            "created_at": "2025-06-12T12:27:06.492Z",
+            "updated_at": "2025-06-12T12:27:27.489Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "account.customuser",
+        "pk": "ebaa81fa-d193-404d-b602-a6f1418c35c4",
+        "fields": {
+            "password": "",
+            "last_login": null,
+            "is_superuser": false,
+            "first_name": "",
+            "last_name": "",
+            "email": "",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2025-06-13T07:05:10.490Z",
+            "full_name": "Oyshabegim Khasanova",
+            "phone": "+998940083112",
+            "chat_id": "5692222371",
+            "language": null,
+            "role": "User",
+            "has_passed": false,
+            "created_at": "2025-06-13T07:05:10.490Z",
+            "updated_at": "2025-06-28T12:30:20.690Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "account.customuser",
+        "pk": "f327dc82-030c-465c-8cb9-ad394ff79e5f",
+        "fields": {
+            "password": "pbkdf2_sha256$870000$75rCGxwU9QTxafLa0a8Dqy$s2uZK4/dSxhQw7l01i9KSmjQOwhNTEZjpXYaLueLd28=",
+            "last_login": null,
+            "is_superuser": false,
+            "first_name": "",
+            "last_name": "",
+            "email": "",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2025-06-13T07:01:09Z",
+            "full_name": "Munisa",
+            "phone": "+998908125770",
+            "chat_id": "1980086291",
+            "language": null,
+            "role": "User",
+            "has_passed": false,
+            "created_at": "2025-06-13T07:01:09.936Z",
+            "updated_at": "2025-06-26T09:49:20.337Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "account.customuser",
+        "pk": "f8a63d20-0b9f-409e-bffd-c7e4cb9888c4",
+        "fields": {
+            "password": "",
+            "last_login": null,
+            "is_superuser": false,
+            "first_name": "",
+            "last_name": "",
+            "email": "",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2025-06-13T09:56:56.614Z",
+            "full_name": "Serdar Isakov",
+            "phone": "+998332717176",
+            "chat_id": "1548220726",
+            "language": null,
+            "role": "User",
+            "has_passed": false,
+            "created_at": "2025-06-13T09:56:56.614Z",
+            "updated_at": "2025-06-13T09:57:31.634Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "account.customuser",
+        "pk": "f9732953-fa01-42ca-b700-9fd676413f2e",
+        "fields": {
+            "password": "",
+            "last_login": null,
+            "is_superuser": false,
+            "first_name": "",
+            "last_name": "",
+            "email": "",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2025-06-13T06:25:36.510Z",
+            "full_name": "Aziz Sagdullaev",
+            "phone": "+998977128507",
+            "chat_id": "638379222",
+            "language": null,
+            "role": "User",
+            "has_passed": false,
+            "created_at": "2025-06-13T06:25:36.510Z",
+            "updated_at": "2025-06-13T06:25:57.985Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "upload.file",
+        "pk": "1d1fc70a-16c6-4705-8083-20ec28c04ecb",
+        "fields": {
+            "created_at": "2025-06-28T10:26:13Z",
+            "updated_at": "2025-06-28T10:27:03.674Z",
+            "file": "files/stamndart.jpg"
+        }
+    },
+    {
+        "model": "upload.file",
+        "pk": "23521541-fe91-4d93-b661-9b6ae580ef76",
+        "fields": {
+            "created_at": "2025-06-13T05:56:22Z",
+            "updated_at": "2025-06-13T05:58:06.831Z",
+            "file": "files/sd1_uebungssatz_01-v26_x7M6AlN.mp4"
+        }
+    },
+    {
+        "model": "upload.file",
+        "pk": "48d0e791-e1d5-4245-bc5c-1682d9e2c37e",
+        "fields": {
+            "created_at": "2025-06-28T14:05:39Z",
+            "updated_at": "2025-06-28T14:05:59.749Z",
+            "file": "files/das_Alphabet_8czxn6x.pdf"
+        }
+    },
+    {
+        "model": "upload.file",
+        "pk": "52f2f678-7097-4db5-a972-7395f99bda79",
+        "fields": {
+            "created_at": "2025-06-28T12:50:26Z",
+            "updated_at": "2025-06-28T12:50:49.131Z",
+            "file": "files/das_Alphabet.pdf"
+        }
+    },
+    {
+        "model": "upload.file",
+        "pk": "6cfc3097-cf45-4514-a543-07007a507afa",
+        "fields": {
+            "created_at": "2025-06-28T11:00:45Z",
+            "updated_at": "2025-06-28T11:01:13.152Z",
+            "file": "files/stamndart_8DjYtaG.jpg"
+        }
+    },
+    {
+        "model": "upload.file",
+        "pk": "854b5911-7ec3-4e97-b42f-6aaf1f9bbb44",
+        "fields": {
+            "created_at": "2025-06-28T11:46:44Z",
+            "updated_at": "2025-06-28T11:47:09.851Z",
+            "file": "files/VIP.jpg"
+        }
+    },
+    {
+        "model": "upload.file",
+        "pk": "96fb3be0-49f1-4f81-bd89-1c4ceef1b212",
+        "fields": {
+            "created_at": "2025-06-12T12:30:55Z",
+            "updated_at": "2025-06-12T12:31:15.532Z",
+            "file": "files/sd1_uebungssatz_01-v26.mp4"
+        }
+    },
+    {
+        "model": "upload.file",
+        "pk": "ab09de29-af61-4c73-b43b-f0c8a27b9f4a",
+        "fields": {
+            "created_at": "2025-06-28T11:03:32Z",
+            "updated_at": "2025-06-28T11:03:51.547Z",
+            "file": "files/stamndart_6QJtrTF.jpg"
+        }
+    },
+    {
+        "model": "upload.file",
+        "pk": "bcdda1bc-c2b4-4428-80c6-ea94780e7751",
+        "fields": {
+            "created_at": "2025-06-28T11:43:17Z",
+            "updated_at": "2025-06-28T11:43:55.461Z",
+            "file": "files/premium.jpg"
+        }
+    },
+    {
+        "model": "upload.file",
+        "pk": "f8eed7dd-7171-4582-bf42-94b84d5c4d42",
+        "fields": {
+            "created_at": "2025-06-13T14:48:01Z",
+            "updated_at": "2025-06-13T14:55:52.575Z",
+            "file": "files/IMG_5412.MP4"
+        }
+    },
+    {
+        "model": "upload.file",
+        "pk": "fcee74d4-a6cd-4815-8695-83a00f19c5de",
+        "fields": {
+            "created_at": "2025-06-13T14:46:21Z",
+            "updated_at": "2025-06-13T14:46:42.673Z",
+            "file": "files/photo_2024-07-02_14-35-51.jpg"
+        }
+    },
+    {
+        "model": "upload.video",
+        "pk": "0a50759e-4359-4eed-8006-2db2952f0943",
+        "fields": {
+            "created_at": "2025-06-28T16:01:29Z",
+            "updated_at": "2025-06-28T16:01:34.059Z",
+            "url": "https://t.me/c/2768244801/146"
+        }
+    },
+    {
+        "model": "upload.video",
+        "pk": "18b57f15-be57-4ed3-a478-900064aa477a",
+        "fields": {
+            "created_at": "2025-06-28T12:34:22Z",
+            "updated_at": "2025-06-28T12:34:27.756Z",
+            "url": "https://t.me/c/2768244801/5"
+        }
+    },
+    {
+        "model": "upload.video",
+        "pk": "19351d9a-a76d-4d9f-8aec-f4db56158b04",
+        "fields": {
+            "created_at": "2025-06-28T15:18:39Z",
+            "updated_at": "2025-06-28T15:18:43.086Z",
+            "url": "https://t.me/c/2768244801/57"
+        }
+    },
+    {
+        "model": "upload.video",
+        "pk": "203c8acd-d2a5-4f0d-ae7b-fd95c34f165d",
+        "fields": {
+            "created_at": "2025-06-28T15:51:21Z",
+            "updated_at": "2025-06-28T15:51:25.979Z",
+            "url": "https://t.me/c/2768244801/131"
+        }
+    },
+    {
+        "model": "upload.video",
+        "pk": "21186006-aed7-418d-bad0-c3f3e9d96a53",
+        "fields": {
+            "created_at": "2025-06-28T15:53:33Z",
+            "updated_at": "2025-06-28T15:53:38.287Z",
+            "url": "https://t.me/c/2611547841/16"
+        }
+    },
+    {
+        "model": "upload.video",
+        "pk": "3187fd74-7cc6-49a4-89ac-25dd80ca2d7b",
+        "fields": {
+            "created_at": "2025-06-16T11:22:55Z",
+            "updated_at": "2025-06-16T11:23:03.047Z",
+            "url": "https://t.me/c/2611547841/2"
+        }
+    },
+    {
+        "model": "upload.video",
+        "pk": "38155dfd-4538-477c-b1cf-92c08f107bf3",
+        "fields": {
+            "created_at": "2025-06-28T14:10:23Z",
+            "updated_at": "2025-06-28T14:10:27.348Z",
+            "url": "https://t.me/c/2768244801/5"
+        }
+    },
+    {
+        "model": "upload.video",
+        "pk": "38ffaaba-e3ce-4769-85cb-783c2d88742a",
+        "fields": {
+            "created_at": "2025-06-16T08:40:43Z",
+            "updated_at": "2025-06-16T08:40:47.590Z",
+            "url": "https://yengi.mussi.uz/users"
+        }
+    },
+    {
+        "model": "upload.video",
+        "pk": "543604e2-ecf2-4536-9016-dab911ea668f",
+        "fields": {
+            "created_at": "2025-06-28T15:33:40Z",
+            "updated_at": "2025-06-28T15:33:44.243Z",
+            "url": "https://t.me/c/2611547841/8"
+        }
+    },
+    {
+        "model": "upload.video",
+        "pk": "5b612699-e68c-4ec3-97e3-8cc975d9dd75",
+        "fields": {
+            "created_at": "2025-06-28T15:49:27Z",
+            "updated_at": "2025-06-28T15:49:32.184Z",
+            "url": "https://t.me/c/2611547841/14"
+        }
+    },
+    {
+        "model": "upload.video",
+        "pk": "635dc549-6cb6-44df-a2bd-3ab758b52f42",
+        "fields": {
+            "created_at": "2025-06-28T15:42:36Z",
+            "updated_at": "2025-06-28T15:42:41.606Z",
+            "url": "https://t.me/c/2611547841/12"
+        }
+    },
+    {
+        "model": "upload.video",
+        "pk": "6977d59b-bac1-452f-8bed-1162c72e5eb3",
+        "fields": {
+            "created_at": "2025-06-28T15:22:40Z",
+            "updated_at": "2025-06-28T15:22:44.268Z",
+            "url": "https://t.me/c/2768244801/57"
+        }
+    },
+    {
+        "model": "upload.video",
+        "pk": "73763ed2-01c0-4505-87f9-7dd49c552367",
+        "fields": {
+            "created_at": "2025-06-28T15:40:15Z",
+            "updated_at": "2025-06-28T15:40:18.657Z",
+            "url": "https://t.me/c/2768244801/80"
+        }
+    },
+    {
+        "model": "upload.video",
+        "pk": "750973d9-fb49-4326-ad21-414dd9d0ee86",
+        "fields": {
+            "created_at": "2025-06-28T14:49:13Z",
+            "updated_at": "2025-06-28T14:49:18.281Z",
+            "url": "https://t.me/c/2611547841/2"
+        }
+    },
+    {
+        "model": "upload.video",
+        "pk": "99b87741-3983-4ab4-b4cf-e94e9b16def8",
+        "fields": {
+            "created_at": "2025-06-28T14:56:28Z",
+            "updated_at": "2025-06-28T14:56:32.619Z",
+            "url": "https://t.me/c/2611547841/4"
+        }
+    },
+    {
+        "model": "upload.video",
+        "pk": "9a6b6631-af44-4bb9-ac60-435c2f0e717d",
+        "fields": {
+            "created_at": "2025-06-28T14:46:14Z",
+            "updated_at": "2025-06-28T14:46:18.095Z",
+            "url": "https://t.me/c/2768244801/57"
+        }
+    },
+    {
+        "model": "upload.video",
+        "pk": "9f31a49a-4294-4c16-a38b-71482ac3036b",
+        "fields": {
+            "created_at": "2025-06-28T16:04:01Z",
+            "updated_at": "2025-06-28T16:04:05.696Z",
+            "url": "https://t.me/c/2611547841/18"
+        }
+    },
+    {
+        "model": "upload.video",
+        "pk": "9f3c3404-4b47-40d0-8778-3281d63ee0a6",
+        "fields": {
+            "created_at": "2025-06-28T14:52:33Z",
+            "updated_at": "2025-06-28T14:52:38.269Z",
+            "url": "https://t.me/c/2768244801/54"
+        }
+    },
+    {
+        "model": "upload.video",
+        "pk": "a1d8475e-ef39-4aa8-8b65-3069beca601a",
+        "fields": {
+            "created_at": "2025-06-28T15:20:51Z",
+            "updated_at": "2025-06-28T15:20:54.972Z",
+            "url": "https://t.me/c/2611547841/4"
+        }
+    },
+    {
+        "model": "upload.video",
+        "pk": "a78dd04f-e559-4211-9fd9-6cfe8bdcd136",
+        "fields": {
+            "created_at": "2025-06-16T08:49:40Z",
+            "updated_at": "2025-06-16T08:49:43.523Z",
+            "url": "https://youtu.be/m7WOGlt0F2o?si=UqHfNiValkS0nrmC"
+        }
+    },
+    {
+        "model": "upload.video",
+        "pk": "ae27b874-f913-4a96-a4fd-a5bcef00fe39",
+        "fields": {
+            "created_at": "2025-06-28T14:15:12Z",
+            "updated_at": "2025-06-28T14:15:18.464Z",
+            "url": "https://t.me/c/2768244801/51"
+        }
+    },
+    {
+        "model": "upload.video",
+        "pk": "b19f2169-0302-4add-a705-a0ae19a3f669",
+        "fields": {
+            "created_at": "2025-06-28T15:27:18Z",
+            "updated_at": "2025-06-28T15:27:21.529Z",
+            "url": "https://t.me/c/2768244801/76"
+        }
+    },
+    {
+        "model": "upload.video",
+        "pk": "b57eb6f3-5736-4b82-b17b-01be3ac5b855",
+        "fields": {
+            "created_at": "2025-06-28T14:50:39Z",
+            "updated_at": "2025-06-28T14:50:44.843Z",
+            "url": "https://t.me/c/2768244801/54"
+        }
+    },
+    {
+        "model": "upload.video",
+        "pk": "c9ed67c7-1af3-48c3-880e-3db5eab7df7d",
+        "fields": {
+            "created_at": "2025-06-28T15:34:16Z",
+            "updated_at": "2025-06-28T15:34:20.336Z",
+            "url": "https://t.me/c/2768244801/78"
+        }
+    },
+    {
+        "model": "upload.video",
+        "pk": "cb21a1b9-7752-41b4-88cc-5505cf85c2bc",
+        "fields": {
+            "created_at": "2025-06-28T15:25:35Z",
+            "updated_at": "2025-06-28T15:25:39.784Z",
+            "url": "https://t.me/c/2611547841/6"
+        }
+    },
+    {
+        "model": "upload.video",
+        "pk": "cf3c51cf-7691-42d3-a0cb-051a233f5476",
+        "fields": {
+            "created_at": "2025-06-28T15:46:44Z",
+            "updated_at": "2025-06-28T15:46:50.055Z",
+            "url": "https://t.me/c/2768244801/129"
+        }
+    },
+    {
+        "model": "upload.video",
+        "pk": "cf8600c2-74c2-4204-8766-70b903664a7c",
+        "fields": {
+            "created_at": "2025-06-28T15:38:30Z",
+            "updated_at": "2025-06-28T15:38:34.027Z",
+            "url": "https://t.me/c/2611547841/10"
+        }
+    },
+    {
+        "model": "upload.video",
+        "pk": "f48729b1-130f-4394-8280-809e79418f20",
+        "fields": {
+            "created_at": "2025-06-28T14:43:56Z",
+            "updated_at": "2025-06-28T14:44:00.270Z",
+            "url": "https://t.me/c/2768244801/54"
+        }
+    },
+    {
+        "model": "upload.video",
+        "pk": "f5ef9876-4328-4baf-975e-3799dea423ab",
+        "fields": {
+            "created_at": "2025-06-28T15:55:41Z",
+            "updated_at": "2025-06-28T15:55:45.620Z",
+            "url": "https://t.me/c/2768244801/133"
+        }
+    },
+    {
+        "model": "course.coursetype",
+        "pk": "020afa4e-f02d-4291-b4db-db2f655fd340",
+        "fields": {
+            "created_at": "2025-06-14T08:12:37Z",
+            "updated_at": "2025-06-14T08:12:48.367Z",
+            "name": "A1-B1 gacha"
+        }
+    },
+    {
+        "model": "course.coursetype",
+        "pk": "237ce973-1f37-419c-9cd9-78d39fdd0209",
+        "fields": {
+            "created_at": "2025-06-28T11:02:02Z",
+            "updated_at": "2025-06-28T11:02:11.111Z",
+            "name": "B1 daraja"
+        }
+    },
+    {
+        "model": "course.coursetype",
+        "pk": "33f25850-1339-48d0-9d1e-8ed1db2e52ff",
+        "fields": {
+            "created_at": "2025-06-14T08:12:05Z",
+            "updated_at": "2025-06-14T08:12:08.887Z",
+            "name": "A1 daraja"
+        }
+    },
+    {
+        "model": "course.coursetype",
+        "pk": "484008ec-e049-49ca-85fb-64405d3ee01f",
+        "fields": {
+            "created_at": "2025-06-28T11:09:19Z",
+            "updated_at": "2025-06-28T11:09:28.808Z",
+            "name": "A1 daraja"
+        }
+    },
+    {
+        "model": "course.coursetype",
+        "pk": "8361681a-1592-4683-bd78-044f7edff9eb",
+        "fields": {
+            "created_at": "2025-06-14T08:11:35Z",
+            "updated_at": "2025-06-14T08:11:47.175Z",
+            "name": "B1 daraja"
+        }
+    },
+    {
+        "model": "course.coursetype",
+        "pk": "83c86772-1af0-4826-a082-7d035afe515f",
+        "fields": {
+            "created_at": "2025-06-28T11:01:28Z",
+            "updated_at": "2025-06-28T11:01:48.901Z",
+            "name": "A1 daraja"
+        }
+    },
+    {
+        "model": "course.coursetype",
+        "pk": "95f1bfde-fd91-4719-9a97-d43a77e58c3b",
+        "fields": {
+            "created_at": "2025-06-28T11:02:14Z",
+            "updated_at": "2025-06-28T11:02:24.975Z",
+            "name": "Grammatika darslari"
+        }
+    },
+    {
+        "model": "course.coursetype",
+        "pk": "96808b40-0947-4969-ac98-00d860baedff",
+        "fields": {
+            "created_at": "2025-06-12T12:12:22Z",
+            "updated_at": "2025-06-14T08:11:24.571Z",
+            "name": "A2 daraja"
+        }
+    },
+    {
+        "model": "course.coursetype",
+        "pk": "a8463283-a46c-4720-a9d0-022b2b8341ba",
+        "fields": {
+            "created_at": "2025-06-28T11:01:51Z",
+            "updated_at": "2025-06-28T11:01:59.577Z",
+            "name": "A2 daraja"
+        }
+    },
+    {
+        "model": "course.coursetype",
+        "pk": "ca9d51bb-0f23-4454-baec-2d91776ea89d",
+        "fields": {
+            "created_at": "2025-06-14T08:13:04Z",
+            "updated_at": "2025-06-14T08:13:20.061Z",
+            "name": "A1-B1 dajalar"
+        }
+    },
+    {
+        "model": "course.course",
+        "pk": "5d5414ee-4d80-4021-b4fa-a46bb2cbd511",
+        "fields": {
+            "created_at": "2025-06-28T15:12:21Z",
+            "updated_at": "2025-06-28T15:13:55.319Z",
+            "name": "💫 Premium ta’rif",
+            "description": "Ushbu kurs nemis tilini o‘rganmoqchi bo‘lgan har bir kishi — istalgan yoshdagi boshlovchilar, tilni qayta esga olmoqchilar yoki o‘z darajasini mustahkamlashni xohlovchilar uchun mo‘ljallangan. 👨‍🎓👩‍🎓\r\n\r\n📚 Kurs A1, A2 va B1 bosqichlariga bo‘lingan bo‘lib, sizni oddiy tushunishdan tortib erkin muloqotga qadar olib chiqadi\r\n🎯 Kursimiz har bir bosqichni sodda, tushunarli va interaktiv uslubda o‘rgatadi.\r\n🎓 O‘quv yakunida siz mustaqil fikrlay oladigan va nemis tilida o‘z fikringizni bemalol bayon eta oladigan darajaga yetasiz!\r\n\r\n📘 50 ta grammatika darsi (A1 dan B1 gacha)\r\n📗 36 ta A1 Spektrum darsi\r\n📙 36 ta A2 Spektrum darsi\r\n📕 20 ta B1 Aspekte darsi\r\n🎧 Audio darslik\r\n📝 Har bir mavzu uchun testlar va mashqlar bajarish\r\n📄 B1 Aspekte kitobidan matn tarjimalari \r\n🎧 Maxsus tinglab tushunish uchun audiolar\r\n📚 Lug’atlar tarjimasi bilan\r\n🗣️ Sprechen uchun maxsus matnlar\r\n🎬 Maxsus subtitir bilan kinolar\r\n🎞️ Darajaga mos multfilmlar\r\n🎵 Musiqlar to’plami\r\n🗺️ Nemis tilini o’rganish uchun maxsus yo’l xaritasi\r\n🎙️ Maxsus podcastlar\r\n🎥 Lola Suvonovaning maxsus 12 ta sprechen uchun video darsligi\r\n💡 Personal skillarni rivojlantirish uchun video\r\n📊 Progres test tizimi\r\n\r\n👥 15 kishilik yopiq telegram guruh\r\n🗓️ Haftada 2 kun ustoz bilan yopiq telegram guruhda jonli suhbat\r\n👨‍🏫 Maxsus kurator\r\n💬 1 oyda 1 marta C2 darajadagi ustoz bilan speaking club\r\n📜 Kurs yakunida har bir o’quvchiga maxsus sertifikat\r\n🎉 Jonli bitiruv oqshomi\r\n\r\n🗓️ Platformadan foydalanish uchun 1 yillik dostup",
+            "photo": null,
+            "price": 849000.0,
+            "course_type": [
+                "83c86772-1af0-4826-a082-7d035afe515f",
+                "a8463283-a46c-4720-a9d0-022b2b8341ba",
+                "237ce973-1f37-419c-9cd9-78d39fdd0209"
+            ]
+        }
+    },
+    {
+        "model": "course.course",
+        "pk": "af31e030-a504-40a3-8443-50ac48e609fa",
+        "fields": {
+            "created_at": "2025-06-28T15:14:02Z",
+            "updated_at": "2025-06-28T15:15:33.061Z",
+            "name": "👑 VIP ta’rif",
+            "description": "Ushbu kurs nemis tilini o‘rganmoqchi bo‘lgan har bir kishi — istalgan yoshdagi boshlovchilar, tilni qayta esga olmoqchilar yoki o‘z darajasini mustahkamlashni xohlovchilar uchun mo‘ljallangan. 👨‍🎓👩‍🎓\r\n\r\n📚 Kurs A1, A2 va B1 bosqichlariga bo‘lingan bo‘lib, sizni oddiy tushunishdan tortib erkin muloqotga qadar olib chiqadi\r\n🎯 Kursimiz har bir bosqichni sodda, tushunarli va interaktiv uslubda o‘rgatadi.\r\n🎓 O‘quv yakunida siz mustaqil fikrlay oladigan va nemis tilida o‘z fikringizni bemalol bayon eta oladigan darajaga yetasiz!\r\n\r\n📘 50 ta grammatika darsi (A1 dan B1 gacha)\r\n📗 36 ta A1 Spektrum darsi\r\n📙 36 ta A2 Spektrum darsi\r\n📕 20 ta B1 Aspekte darsi\r\n🎧 Audio darslik\r\n📝 Har bir mavzu uchun testlar va mashqlar bajarish\r\n📄 B1 Aspekte kitobidan matn tarjimalari \r\n🎧 Maxsus tinglab tushunish uchun audiolar\r\n📚 Lug’atlar tarjimasi bilan\r\n🗣️ Sprechen uchun maxsus matnlar\r\n🎬 Maxsus subtitir bilan kinolar\r\n🎞️ Darajaga mos multfilmlar\r\n🎵 Musiqlar to’plami\r\n🗺️ Nemis tilini o’rganish uchun maxsus yo’l xaritasi\r\n🎙️ Maxsus podcastlar\r\n🎥 Lola Suvonovaning maxsus 12 ta sprechen uchun video darsligi\r\n💡 Personal skillarni rivojlantirish uchun video\r\n📊 Progres test tizimi\r\n\r\n🙋‍♂️ Individual yondashuv\r\n🔐 1 kishilik yopiq telegram guruh\r\n🗓️ Haftada 2 kun ustoz bilan yopiq telegram guruhda jonli suhbat\r\n👨‍🏫 Maxsus kurator\r\n💬 1 oyda 1 marta C2 darajadagi ustoz bilan speaking club\r\n📜 Kurs yakunida har bir o’quvchiga maxsus sertifikat\r\n🎉 Jonli bitiruv oqshomi\r\n\r\n🗓️ Platformadan foydalanish uchun 1 yillik dostup",
+            "photo": null,
+            "price": 1449000.0,
+            "course_type": [
+                "83c86772-1af0-4826-a082-7d035afe515f",
+                "a8463283-a46c-4720-a9d0-022b2b8341ba",
+                "237ce973-1f37-419c-9cd9-78d39fdd0209"
+            ]
+        }
+    },
+    {
+        "model": "course.course",
+        "pk": "d4cf2726-2203-4f7b-87af-e90f4cd75ac2",
+        "fields": {
+            "created_at": "2025-06-28T15:03:34Z",
+            "updated_at": "2025-06-28T15:11:20.001Z",
+            "name": "⭐ Standart ta’rif",
+            "description": "Ushbu kurs nemis tilini o‘rganmoqchi bo‘lgan har bir kishi — istalgan yoshdagi boshlovchilar, tilni qayta esga olmoqchilar yoki o‘z darajasini mustahkamlashni xohlovchilar uchun mo‘ljallangan. 👨‍🎓👩‍🎓\r\n\r\n📚 Kurs A1, A2 va B1 bosqichlariga bo‘lingan bo‘lib, sizni oddiy tushunishdan tortib erkin muloqotga qadar olib chiqadi\r\n🎯 Kursimiz har bir bosqichni sodda, tushunarli va interaktiv uslubda o‘rgatadi.\r\n🎓 O‘quv yakunida siz mustaqil fikrlay oladigan va nemis tilida o‘z fikringizni bemalol bayon eta oladigan darajaga yetasiz!\r\n\r\n📘 50 ta grammatika darsi A1 dan B1 gacha\r\n📗 36 ta A1 Spektrum darsi\r\n📙 36 ta A2 Spektrum darsi\r\n📕 20 ta B1 Aspekte darsi\r\n🎧 Audio darslik\r\n📝 Har bir mavzu uchun mashqlar va testlar bajarish\r\n📄 Matn tarjimalari B1 Aspekte kitobidan\r\n🎧 Maxsus tinglab tushunish uchun audiolar\r\n📚 Lug’atlar tarjimasi bilan\r\n🗣️ Sprechen uchun maxsus matnlar\r\n🎬 Maxsus subtitir bilan kinolar\r\n🎞️ Darajaga mos multfilmlar\r\n🎵 Musiqlar to’plami\r\n🗺️ Nemis tilini o’rganish uchun maxsus yo’l xaritasi\r\n🎙️ Maxsus podcastlar\r\n\r\n🗓️ Platformadan foydalanish uchun 1 yillik dostup",
+            "photo": null,
+            "price": 549000.0,
+            "course_type": [
+                "83c86772-1af0-4826-a082-7d035afe515f",
+                "a8463283-a46c-4720-a9d0-022b2b8341ba",
+                "237ce973-1f37-419c-9cd9-78d39fdd0209"
+            ]
+        }
+    },
+    {
+        "model": "theme.theme",
+        "pk": "0d7804a2-777f-435e-a651-2c9380cb51fb",
+        "fields": {
+            "created_at": "2025-06-28T15:48:02Z",
+            "updated_at": "2025-06-28T15:49:35.823Z",
+            "name": "15-dars.Artikel",
+            "description": "🧩 Artikel – Nemis tilida ot oldidagi aniqlovchilar\r\nNemis tilida har bir ot (narsaning nomi) artikl bilan birga ishlatiladi. Artikl otning jinsini (rodini) va gapdagi rolini bildiradi.\r\n\r\n📌 Artikl turlari:\r\nNominativ (asosiy shakl) uchun:\r\n\r\nder – erkak jins (masalan: der Tisch)\r\n\r\ndie – ayol jins (masalan: die Lampe)\r\n\r\ndas – o‘rta jins (masalan: das Buch)\r\n\r\ndie – ko‘plik (barcha jinslar uchun: die Bücher)\r\n\r\n🧠 Nima uchun bu muhim?\r\nArtiklni to‘g‘ri ishlatish:\r\n\r\nFe’l va ot o‘rtasidagi grammatik bog‘lanishni ko‘rsatadi\r\n\r\nKelishiklar (Nominativ, Akkusativ, Dativ) o‘zgarishlarini tushunishga yordam beradi\r\n\r\nTo‘g‘ri gap tuzish uchun zarur\r\n\r\n📝 Misollar:\r\nDer Mann liest. – Erkak o‘qiyapti.\r\n\r\nIch sehe die Lampe. – Men lampani ko‘ryapman.",
+            "course": "d4cf2726-2203-4f7b-87af-e90f4cd75ac2",
+            "materials": null,
+            "link": null,
+            "sprechen": "",
+            "schreiben": "",
+            "youtube": null,
+            "video": [
+                "5b612699-e68c-4ec3-97e3-8cc975d9dd75"
+            ],
+            "course_type": [
+                "83c86772-1af0-4826-a082-7d035afe515f"
+            ]
+        }
+    },
+    {
+        "model": "theme.theme",
+        "pk": "27b061a2-1bae-4034-bbaa-72d8d2b53572",
+        "fields": {
+            "created_at": "2025-06-28T15:25:48Z",
+            "updated_at": "2025-06-28T15:36:05.775Z",
+            "name": "8-dars. Spektrum A1 2.Kapitel (1-qism)",
+            "description": "📘 Spektrum A1+, Kapitel 2 – Alltag und Beruf\r\nUshbu bob sizni kundalik hayot va kasblar dunyosiga olib kiradi. O‘quvchilar nemis tilida oddiy ishlar, kasblar va kun tartibi haqida gapirishni o‘rganadilar. Asosiy yo‘nalishlar:\r\n\r\nKasblarni nomlash va ular haqida gapirish\r\n\r\nKundalik faoliyatlar (uyqu, ish, nonushta, sport va h.k.) haqida so‘zlash\r\n\r\nKun davomida vaqtni ifodalash (soat nechi bo‘lgani, vaqt ketma-ketligi)\r\n\r\n“haben” va “sein” yordamchi fe’llarini takrorlash\r\n\r\nModal fe’llar: müssen, können va ularning qo‘llanilishi\r\n\r\nFe’llarning hozirgi zamonda tuslanishi va gap tuzish\r\n\r\nBu bob orqali siz kunlik muloqotlarda eng ko‘p ishlatiladigan so‘zlar va tuzilmalarni o‘zlashtirasiz.",
+            "course": "d4cf2726-2203-4f7b-87af-e90f4cd75ac2",
+            "materials": null,
+            "link": "https://wordwall.net/resource/92460508",
+            "sprechen": "",
+            "schreiben": "",
+            "youtube": null,
+            "video": [
+                "b19f2169-0302-4add-a705-a0ae19a3f669"
+            ],
+            "course_type": [
+                "83c86772-1af0-4826-a082-7d035afe515f"
+            ]
+        }
+    },
+    {
+        "model": "theme.theme",
+        "pk": "2d58aefd-0e49-4a9e-bdec-3310222f08e0",
+        "fields": {
+            "created_at": "2025-06-28T15:32:15Z",
+            "updated_at": "2025-06-28T15:33:47.182Z",
+            "name": "9-dars. Trennbare und untrennbare Verben",
+            "description": "🔗 Trennbare und untrennbare Verben – Ajraluvchi va ajralmaydigan fe’llar\r\nBu mavzuda siz nemis tilidagi ajraluvchi (trennbare) va ajralmaydigan (untrennbare) old qo‘shimchali fe’llarni o‘rganasiz.\r\n\r\n✅ Trennbare Verben – Ajraluvchi fe’llar:\r\nBu fe’llar gapda ishlatilganda old qo‘shimchasi ajralib, gap oxiriga o‘tadi.\r\nMisol:\r\n\r\naufstehen → Ich stehe um 7 Uhr auf.\r\n(soat 7 da turaman)\r\n\r\n❌ Untrennbare Verben – Ajralmaydigan fe’llar:\r\nBu fe’llarning old qo‘shimchalari ajralmaydi va fe’l bilan birga qoladi.\r\nMisol:\r\n\r\nverstehen → Ich verstehe dich.\r\n(Seni tushunaman)\r\n\r\nSiz bu mavzuda:\r\n\r\nQaysi qo‘shimchalar ajralishini\r\n\r\nGap tuzilishidagi farqlarni\r\n\r\nHar ikkala turdagi fe’llarning hozirgi zamondagi tuslanishini\r\no‘rganasiz.\r\n\r\nBu mavzu grammatikani chuqurroq tushunish va to‘g‘ri gap tuzish uchun juda muhimdir.",
+            "course": "d4cf2726-2203-4f7b-87af-e90f4cd75ac2",
+            "materials": null,
+            "link": null,
+            "sprechen": "",
+            "schreiben": "",
+            "youtube": null,
+            "video": [
+                "543604e2-ecf2-4536-9016-dab911ea668f"
+            ],
+            "course_type": [
+                "83c86772-1af0-4826-a082-7d035afe515f"
+            ]
+        }
+    },
+    {
+        "model": "theme.theme",
+        "pk": "3a28f363-12d1-4ebc-ae0a-ad727b104ee3",
+        "fields": {
+            "created_at": "2025-06-28T15:51:50Z",
+            "updated_at": "2025-06-28T15:53:42.727Z",
+            "name": "17-dars.Negation",
+            "description": "🚫 Negation – Nemis tilida inkor shakli\r\nUshbu mavzuda siz nemis tilida salbiy (inkor) gaplar tuzishni o‘rganasiz. Inkor orqali biror narsa yo‘qligini, bo‘lmasligini yoki qilinmasligini bildiramiz.\r\n\r\n📌 Inkorning asosiy shakllari:\r\nnicht – fe’l, sifat, ravish yoki butun gapni inkor qiladi.\r\nMisollar:\r\n\r\nIch arbeite nicht. – Men ishlamayapman.\r\n\r\nDas ist nicht gut. – Bu yaxshi emas.\r\n\r\nkein / keine / keinen – otlarni (artiklli so‘zlarni) inkor qilish uchun ishlatiladi.\r\nMisollar:\r\n\r\nIch habe keinen Hund. – Menda it yo‘q.\r\n\r\nSie hat keine Zeit. – Unda vaqt yo‘q.\r\n\r\n🧠 Nima uchun muhim?\r\nTo‘g‘ri inkor qilish sizga fikr bildirayotganda:\r\n\r\nNoto‘g‘ri tushunishni oldini oladi\r\n\r\nAniq va ravon gapirishga yordam beradi\r\n\r\nSavollarga \"yo‘q\" deb to‘g‘ri javob bera olishni o‘rgatadi",
+            "course": "d4cf2726-2203-4f7b-87af-e90f4cd75ac2",
+            "materials": null,
+            "link": null,
+            "sprechen": "",
+            "schreiben": "",
+            "youtube": null,
+            "video": [
+                "21186006-aed7-418d-bad0-c3f3e9d96a53"
+            ],
+            "course_type": [
+                "83c86772-1af0-4826-a082-7d035afe515f"
+            ]
+        }
+    },
+    {
+        "model": "theme.theme",
+        "pk": "3f14e249-ce7a-4825-8815-a5999db91ce2",
+        "fields": {
+            "created_at": "2025-06-28T15:21:35Z",
+            "updated_at": "2025-06-28T15:36:57.959Z",
+            "name": "6-dars. Spektrum A1 1. Kapitel (3-qism)",
+            "description": "Bu bobda siz o‘zingizni tanishtirish, boshqa odamlar bilan salomlashish va ularning kelib chiqishi haqida so‘rashni o‘rganasiz. Mavzu davomida quyidagilar bilan tanishasiz:\r\n\r\nIsm, kasb va mamlakat haqida gapirish\r\n\r\nMashhur shaxslar haqida qisqacha ma'lumot berish\r\n\r\nShaxsiy ma'lumotlar (telefon raqami, email manzili)\r\n\r\n“sein” va “kommen” fe’llarining hozirgi zamonda qo‘llanishi\r\n\r\nNemis alifbosi va talaffuzi\r\n\r\nBu bob nemis tilida muloqot qilishning ilk bosqichlarini egallashga yordam beradi. O‘quvchilar real hayotga yaqin muloqot vaziyatlari orqali til ko‘nikmalarini shakllantiradilar.",
+            "course": "d4cf2726-2203-4f7b-87af-e90f4cd75ac2",
+            "materials": null,
+            "link": "https://wordwall.net/resource/92455068",
+            "sprechen": "",
+            "schreiben": "",
+            "youtube": null,
+            "video": [
+                "6977d59b-bac1-452f-8bed-1162c72e5eb3"
+            ],
+            "course_type": [
+                "83c86772-1af0-4826-a082-7d035afe515f"
+            ]
+        }
+    },
+    {
+        "model": "theme.theme",
+        "pk": "40d841df-fcd9-4561-a734-0f8f218a4632",
+        "fields": {
+            "created_at": "2025-06-28T15:42:53Z",
+            "updated_at": "2025-06-28T15:47:39.903Z",
+            "name": "14-dars. Spektrum A1 3.Kapitel (1-qism)",
+            "description": "📘 Spektrum A1+, Kapitel 3 – Essen und Trinken\r\nUshbu bobda siz nemis tilida ovqatlanish, ichimliklar, va do‘konda xarid qilish mavzulari bilan tanishasiz. Kundalik hayotda foydali bo‘lgan so‘zlar va iboralarni o‘rganasiz.\r\n\r\n🍽️ Asosiy mavzular:\r\nOziq-ovqat mahsulotlari va ichimlik nomlari\r\n\r\nDo‘konda savdo qilish: narx so‘rash, mahsulot so‘rash\r\n\r\nOvqatlanish odatlari haqida gapirish\r\n\r\nMenyuni tushunish va buyurtma berish\r\n\r\nMiqdor bildiruvchi so‘zlar: ein Kilo, eine Flasche, ein Stück\r\n\r\nFe’llar: essen, trinken, kaufen va ularning tuslanishi\r\n\r\nAkkusativ (tushum kelishigi)ga kirish: artikl o‘zgarishi (den, einen)\r\n\r\n🎯 Nima uchun muhim?\r\nBu bob sizga restoran, kafe yoki do‘konda o‘zingizni erkin ifoda etish imkonini beradi. Real hayotdagi muloqotlarda tez-tez qo‘llaniladigan mavzudir.",
+            "course": "d4cf2726-2203-4f7b-87af-e90f4cd75ac2",
+            "materials": null,
+            "link": "https://wordwall.net/resource/92486288",
+            "sprechen": "",
+            "schreiben": "",
+            "youtube": null,
+            "video": [
+                "cf3c51cf-7691-42d3-a0cb-051a233f5476"
+            ],
+            "course_type": [
+                "83c86772-1af0-4826-a082-7d035afe515f"
+            ]
+        }
+    },
+    {
+        "model": "theme.theme",
+        "pk": "41250249-a25a-43f3-8a65-f5adb175668e",
+        "fields": {
+            "created_at": "2025-06-28T16:02:04Z",
+            "updated_at": "2025-06-28T16:04:12.237Z",
+            "name": "20-dars. Possesivartikel",
+            "description": "🧩 Possessivartikel – Egalik bildiruvchi artikllar\r\nUshbu mavzuda siz nemis tilida kimga tegishli ekanini ifodalovchi so‘zlar – possesiv artikllar bilan tanishasiz. Ular otlardan oldin keladi va egalikni bildiradi.\r\n\r\n📌 Asosiy egalik artikllar:\r\nmein – mening\r\n\r\ndein – sening\r\n\r\nsein / ihr / sein – uning (erkak / ayol / o‘rta jins)\r\n\r\nunser – bizning\r\n\r\neuer – sizlarning\r\n\r\nihr / Ihr – ularning / Sizning (hurmat shakli)\r\n\r\n📝 Misollar:\r\nDas ist mein Buch. – Bu mening kitobim.\r\n\r\nWo ist dein Handy? – Telefoning qayerda?\r\n\r\nSein Auto ist neu. – Uning mashinasi yangi.\r\n\r\n🧠 Nima uchun bu muhim?\r\nPossessiv artikllarni bilish sizga:\r\n\r\nO‘z narsalaringiz yoki boshqalarniki haqida gapirish\r\n\r\nAniqlik kiritish\r\n\r\nSuhbatda to‘g‘ri ifoda berish imkonini beradi",
+            "course": "d4cf2726-2203-4f7b-87af-e90f4cd75ac2",
+            "materials": null,
+            "link": null,
+            "sprechen": "",
+            "schreiben": "",
+            "youtube": null,
+            "video": [
+                "9f31a49a-4294-4c16-a38b-71482ac3036b"
+            ],
+            "course_type": [
+                "83c86772-1af0-4826-a082-7d035afe515f"
+            ]
+        }
+    },
+    {
+        "model": "theme.theme",
+        "pk": "427f562d-9ca7-4b45-a812-521b3c569e98",
+        "fields": {
+            "created_at": "2025-06-28T15:24:03Z",
+            "updated_at": "2025-06-28T15:25:43.226Z",
+            "name": "7-dars.Modalverben",
+            "description": "🔧 Modalverben – Istak, ruxsat va majburiyatni ifodalovchi fe’llar\r\nUshbu mavzuda siz modal fe’llar bilan tanishasiz. Ular boshqa fe’l bilan birga ishlatiladi va istak, zarurat, ruxsat yoki majburiyat kabi ma’nolarni bildiradi.\r\n\r\nAsosiy modal fe’llar:\r\n\r\nkönnen – qila olish\r\n\r\nmüssen – kerak, majbur\r\n\r\ndürfen – ruxsat bo‘lish\r\n\r\nwollen – xohlamoq\r\n\r\nsollen – kerak bo‘lmoq (boshqalarning ko‘rsatmasi)\r\n\r\nmögen – yoqtirmoq\r\n\r\nMisollar:\r\n\r\nIch kann Deutsch sprechen. (Men nemischa gapira olaman.)\r\n\r\nDu musst lernen. (Sen o‘qishing kerak.)\r\n\r\nSiz bu mavzuda modal fe’llarning hozirgi zamondagi tuslanishi va ularning gapda qanday tartibda joylashishini o‘rganasiz.",
+            "course": "d4cf2726-2203-4f7b-87af-e90f4cd75ac2",
+            "materials": null,
+            "link": null,
+            "sprechen": "",
+            "schreiben": "",
+            "youtube": null,
+            "video": [
+                "cb21a1b9-7752-41b4-88cc-5505cf85c2bc"
+            ],
+            "course_type": [
+                "83c86772-1af0-4826-a082-7d035afe515f"
+            ]
+        }
+    },
+    {
+        "model": "theme.theme",
+        "pk": "580b575c-698c-4a2b-86b9-16b2ad7106e0",
+        "fields": {
+            "created_at": "2025-06-28T15:19:47Z",
+            "updated_at": "2025-06-28T15:21:24.175Z",
+            "name": "5-dars.  Sein und Haben",
+            "description": "Bu mavzuda nemis tilidagi ikki asosiy fe’l – sein (bo‘lmoq) va haben (ega bo‘lmoq) bilan tanishasiz. Ular kundalik suhbatlarda juda ko‘p ishlatiladi.\r\n\r\nSein yordamida kimdir yoki nimadir haqida holat va tavsif beriladi:\r\nIch bin Schüler. (Men o‘quvchiman)\r\n\r\nHaben yordamida biror narsaga ega bo‘lish ifodalanadi:\r\nDu hast ein Buch. (Senda kitob bor)\r\n\r\nShuningdek, siz ushbu fe’llarning shaxsga qarab tuslanishini (ich bin, du bist, er hat, wir haben va h.k.) o‘rganasiz.",
+            "course": "d4cf2726-2203-4f7b-87af-e90f4cd75ac2",
+            "materials": null,
+            "link": null,
+            "sprechen": "",
+            "schreiben": "",
+            "youtube": null,
+            "video": [
+                "a1d8475e-ef39-4aa8-8b65-3069beca601a"
+            ],
+            "course_type": [
+                "83c86772-1af0-4826-a082-7d035afe515f"
+            ]
+        }
+    },
+    {
+        "model": "theme.theme",
+        "pk": "7480a1d8-b311-44c7-a648-20c7d238ecef",
+        "fields": {
+            "created_at": "2025-06-28T15:40:52Z",
+            "updated_at": "2025-06-28T15:42:47.395Z",
+            "name": "13-dars.Plural",
+            "description": "🔤 Plural – Nemis tilida ko‘plik shakli\r\nUshbu mavzuda siz nemis tilida otlarning ko‘plik (plural) shaklini qanday hosil qilishni o‘rganasiz. Har bir otning ko‘plik shakli bir xil qoida bilan yasalmasligi sababli, bu mavzu alohida e’tibor talab qiladi.\r\n\r\n📌 Asosiy jihatlar:\r\nKo‘plik hosil qilish uchun otlarga -e, -en, -n, -er qo‘shimchalari qo‘shiladi yoki umlaut (ä, ö, ü) o‘zgarishi yuz beradi.\r\nMisollar:\r\n\r\nder Tisch → die Tische\r\n\r\ndie Blume → die Blumen\r\n\r\ndas Kind → die Kinder\r\n\r\nBa’zi so‘zlar o‘zgarmaydi:\r\n\r\ndas Fenster → die Fenster\r\n\r\n🧠 Nega bu muhim?\r\nPlural shakllarini bilish sizga to‘g‘ri gap tuzish, aniq ifoda berish va fikrni ko‘plikda bildirish uchun zarurdir.",
+            "course": "d4cf2726-2203-4f7b-87af-e90f4cd75ac2",
+            "materials": null,
+            "link": null,
+            "sprechen": "",
+            "schreiben": "",
+            "youtube": null,
+            "video": [
+                "635dc549-6cb6-44df-a2bd-3ab758b52f42"
+            ],
+            "course_type": [
+                "83c86772-1af0-4826-a082-7d035afe515f"
+            ]
+        }
+    },
+    {
+        "model": "theme.theme",
+        "pk": "776e6bad-bb31-4935-9a72-46b5148baf5c",
+        "fields": {
+            "created_at": "2025-06-28T15:50:10Z",
+            "updated_at": "2025-06-28T15:51:46.911Z",
+            "name": "16-dars. Spektrum A1 3.Kapitel (2-qism)",
+            "description": "📘 Spektrum A1+, Kapitel 3 – Essen und Trinken\r\nUshbu bobda siz nemis tilida ovqatlanish, ichimliklar, va do‘konda xarid qilish mavzulari bilan tanishasiz. Kundalik hayotda foydali bo‘lgan so‘zlar va iboralarni o‘rganasiz.\r\n\r\n🍽️ Asosiy mavzular:\r\nOziq-ovqat mahsulotlari va ichimlik nomlari\r\n\r\nDo‘konda savdo qilish: narx so‘rash, mahsulot so‘rash\r\n\r\nOvqatlanish odatlari haqida gapirish\r\n\r\nMenyuni tushunish va buyurtma berish\r\n\r\nMiqdor bildiruvchi so‘zlar: ein Kilo, eine Flasche, ein Stück\r\n\r\nFe’llar: essen, trinken, kaufen va ularning tuslanishi\r\n\r\nAkkusativ (tushum kelishigi)ga kirish: artikl o‘zgarishi (den, einen)\r\n\r\n🎯 Nima uchun muhim?\r\nBu bob sizga restoran, kafe yoki do‘konda o‘zingizni erkin ifoda etish imkonini beradi. Real hayotdagi muloqotlarda tez-tez qo‘llaniladigan mavzudir.",
+            "course": "d4cf2726-2203-4f7b-87af-e90f4cd75ac2",
+            "materials": null,
+            "link": "https://wordwall.net/resource/92486563",
+            "sprechen": "",
+            "schreiben": "",
+            "youtube": null,
+            "video": [
+                "203c8acd-d2a5-4f0d-ae7b-fd95c34f165d"
+            ],
+            "course_type": [
+                "83c86772-1af0-4826-a082-7d035afe515f"
+            ]
+        }
+    },
+    {
+        "model": "theme.theme",
+        "pk": "77d143a4-876e-4247-a851-4be66fc39b4d",
+        "fields": {
+            "created_at": "2025-06-28T15:59:25Z",
+            "updated_at": "2025-06-28T16:01:59.451Z",
+            "name": "19-dars. Spektrum A1 4.Kapitel (1-qism)",
+            "description": "🏠 Spektrum A1+, Kapitel 4 – Wohnen und Umgebung\r\nUshbu bobda siz yashash joyi, uy turi, va atrof-muhit haqida gapirishni o‘rganasiz. Darslar orqali o‘z uyingizni tasvirlash, manzilni aytish va yashash sharoiti haqida suhbatlashish ko‘nikmalarini egallaysiz.\r\n\r\n🛋️ Asosiy mavzular:\r\nTurar joy turlari: Wohnung, Haus, Zimmer\r\n\r\nUy jihozlari va xonalar nomlari (Küche, Bad, Bett, Tisch...)\r\n\r\nUy haqida so‘zlash va ta’riflash\r\n\r\nYashash joyingiz manzilini aytish (Adresse, Straße, Nummer)\r\n\r\nes gibt iborasi – mavjudlikni ifodalash\r\n\r\nAkkusativ va artikl o‘zgarishlarini davom ettirish\r\n\r\nFe’llar: wohnen, leben, haben, sein va ularning tuslanishi\r\n\r\n🎯 Nima uchun muhim?\r\nBu mavzu orqali siz nemis tilida:\r\n\r\nO‘zingizning yoki boshqalarning yashash joyi haqida to‘g‘ri gapira olasiz\r\n\r\nXarita yoki manzil so‘rash va tariflashni o‘rganasiz\r\n\r\nReal hayotda foydali bo‘lgan ko‘plab so‘zlar bilan tanishasiz",
+            "course": "d4cf2726-2203-4f7b-87af-e90f4cd75ac2",
+            "materials": null,
+            "link": "https://wordwall.net/resource/92576624",
+            "sprechen": "",
+            "schreiben": "",
+            "youtube": null,
+            "video": [
+                "0a50759e-4359-4eed-8006-2db2952f0943"
+            ],
+            "course_type": [
+                "83c86772-1af0-4826-a082-7d035afe515f"
+            ]
+        }
+    },
+    {
+        "model": "theme.theme",
+        "pk": "8b020eef-7a92-4f1a-9e23-bba3957d0e6c",
+        "fields": {
+            "created_at": "2025-06-28T14:08:02Z",
+            "updated_at": "2025-06-28T15:16:59.581Z",
+            "name": "1-dars.Das Alphabet",
+            "description": "Ushbu mavzuda siz nemis tilidagi 26 ta asosiy harf va maxsus umlaut harflari (ä, ö, ü) hamda “ß” belgisi bilan tanishasiz. Har bir harfning to‘g‘ri talaffuzi va nemischa so‘zlardagi qo‘llanilishi o‘rganiladi. Bu mavzu yozish, o‘qish va talaffuz ko‘nikmalarining mustahkam poydevori bo‘lib xizmat qiladi.",
+            "course": "d4cf2726-2203-4f7b-87af-e90f4cd75ac2",
+            "materials": null,
+            "link": null,
+            "sprechen": "",
+            "schreiben": "",
+            "youtube": null,
+            "video": [
+                "38155dfd-4538-477c-b1cf-92c08f107bf3"
+            ],
+            "course_type": [
+                "83c86772-1af0-4826-a082-7d035afe515f"
+            ]
+        }
+    },
+    {
+        "model": "theme.theme",
+        "pk": "92cd1eec-df82-46cd-b33a-ce59f4ab2513",
+        "fields": {
+            "created_at": "2025-06-28T14:41:19Z",
+            "updated_at": "2025-06-28T15:17:25.040Z",
+            "name": "3-dars. Personalpronomen, Präsens und Vokalwechsel",
+            "description": "Bu mavzuda nemis tilidagi asosiy grammatik tushunchalar bilan tanishasiz:\r\n\r\nPersonalpronomen – Men, sen, u kabi shaxs olmoshlari (ich, du, er, sie, es, wir, ihr, sie, Sie) bilan tanishib chiqasiz.\r\n\r\nPräsens – Fe’llarning hozirgi zamonda qanday tuslanishini o‘rganasiz. Bu kundalik gaplar tuzish uchun muhim bosqichdir.\r\n\r\nVokalwechsel – Ba’zi fe’llarda “du” va “er/sie/es” shakllarida unli harflar almashishi (masalan: fahren → du fährst) haqida ma’lumot olasiz.\r\n\r\nUshbu mavzu sizga nemis tilida to‘g‘ri va ravon gap tuzish uchun zarur asosiy grammatikani beradi.",
+            "course": "d4cf2726-2203-4f7b-87af-e90f4cd75ac2",
+            "materials": null,
+            "link": null,
+            "sprechen": "",
+            "schreiben": "",
+            "youtube": null,
+            "video": [
+                "750973d9-fb49-4326-ad21-414dd9d0ee86"
+            ],
+            "course_type": [
+                "83c86772-1af0-4826-a082-7d035afe515f"
+            ]
+        }
+    },
+    {
+        "model": "theme.theme",
+        "pk": "963357ac-d56e-4f28-b796-cce2da215556",
+        "fields": {
+            "created_at": "2025-06-28T15:39:00Z",
+            "updated_at": "2025-06-28T15:40:37.367Z",
+            "name": "12-dars.Spektrum A1 2.Kapitel (3-qism)",
+            "description": "📘 Spektrum A1+, Kapitel 2 – Alltag und Beruf\r\nUshbu bob sizni kundalik hayot va kasblar dunyosiga olib kiradi. O‘quvchilar nemis tilida oddiy ishlar, kasblar va kun tartibi haqida gapirishni o‘rganadilar. Asosiy yo‘nalishlar:\r\n\r\nKasblarni nomlash va ular haqida gapirish\r\n\r\nKundalik faoliyatlar (uyqu, ish, nonushta, sport va h.k.) haqida so‘zlash\r\n\r\nKun davomida vaqtni ifodalash (soat nechi bo‘lgani, vaqt ketma-ketligi)\r\n\r\n“haben” va “sein” yordamchi fe’llarini takrorlash\r\n\r\nModal fe’llar: müssen, können va ularning qo‘llanilishi\r\n\r\nFe’llarning hozirgi zamonda tuslanishi va gap tuzish\r\n\r\nBu bob orqali siz kunlik muloqotlarda eng ko‘p ishlatiladigan so‘zlar va tuzilmalarni o‘zlashtirasiz.",
+            "course": "d4cf2726-2203-4f7b-87af-e90f4cd75ac2",
+            "materials": null,
+            "link": "https://wordwall.net/resource/92461564",
+            "sprechen": "",
+            "schreiben": "",
+            "youtube": null,
+            "video": [
+                "73763ed2-01c0-4505-87f9-7dd49c552367"
+            ],
+            "course_type": [
+                "83c86772-1af0-4826-a082-7d035afe515f"
+            ]
+        }
+    },
+    {
+        "model": "theme.theme",
+        "pk": "a0b0abb8-2a3d-42d6-8197-a87bcddcd29d",
+        "fields": {
+            "created_at": "2025-06-28T15:37:06Z",
+            "updated_at": "2025-06-28T15:38:38.865Z",
+            "name": "11-dars. W-Fragen,Ja/Nein Fragen und Wörter im Satz",
+            "description": "❓ W-Fragen, Ja/Nein-Fragen und Wörter im Satz – Savol tuzish va gap tartibi\r\nUshbu mavzuda siz nemis tilida savol berish va gapdagi so‘zlar tartibini o‘rganasiz. Bu kundalik muloqot uchun juda muhim bo‘lgan mavzudir.\r\n\r\n🟢 W-Fragen – So‘roq so‘zlari bilan savollar:\r\nSavollar was, wo, wann, wie, warum kabi so‘roq so‘zlari bilan boshlanadi.\r\nMisol: Wo wohnst du? – (Sen qayerda yashaysan?)\r\n\r\n🔵 Ja/Nein-Fragen – Ha/yo‘q bilan javob beriladigan savollar:\r\nBu savollar fe’l bilan boshlanadi.\r\nMisol: Kommst du aus Deutschland? – (Sen Germaniyadansanmi?)\r\nJavob: Ja, ich komme aus Deutschland. yoki Nein, ich komme aus der Schweiz.\r\n\r\n🟡 Wörter im Satz – Gapdagi so‘zlar tartibi:\r\nSiz gapda subyekt, fe’l va boshqa so‘zlar qanday tartibda kelishini o‘rganasiz.\r\nMasalan:\r\n\r\nIch lerne Deutsch.\r\n\r\nHeute lerne ich Deutsch.\r\n\r\nUshbu mavzu yordamida siz savollarni to‘g‘ri tuzishni va gapdagi so‘zlarning joylashishini o‘zlashtirasiz.",
+            "course": "d4cf2726-2203-4f7b-87af-e90f4cd75ac2",
+            "materials": null,
+            "link": null,
+            "sprechen": "",
+            "schreiben": "",
+            "youtube": null,
+            "video": [
+                "cf8600c2-74c2-4204-8766-70b903664a7c"
+            ],
+            "course_type": [
+                "83c86772-1af0-4826-a082-7d035afe515f"
+            ]
+        }
+    },
+    {
+        "model": "theme.theme",
+        "pk": "bcc7d3fe-edef-4d60-a28b-b57b63e742e3",
+        "fields": {
+            "created_at": "2025-06-28T15:33:51Z",
+            "updated_at": "2025-06-28T15:35:49.206Z",
+            "name": "10-dars. Spektrum A1 2.Kapitel (2-qism)",
+            "description": "📘 Spektrum A1+, Kapitel 2 – Alltag und Beruf\r\nUshbu bob sizni kundalik hayot va kasblar dunyosiga olib kiradi. O‘quvchilar nemis tilida oddiy ishlar, kasblar va kun tartibi haqida gapirishni o‘rganadilar. Asosiy yo‘nalishlar:\r\n\r\nKasblarni nomlash va ular haqida gapirish\r\n\r\nKundalik faoliyatlar (uyqu, ish, nonushta, sport va h.k.) haqida so‘zlash\r\n\r\nKun davomida vaqtni ifodalash (soat nechi bo‘lgani, vaqt ketma-ketligi)\r\n\r\n“haben” va “sein” yordamchi fe’llarini takrorlash\r\n\r\nModal fe’llar: müssen, können va ularning qo‘llanilishi\r\n\r\nFe’llarning hozirgi zamonda tuslanishi va gap tuzish\r\n\r\nBu bob orqali siz kunlik muloqotlarda eng ko‘p ishlatiladigan so‘zlar va tuzilmalarni o‘zlashtirasiz.",
+            "course": null,
+            "materials": null,
+            "link": "https://wordwall.net/resource/92460952",
+            "sprechen": "",
+            "schreiben": "",
+            "youtube": null,
+            "video": [
+                "c9ed67c7-1af3-48c3-880e-3db5eab7df7d"
+            ],
+            "course_type": [
+                "83c86772-1af0-4826-a082-7d035afe515f"
+            ]
+        }
+    },
+    {
+        "model": "theme.theme",
+        "pk": "c8f5c718-38f7-40b6-8716-04e0c7d808c7",
+        "fields": {
+            "created_at": "2025-06-28T14:44:40Z",
+            "updated_at": "2025-06-28T15:36:41.154Z",
+            "name": "4-dars. Spektrum A1  1.Kapitel (2-qism)",
+            "description": "Bu bobda siz o‘zingizni tanishtirish, boshqa odamlar bilan salomlashish va ularning kelib chiqishi haqida so‘rashni o‘rganasiz. Mavzu davomida quyidagilar bilan tanishasiz:\r\n\r\nIsm, kasb va mamlakat haqida gapirish\r\n\r\nMashhur shaxslar haqida qisqacha ma'lumot berish\r\n\r\nShaxsiy ma'lumotlar (telefon raqami, email manzili)\r\n\r\n“sein” va “kommen” fe’llarining hozirgi zamonda qo‘llanishi\r\n\r\nNemis alifbosi va talaffuzi\r\n\r\nBu bob nemis tilida muloqot qilishning ilk bosqichlarini egallashga yordam beradi. O‘quvchilar real hayotga yaqin muloqot vaziyatlari orqali til ko‘nikmalarini shakllantiradilar.",
+            "course": "d4cf2726-2203-4f7b-87af-e90f4cd75ac2",
+            "materials": null,
+            "link": "https://wordwall.net/resource/92454218",
+            "sprechen": "",
+            "schreiben": "",
+            "youtube": null,
+            "video": [
+                "9f3c3404-4b47-40d0-8778-3281d63ee0a6"
+            ],
+            "course_type": [
+                "83c86772-1af0-4826-a082-7d035afe515f"
+            ]
+        }
+    },
+    {
+        "model": "theme.theme",
+        "pk": "c961fe29-4ea0-4f31-bcdb-9147f9b2613b",
+        "fields": {
+            "created_at": "2025-06-28T15:54:43Z",
+            "updated_at": "2025-06-28T15:56:43.669Z",
+            "name": "18-dars. Spektrum A1 3.Kapitel (3-qism)",
+            "description": "📘 Spektrum A1+, Kapitel 3 – Essen und Trinken\r\nUshbu bobda siz nemis tilida ovqatlanish, ichimliklar, va do‘konda xarid qilish mavzulari bilan tanishasiz. Kundalik hayotda foydali bo‘lgan so‘zlar va iboralarni o‘rganasiz.\r\n\r\n🍽️ Asosiy mavzular:\r\nOziq-ovqat mahsulotlari va ichimlik nomlari\r\n\r\nDo‘konda savdo qilish: narx so‘rash, mahsulot so‘rash\r\n\r\nOvqatlanish odatlari haqida gapirish\r\n\r\nMenyuni tushunish va buyurtma berish\r\n\r\nMiqdor bildiruvchi so‘zlar: ein Kilo, eine Flasche, ein Stück\r\n\r\nFe’llar: essen, trinken, kaufen va ularning tuslanishi\r\n\r\nAkkusativ (tushum kelishigi)ga kirish: artikl o‘zgarishi (den, einen)\r\n\r\n🎯 Nima uchun muhim?\r\nBu bob sizga restoran, kafe yoki do‘konda o‘zingizni erkin ifoda etish imkonini beradi. Real hayotdagi muloqotlarda tez-tez qo‘llaniladigan mavzudir.",
+            "course": "d4cf2726-2203-4f7b-87af-e90f4cd75ac2",
+            "materials": null,
+            "link": "https://wordwall.net/resource/92487069",
+            "sprechen": "",
+            "schreiben": "",
+            "youtube": null,
+            "video": [
+                "f5ef9876-4328-4baf-975e-3799dea423ab"
+            ],
+            "course_type": [
+                "83c86772-1af0-4826-a082-7d035afe515f"
+            ]
+        }
+    },
+    {
+        "model": "theme.theme",
+        "pk": "f9f440a8-e118-4765-aacf-bf4c5f7ae79c",
+        "fields": {
+            "created_at": "2025-06-28T14:13:38Z",
+            "updated_at": "2025-06-28T15:36:27.464Z",
+            "name": "2-dars.Spektrum  A1  1.Kapitel (1-qism)",
+            "description": "Bu bobda siz o‘zingizni tanishtirish, boshqa odamlar bilan salomlashish va ularning kelib chiqishi haqida so‘rashni o‘rganasiz. Mavzu davomida quyidagilar bilan tanishasiz:\r\n\r\nIsm, kasb va mamlakat haqida gapirish\r\n\r\nMashhur shaxslar haqida qisqacha ma'lumot berish\r\n\r\nShaxsiy ma'lumotlar (telefon raqami, email manzili)\r\n\r\n“sein” va “kommen” fe’llarining hozirgi zamonda qo‘llanishi\r\n\r\nNemis alifbosi va talaffuzi\r\n\r\nBu bob nemis tilida muloqot qilishning ilk bosqichlarini egallashga yordam beradi. O‘quvchilar real hayotga yaqin muloqot vaziyatlari orqali til ko‘nikmalarini shakllantiradilar.",
+            "course": "d4cf2726-2203-4f7b-87af-e90f4cd75ac2",
+            "materials": null,
+            "link": "https://wordwall.net/resource/92452780",
+            "sprechen": "",
+            "schreiben": "",
+            "youtube": null,
+            "video": [
+                "ae27b874-f913-4a96-a4fd-a5bcef00fe39"
+            ],
+            "course_type": [
+                "83c86772-1af0-4826-a082-7d035afe515f"
+            ]
+        }
+    },
+    {
+        "model": "theme.themeattendance",
+        "pk": "648ee149-d198-4c68-ac2b-e10c7e425529",
+        "fields": {
+            "created_at": "2025-06-29T07:08:29.662Z",
+            "updated_at": "2025-06-29T07:08:29.663Z",
+            "user": "ebaa81fa-d193-404d-b602-a6f1418c35c4",
+            "theme": "41250249-a25a-43f3-8a65-f5adb175668e",
+            "is_attendance": true,
+            "is_complete_test": false,
+            "ball": 0
+        }
+    },
+    {
+        "model": "theme.themeattendance",
+        "pk": "83ba5893-a24d-403d-9568-bd312b6d3d09",
+        "fields": {
+            "created_at": "2025-06-16T11:30:17.304Z",
+            "updated_at": "2025-06-16T14:44:46.016Z",
+            "user": "f327dc82-030c-465c-8cb9-ad394ff79e5f",
+            "theme": null,
+            "is_attendance": true,
+            "is_complete_test": true,
+            "ball": 0
+        }
+    },
+    {
+        "model": "theme.themeattendance",
+        "pk": "97de98a3-24eb-4738-9623-904161f31071",
+        "fields": {
+            "created_at": "2025-06-28T14:28:02.570Z",
+            "updated_at": "2025-06-28T14:28:02.571Z",
+            "user": "f327dc82-030c-465c-8cb9-ad394ff79e5f",
+            "theme": "f9f440a8-e118-4765-aacf-bf4c5f7ae79c",
+            "is_attendance": true,
+            "is_complete_test": false,
+            "ball": 0
+        }
+    },
+    {
+        "model": "theme.themeattendance",
+        "pk": "b220c299-e50e-417a-818b-803c8954abac",
+        "fields": {
+            "created_at": "2025-06-29T07:10:48.294Z",
+            "updated_at": "2025-06-29T07:10:48.294Z",
+            "user": "ebaa81fa-d193-404d-b602-a6f1418c35c4",
+            "theme": "c8f5c718-38f7-40b6-8716-04e0c7d808c7",
+            "is_attendance": true,
+            "is_complete_test": false,
+            "ball": 0
+        }
+    },
+    {
+        "model": "theme.themeattendance",
+        "pk": "b8c3661d-c7eb-4ece-9860-580cb19fd009",
+        "fields": {
+            "created_at": "2025-06-28T14:10:51.667Z",
+            "updated_at": "2025-06-28T14:10:51.668Z",
+            "user": "f327dc82-030c-465c-8cb9-ad394ff79e5f",
+            "theme": "8b020eef-7a92-4f1a-9e23-bba3957d0e6c",
+            "is_attendance": true,
+            "is_complete_test": false,
+            "ball": 0
+        }
+    },
+    {
+        "model": "theme.themeattendance",
+        "pk": "cfbd5640-b1a2-4042-9a4e-1e8374fc3161",
+        "fields": {
+            "created_at": "2025-06-29T07:22:09.892Z",
+            "updated_at": "2025-06-29T07:22:09.892Z",
+            "user": "ebaa81fa-d193-404d-b602-a6f1418c35c4",
+            "theme": "77d143a4-876e-4247-a851-4be66fc39b4d",
+            "is_attendance": true,
+            "is_complete_test": false,
+            "ball": 0
+        }
+    },
+    {
+        "model": "theme.themeattendance",
+        "pk": "dc537d7c-80f2-450f-97d9-166f2443cf2d",
+        "fields": {
+            "created_at": "2025-06-28T14:04:13.054Z",
+            "updated_at": "2025-06-28T14:04:13.054Z",
+            "user": "f327dc82-030c-465c-8cb9-ad394ff79e5f",
+            "theme": null,
+            "is_attendance": true,
+            "is_complete_test": false,
+            "ball": 0
+        }
+    },
+    {
+        "model": "theme.themeattendance",
+        "pk": "fa5673da-c93c-4a1e-bdea-8921739d6e47",
+        "fields": {
+            "created_at": "2025-06-16T13:16:11.950Z",
+            "updated_at": "2025-06-16T13:16:11.951Z",
+            "user": "da03e3db-6958-4e75-8146-8f45e00901e2",
+            "theme": null,
+            "is_attendance": true,
+            "is_complete_test": false,
+            "ball": 0
+        }
+    },
+    {
+        "model": "transaction.transaction",
+        "pk": "07870cf0-cd3d-4891-a9f4-ba1a21d8c4a7",
+        "fields": {
+            "created_at": "2025-06-16T11:29:54.981Z",
+            "updated_at": "2025-06-16T11:29:58.635Z",
+            "user": "f327dc82-030c-465c-8cb9-ad394ff79e5f",
+            "amount": 549000.0,
+            "course": null,
+            "status": "Accepted",
+            "file": "AgACAgIAAxkBAAIBuGhQAAEyekOrL6caPe1FUfa3pbzcbgACvvIxG4eMgUoz5OM5iwSDSQEAAwIAA3kAAzYE",
+            "updater": null
+        }
+    },
+    {
+        "model": "transaction.transaction",
+        "pk": "3ca84ce1-e7bd-431a-bc9e-6ab322fbe9fc",
+        "fields": {
+            "created_at": "2025-06-28T15:08:15.857Z",
+            "updated_at": "2025-06-28T15:08:15.858Z",
+            "user": "ebaa81fa-d193-404d-b602-a6f1418c35c4",
+            "amount": 0.0,
+            "course": null,
+            "status": "Pending",
+            "file": "AgACAgIAAxkBAAIDMmhgBUwf3eXvzSBou4BhUNu96b1BAAKR-DEbcaoAAUsF-0Hm8qyA1gEAAwIAA3cAAzYE",
+            "updater": null
+        }
+    },
+    {
+        "model": "transaction.transaction",
+        "pk": "4dbeb141-b03e-46b6-9f61-269e31adcc3a",
+        "fields": {
+            "created_at": "2025-06-28T12:36:04.028Z",
+            "updated_at": "2025-06-28T12:36:11.155Z",
+            "user": "39f39aed-f963-4867-ab78-4c701ed1cacc",
+            "amount": 1449000.0,
+            "course": null,
+            "status": "Accepted",
+            "file": "AgACAgIAAxkBAAICkmhf4bMgn5up-MszBq_urElfAAEaWgACV_QxGwj2AAFLpO1wzQuwtJABAAMCAAN3AAM2BA",
+            "updater": null
+        }
+    },
+    {
+        "model": "transaction.transaction",
+        "pk": "50cb856c-213f-40ed-a447-7cd2275e8a85",
+        "fields": {
+            "created_at": "2025-06-28T15:17:20.730Z",
+            "updated_at": "2025-06-28T15:17:20.731Z",
+            "user": "ebaa81fa-d193-404d-b602-a6f1418c35c4",
+            "amount": 0.0,
+            "course": null,
+            "status": "Pending",
+            "file": "AgACAgIAAxkBAAIDMmhgBUwf3eXvzSBou4BhUNu96b1BAAKR-DEbcaoAAUsF-0Hm8qyA1gEAAwIAA3cAAzYE",
+            "updater": null
+        }
+    },
+    {
+        "model": "transaction.transaction",
+        "pk": "61b87186-1dde-46ef-9a7a-3aeef4bae7dc",
+        "fields": {
+            "created_at": "2025-06-28T14:35:34.894Z",
+            "updated_at": "2025-06-28T14:52:43.349Z",
+            "user": "f327dc82-030c-465c-8cb9-ad394ff79e5f",
+            "amount": 849000.0,
+            "course": null,
+            "status": "Accepted",
+            "file": "AgACAgIAAxkBAAIDC2hf_bY-Bsq5KAABmp9Dq3Z6EVipAQAC4-4xG0ucAAFLI3UqYfX-C3QBAAMCAAN5AAM2BA",
+            "updater": null
+        }
+    },
+    {
+        "model": "transaction.transaction",
+        "pk": "90f27239-1f31-49d1-b9e9-ca31ff7975ac",
+        "fields": {
+            "created_at": "2025-06-26T10:41:36.574Z",
+            "updated_at": "2025-06-26T10:41:57.469Z",
+            "user": "f327dc82-030c-465c-8cb9-ad394ff79e5f",
+            "amount": 1449000.0,
+            "course": null,
+            "status": "Accepted",
+            "file": "AgACAgIAAxkBAAICCmhdI-BlzsDIpQeO2YiR_Sb07OXVAAK9_jEblb7pSkI9jlniyQWSAQADAgADeQADNgQ",
+            "updater": null
+        }
+    },
+    {
+        "model": "transaction.transaction",
+        "pk": "9fe14091-cb7b-4565-9196-4b4e354dba7b",
+        "fields": {
+            "created_at": "2025-06-29T04:02:40.420Z",
+            "updated_at": "2025-06-29T04:02:40.420Z",
+            "user": "ebaa81fa-d193-404d-b602-a6f1418c35c4",
+            "amount": 549000.0,
+            "course": "d4cf2726-2203-4f7b-87af-e90f4cd75ac2",
+            "status": "Pending",
+            "file": "AgACAgIAAxkBAAIDMmhgBUwf3eXvzSBou4BhUNu96b1BAAKR-DEbcaoAAUsF-0Hm8qyA1gEAAwIAA3cAAzYE",
+            "updater": null
+        }
+    },
+    {
+        "model": "transaction.transaction",
+        "pk": "b1fb345b-d08e-478a-92b4-5676253e60b6",
+        "fields": {
+            "created_at": "2025-06-16T08:57:51.769Z",
+            "updated_at": "2025-06-16T08:58:01.914Z",
+            "user": "da03e3db-6958-4e75-8146-8f45e00901e2",
+            "amount": 549000.0,
+            "course": null,
+            "status": "Accepted",
+            "file": "AgACAgIAAxkBAAIBlmhP3I9AJBPNsMzraFcr-z-vnXLmAALL9DEbIdCASs0D8JsN3x2AAQADAgADeAADNgQ",
+            "updater": null
+        }
+    },
+    {
+        "model": "transaction.transaction",
+        "pk": "d0ab8008-ce90-4f2e-8848-73903f75abc6",
+        "fields": {
+            "created_at": "2025-06-28T15:07:56.670Z",
+            "updated_at": "2025-06-29T06:38:40.330Z",
+            "user": "ebaa81fa-d193-404d-b602-a6f1418c35c4",
+            "amount": 0.0,
+            "course": null,
+            "status": "Accepted",
+            "file": "AgACAgIAAxkBAAIDMmhgBUwf3eXvzSBou4BhUNu96b1BAAKR-DEbcaoAAUsF-0Hm8qyA1gEAAwIAA3cAAzYE",
+            "updater": null
+        }
+    },
+    {
+        "model": "studentcourse.studentcourse",
+        "pk": "f585d552-da12-4455-838e-2e7aaa47083c",
+        "fields": {
+            "created_at": "2025-06-29T04:02:40.599Z",
+            "updated_at": "2025-06-29T06:38:40.359Z",
+            "user": "ebaa81fa-d193-404d-b602-a6f1418c35c4",
+            "course": "d4cf2726-2203-4f7b-87af-e90f4cd75ac2",
+            "status": "Active"
+        }
+    }
+]
