@@ -28,6 +28,8 @@ class CustomUser(AbstractUser):
         ("Admin", "Admin"),
     )
 
+    balance = models.IntegerField(default=0)
+
     role = models.CharField(choices=ROLE_CHOICES, max_length=30, default="User")
 
     has_passed = models.BooleanField(default=False, help_text="Is this user has passed the test?")

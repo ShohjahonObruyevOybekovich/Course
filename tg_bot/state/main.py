@@ -13,3 +13,7 @@ class User(StatesGroup):
 
 class Theme_State(StatesGroup):
     schreiben=State()
+
+
+class Products_State(StatesGroup):
+    products = State()

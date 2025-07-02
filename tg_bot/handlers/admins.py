@@ -151,3 +151,63 @@ async def handle_admin_decision(callback: CallbackQuery):
         await callback.message.edit_reply_markup()  # Remove buttons
         await callback.answer("🗑 To'lov bekor qilindi.")
 
+
+@dp.callback_query(lambda call: call.data.startswith("ac_"))
+async def approve_order(call: CallbackQuery):
+    _, product_id, user_id = call.data.split("_")
+    product = Product.objects.filter(id=product_id).first()
+    user = CustomUser.objects.filter(id=user_id).first()
+
+    if not product or not user:
+        await call.message.answer("❌ Maxsulot yoki foydalanuvchi topilmadi.")
+        return
+
+    order = Order.objects.filter(product=product, user=user, status="Pending").first()
+    if not order:
+        await call.message.answer("❌ Buyurtma topilmadi yoki allaqachon ko'rib chiqilgan.",show_alert=True)
+        return
+
+    # Update status to Accepted
+    order.status = "Accepted"
+    order.save()
+
+    await call.message.edit_text("✅ Buyurtma qabul qilindi.")
+
+    # Notify the buyer
+    await bot.send_message(
+        chat_id=user.chat_id,
+        text=f"✅ Sizning {product.name} bo‘yicha buyurtmangiz tasdiqlandi!\n"
+             f"Iltimos, markazga borib maxsulotni olib keting.",
+        reply_markup=user_menu()
+    )
+
+
+@dp.callback_query(lambda call: call.data.startswith("can_"))
+async def reject_order(call: CallbackQuery):
+    _, product_id, user_id = call.data.split("_")
+    product = Product.objects.filter(id=product_id).first()
+    user = CustomUser.objects.filter(id=user_id).first()
+
+    if not product or not user:
+        await call.message.answer("❌ Maxsulot yoki foydalanuvchi topilmadi.")
+        return
+
+    order = Order.objects.filter(product=product, user=user, status="Pending").first()
+    if not order:
+        await call.message.answer("❌ Buyurtma topilmadi yoki allaqachon ko'rib chiqilgan.",show_alert=True)
+        return
+
+    # Refund and delete the order
+    user.balance += product.price
+    user.save()
+    order.delete()
+
+    await call.message.edit_text("❌ Buyurtma rad etildi.")
+
+    # Notify the buyer
+    await bot.send_message(
+        chat_id=user.chat_id,
+        text=f"❌ Afsuski, sizning {product.name} bo‘yicha buyurtmangiz rad etildi.\n"
+             f"{product.price} tanga balansingizga qaytarildi.",
+        reply_markup=user_menu()
+    )

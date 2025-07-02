@@ -644,6 +644,20 @@ async def recheck_channels(call: CallbackQuery, state: FSMContext):
         logger.error(f"Error in recheck_channels: {e}")
         await call.message.answer("Xatolik yuz berdi. Qayta urinib ko‘ring.")
 
+
+
+@dp.callback_query(F.data.startswith("themepage:"))
+async def paginate_themes(call: CallbackQuery):
+    _, _, page, level_id, course_ids = call.data.split(":", 4)
+    page = int(page)
+    level_id = int(level_id)
+    course_id_list = list(map(int, course_ids.split(",")))
+
+    keyboard = themes_attendance(course_id_list, call.from_user.id, level_id, page)
+    await call.message.edit_reply_markup(reply_markup=keyboard)
+
+
+
 @dp.callback_query(lambda c: c.data.startswith(("select_level_", "go_back")))
 async def handle_select_level(call: CallbackQuery, state: FSMContext):
     await call.message.edit_reply_markup(reply_markup=None)
@@ -765,6 +779,7 @@ async def handle_start_lesson(call: CallbackQuery, state: FSMContext):
 @dp.callback_query(lambda c: c.data.startswith("finish_theme_"))
 async def finishing_the_same(call: CallbackQuery, state: FSMContext):
     await call.message.edit_reply_markup(reply_markup=None)
+
     theme_id = call.data.split("_")[2]
 
     theme = Theme.objects.filter(id=theme_id).first()
@@ -772,14 +787,12 @@ async def finishing_the_same(call: CallbackQuery, state: FSMContext):
         await call.message.answer("❌ Mavzu topilmadi.")
         return
 
-    # Get course IDs
     course_ids = list(theme.course.values_list("id", flat=True))
     level = theme.course_type.first()
     if not level:
         await call.message.answer("❌ Kurs darajasi aniqlanmadi.")
         return
 
-    # Find attendance
     theme_att = ThemeAttendance.objects.filter(
         theme_id=theme_id,
         user__chat_id=call.from_user.id,
@@ -788,7 +801,11 @@ async def finishing_the_same(call: CallbackQuery, state: FSMContext):
     if not theme_att:
         await call.message.answer(
             text=f"👮🏻‍♂️ Siz {theme.name} mavzusini hali boshlamagansiz ⁉️",
-            reply_markup=themes_attendance(course_id=course_ids, user=call.from_user.id, level_id=level.id)
+            reply_markup=themes_attendance(
+                course_id=course_ids,
+                user=call.from_user.id,
+                level_id=level.id
+            )
         )
         return
 
@@ -797,8 +814,14 @@ async def finishing_the_same(call: CallbackQuery, state: FSMContext):
 
     await call.message.answer(
         text="✅ Siz mavzuni muvaffaqiyatli yakunladingiz!",
-        reply_markup=themes_attendance(course_id=course_ids, user=call.from_user.id, level_id=level.id)
+        reply_markup=themes_attendance(
+            course_id=course_ids,
+            user=call.from_user.id,
+            level_id=level.id
+        )
     )
+
+
 
 @dp.callback_query(lambda c: c.data.startswith("theme_already_completed_"))
 async def finishing_the_same(call: CallbackQuery, state: FSMContext):
@@ -817,6 +840,8 @@ async def finishing_the_same(call: CallbackQuery, state: FSMContext):
         text="Kursingizning mavzularidan birini tanlang.",
         reply_markup=themes_attendance([course_id], user,level)
     )
+
+
 
 
 @dp.message(F.text == "👨‍🏫 Adminlar bilan aloqa")
