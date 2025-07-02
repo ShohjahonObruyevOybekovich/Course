@@ -11,7 +11,7 @@ from tg_bot.ai import GptFunctions
 from tg_bot.buttons.reply import user_menu
 
 # 🔐 Set your OpenAI API key
-openai.api_key = os.getenv("OPENAI_API_KEY")  # Or hard-code for testing
+openai.api_key = os.getenv("AI_TOKEN")  # Or hard-code for testing
 
 bot = Bot(token=TOKEN)
 gpt = GptFunctions()

@@ -29,6 +29,7 @@ def start_btn(link):
 def course_navigation_buttons(index: int, total: int, course_id: int):
     left = InlineKeyboardButton(text="⬅️", callback_data=f"left_{index}")
     right = InlineKeyboardButton(text="➡️", callback_data=f"right_{index}")
+    examples = InlineKeyboardButton(text="📒 Darslardan parchalar",callback_data=f"examples_{course_id}")
     payment = InlineKeyboardButton(text="💳 Sotib olish", callback_data=f"payment_{course_id}")
     back = InlineKeyboardButton(text="🔙 Ortga", callback_data="back")
 
@@ -36,6 +37,7 @@ def course_navigation_buttons(index: int, total: int, course_id: int):
 
     return InlineKeyboardMarkup(inline_keyboard=[
         nav_row,
+        [examples],
         [payment],
         [back],
     ])
@@ -85,11 +87,11 @@ def my_course_navigation_buttons(index: int, total: int, course_id: int, user):
     return InlineKeyboardMarkup(inline_keyboard=keyboard)
 
 
-def themes_attendance(course_id, user, level_id):
+def themes_attendance(course_id : list, user, level_id):
 
     print(course_id, user,level_id)
     themes = Theme.objects.filter(
-        course__id=course_id,
+        course__id__in=course_id,
         course_type__id=level_id
     ).distinct()
 
