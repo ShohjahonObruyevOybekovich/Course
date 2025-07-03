@@ -64,6 +64,8 @@ INSTALLED_APPS = [
     'transaction',
     'studentcourse',
     'channel',
+    'idioms',
+    'shop',
 
     #Installed Libraries
     'rest_framework',
@@ -216,3 +218,8 @@ JAZZMIN_SETTINGS = {
     "show_sidebar": True,
     "navigation_expanded": True,
 }
+
+
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'

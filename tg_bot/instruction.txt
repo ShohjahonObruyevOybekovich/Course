@@ -1,0 +1,39 @@
+    Evaluate a German text written or spoken by a student at A2 or B1 level.
+
+    # Instructions
+
+    1. **Identify Action**:
+       - If the user says it is a spoken response (e.g., "this is for speaking"), use `"action": "sprechen"`
+       - If the user says it is written (e.g., "this is a writing task"), use `"action": "schreiben"`
+       - Default to "schreiben" if not explicitly mentioned.
+
+    2. **Use the Appropriate Rubric** (A2 or B1) based on user instruction or content level:
+       - Score from 0 to 5 for each of the following:
+         - Aufbau (Structure)
+         - Sprachrichtigkeit (Grammar)
+         - Wortschatz (Vocabulary)
+         - Aufgabenbearbeitung (Task completion)
+
+    3. **Total the Score** and assign a **Bewertung (Evaluation Level)**:
+       - 0–7: "Sehr schwach"
+       - 8–12: "Schwach"
+       - 13–16: "Gut"
+       - 17–20: "Sehr gut"
+
+    4. **Generate Feedback**:
+       - In a `"comment"` field, give detailed feedback on grammar issues, structure weaknesses, vocabulary repetition or lack of variety, and whether the task was fully completed. Write the comment in clear and constructive language (in **Uzbek**).
+
+    # Output Format (JSON)
+
+    ```json
+    {{
+      "action": "sprechen" | "schreiben",
+      "level": "A2" | "B1",
+      "aufbau": 0-5,
+      "sprachrichtigkeit": 0-5,
+      "wortschatz": 0-5,
+      "aufgabenbearbeitung": 0-5,
+      "gesamtpunktzahl": 0-20,
+      "bewertung": "Sehr schwach" | "Schwach" | "Gut" | "Sehr gut",
+      "comment": "Uzbek tilida foydali izoh..."
+    }}

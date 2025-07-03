@@ -29,6 +29,7 @@ def start_btn(link):
 def course_navigation_buttons(index: int, total: int, course_id: int):
     left = InlineKeyboardButton(text="⬅️", callback_data=f"left_{index}")
     right = InlineKeyboardButton(text="➡️", callback_data=f"right_{index}")
+    examples = InlineKeyboardButton(text="📒 Darslardan parchalar",callback_data=f"examples_{course_id}")
     payment = InlineKeyboardButton(text="💳 Sotib olish", callback_data=f"payment_{course_id}")
     back = InlineKeyboardButton(text="🔙 Ortga", callback_data="back")
 
@@ -36,6 +37,7 @@ def course_navigation_buttons(index: int, total: int, course_id: int):
 
     return InlineKeyboardMarkup(inline_keyboard=[
         nav_row,
+        [examples],
         [payment],
         [back],
     ])
@@ -84,31 +86,32 @@ def my_course_navigation_buttons(index: int, total: int, course_id: int, user):
 
     return InlineKeyboardMarkup(inline_keyboard=keyboard)
 
+from math import ceil
+def themes_attendance(course_id: list, user, level_id, page=1):
+    page_size = 18
+    start_index = (page - 1) * page_size
+    end_index = start_index + page_size
 
-def themes_attendance(course_id, user, level_id):
-
-    print(course_id, user,level_id)
-    themes = Theme.objects.filter(
-        course__id=course_id,
+    themes_qs = Theme.objects.filter(
+        course__id__in=course_id,
         course_type__id=level_id
     ).distinct()
 
-    print(themes)
+    total_themes = themes_qs.count()
+    total_pages = ceil(total_themes / page_size)
+
+    themes = themes_qs[start_index:end_index]
 
     keyboard = []
     row = []
 
-    for i, theme in enumerate(themes, start=1):
+    for i, theme in enumerate(themes, start=start_index + 1):
         attendance = ThemeAttendance.objects.filter(
             user=user,
             theme=theme,
             is_attendance=True,
             is_complete_test=True
         ).first()
-
-        print(attendance)
-
-        print(len(f"lesson_{theme.id}"))
 
         check_icon = " ✅" if attendance else ""
 
@@ -117,14 +120,32 @@ def themes_attendance(course_id, user, level_id):
             callback_data=f"lesson_{theme.id}"
         ))
 
-        if len(row) == 6:
+        if len(row) == 3:
             keyboard.append(row)
             row = []
 
     if row:
         keyboard.append(row)
 
-    keyboard.append([InlineKeyboardButton(text="⬅️ Orqaga", callback_data=f"start_lesson_{course_id}")])
+    # Add pagination navigation
+    nav_row = []
+    if page > 1:
+        nav_row.append(InlineKeyboardButton(
+            text="⬅️ Previous",
+            callback_data=f"themepage:{page - 1}:{level_id}:{course_id[0]}"
+        ))
+    if page < total_pages:
+        nav_row.append(InlineKeyboardButton(
+            text="Next ➡️",
+            callback_data=f"themepage:{page + 1}:{level_id}:{course_id[0]}"
+        ))
+
+    if nav_row:
+        keyboard.append(nav_row)
+
+    keyboard.append([
+        InlineKeyboardButton(text="⬅️ Orqaga", callback_data=f"start_lesson_{course_id[0]}")
+    ])
 
     return InlineKeyboardMarkup(inline_keyboard=keyboard)
 
@@ -188,7 +209,36 @@ def get_theme_buttons(theme_id: str, user_chat_id: int) -> InlineKeyboardMarkup:
             text="✅ Darsni tugatdim",
             callback_data=f"finish_theme_{theme_id}"
         )
+    schreiben = InlineKeyboardButton(
+        text = "📝 Schreiben topshirish",
+        callback_data=f"schreiben_{theme_id}"
+    )
+    sprechen = InlineKeyboardButton(
+        text="🗣 Sprechen topshirish",
+        callback_data=f"sprechen_{theme_id}"
+    )
 
     back_button = InlineKeyboardButton(text="🔙 Ortga", callback_data="back")
 
-    return InlineKeyboardMarkup(inline_keyboard=[[over_button], [back_button]])
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [schreiben, sprechen],  # One row with two buttons
+            [over_button],  # One row with one button
+            [back_button]  # One row with one button
+        ]
+    )
+
+
+
+def order_accept(product,user):
+    accept_button = InlineKeyboardButton(
+        text="✅ Tasdiqlash",callback_data=f"ac_{product.id}_{user.id}"
+    )
+    cancel_button = InlineKeyboardButton(
+        text=":❌ Bekor qilish",callback_data=f"can_{product.id}_{user.id}"
+    )
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [accept_button], [cancel_button]
+        ]
+    )

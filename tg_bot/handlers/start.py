@@ -20,7 +20,7 @@ from tg_bot.buttons.reply import phone_number_btn, results, admin, user_menu, ba
 from tg_bot.buttons.text import start_txt, natija_txt
 from tg_bot.state.main import User
 from tg_bot.utils import format_phone_number, check_user_in_channel, send_theme_material
-from theme.models import ThemeAttendance, Theme
+from theme.models import ThemeAttendance, Theme, ThemeExamples
 from transaction.models import Transaction
 
 bot = Bot(token=TOKEN)
@@ -32,28 +32,6 @@ card_name = config("CARD_NAME")
 @dp.message(F.text == "/start")
 async def command_start_handler(message: Message, state: FSMContext) -> None:
     await state.clear()
-
-    # 🔁 Step 1: Check forced channel join
-    channels = Channel.objects.all()
-    not_joined = []
-
-    for channel in channels:
-        joined = await check_user_in_channel(message.from_user.id, channel.username, bot)
-        if not joined:
-            not_joined.append(channel)
-
-    if not_joined:
-        markup = InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text=f"➕ {ch.name}", url=f"https://t.me/{ch.username}")]
-            for ch in not_joined
-        ])
-        markup.inline_keyboard.append([InlineKeyboardButton(text="✅ Tekshirish", callback_data="check_channels")])
-
-        await message.answer(
-            "❗️ Davom etishdan oldin quyidagi kanallarga obuna bo‘ling:",
-            reply_markup=markup
-        )
-        return
 
     # 🔁 Step 2: User registration and role-based greeting
     user = CustomUser.objects.filter(chat_id=message.from_user.id).first()
@@ -75,25 +53,6 @@ async def command_start_handler(message: Message, state: FSMContext) -> None:
         )
     else:
         await message.answer(natija_txt, reply_markup=user_menu())
-
-@dp.callback_query(F.data == "check_channels")
-async def recheck_channels(call: CallbackQuery, state: FSMContext):
-    user_id = call.from_user.id
-    channels = Channel.objects.all()
-    not_joined = []
-
-    for channel in channels:
-        joined = await check_user_in_channel(user_id, channel.username, bot)
-        if not joined:
-            not_joined.append(channel)
-
-    if not_joined:
-        await call.answer("❌ Hali hamma kanallarga obuna emassiz.", show_alert=True)
-    else:
-        await call.message.delete()
-        await call.message.answer(start_txt)
-        await state.set_state(User.full_name)
-
 
 
 @dp.message(User.full_name)
@@ -232,13 +191,12 @@ async def send_course(chat_id: int, index: int, message_to_edit=None):
             await bot.send_message(chat_id, caption, reply_markup=keyboard, parse_mode="HTML")
 
 
-@dp.callback_query(lambda c: c.data.startswith(("left_", "right_","payment_", "back")))
+@dp.callback_query(lambda c: c.data.startswith(("left_", "right_","payment_","examples_", "back")))
 async def handle_course_navigation(call: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     index = data.get("course_index", 0)
     total = Course.objects.count()
 
-    ic(call.data)
 
     if call.data.startswith("left_"):
         if index > 0:
@@ -247,12 +205,14 @@ async def handle_course_navigation(call: CallbackQuery, state: FSMContext):
             await call.message.delete()
             await send_course(call.message.chat.id, index)
 
+
     elif call.data.startswith("right_"):
         if index < total - 1:
             index += 1
             await state.update_data(course_index=index)
             await call.message.delete()
             await send_course(call.message.chat.id, index)
+
 
     elif call.data.startswith("payment_"):
         await call.message.edit_reply_markup(reply_markup=None)
@@ -303,6 +263,43 @@ async def handle_course_navigation(call: CallbackQuery, state: FSMContext):
 
         else:
             await call.message.answer("❗️Kurs topilmadi.",reply_markup=user_menu())
+
+
+    elif call.data.startswith("examples_"):
+        await call.message.delete()
+
+        course_id = str(call.data.split("_")[1])
+        course = Course.objects.filter(id=course_id).first()
+
+        if not course:
+            await call.message.answer("❌ Kurs topilmadi.")
+            return
+
+        examples = ThemeExamples.objects.filter(course=course).all()
+
+        if not examples:
+            await call.message.answer("🚫 Bu kurs uchun misollar mavjud emas.")
+            return
+
+        for theme in examples:
+            # Format the message
+            text = f"📚 <b>{theme.name}</b>\n\n"
+            if theme.description:
+                text += f"📝 {theme.description}\n\n"
+
+            if theme.video:
+                text += "🎥 <b>Videolar:</b>\n"
+                for i, video in enumerate(theme.video.all(), start=1):
+                    text += f"  {i}. <a href='{video.url}'>Video {i}</a>\n"
+                text += "\n"
+
+            await call.message.answer(
+                text,
+                reply_markup=start_btn(link=theme.link),
+                parse_mode="HTML",
+                disable_web_page_preview=True
+            )
+
 
     elif call.data == "back":
         await call.message.edit_reply_markup(reply_markup=None)
@@ -553,12 +550,40 @@ async def handle_my_course_navigation(call: CallbackQuery, state: FSMContext):
 
 @dp.callback_query(lambda c: c.data.startswith("start_lesson_"))
 async def handle_start_lesson(call: CallbackQuery, state: FSMContext):
-    await call.message.edit_reply_markup(reply_markup=None)
     try:
+        await call.message.edit_reply_markup(reply_markup=None)
+
+        # 🔁 Step 1: Check forced channel join
+        channels = Channel.objects.all()
+        not_joined = []
+
+        for channel in channels:
+            joined = await check_user_in_channel(call.from_user.id, channel.username, bot)
+            if not joined:
+                not_joined.append(channel)
+
         course_id = call.data.split("_")[2]
         ic(course_id)
-        user = CustomUser.objects.filter(chat_id=call.from_user.id).first()
 
+        if not_joined:
+            # Save intent for later resume
+            await state.update_data(next_action="start_lesson", course_id=course_id)
+
+            markup = InlineKeyboardMarkup(inline_keyboard=[
+                [InlineKeyboardButton(text=f"➕ {ch.name}", url=f"https://t.me/{ch.username}")]
+                for ch in not_joined
+            ])
+            markup.inline_keyboard.append([
+                InlineKeyboardButton(text="✅ Tekshirish", callback_data="check_channels")
+            ])
+
+            await call.message.answer(
+                "❗️ Davom etishdan oldin quyidagi kanallarga obuna bo‘ling:",
+                reply_markup=markup
+            )
+            return
+
+        user = CustomUser.objects.filter(chat_id=call.from_user.id).first()
         ic(user)
 
         if not user:
@@ -572,7 +597,64 @@ async def handle_start_lesson(call: CallbackQuery, state: FSMContext):
 
     except Exception as e:
         logger.error(f"Error in handle_start_lesson: {e}")
-        await call.message.answer("An error occurred. Please try again.")
+        await call.message.answer("Xatolik yuz berdi. Qayta urinib ko‘ring.")
+
+
+@dp.callback_query(lambda c: c.data == "check_channels")
+async def recheck_channels(call: CallbackQuery, state: FSMContext):
+    try:
+        user_id = call.from_user.id
+        channels = Channel.objects.all()
+        not_joined = []
+
+        for channel in channels:
+            joined = await check_user_in_channel(user_id, channel.username, bot)
+            if not joined:
+                not_joined.append(channel)
+
+        if not_joined:
+            await call.answer("❌ Hali hamma kanallarga obuna emassiz.", show_alert=True)
+            return
+
+        await call.message.delete()
+
+        # ⏪ Retrieve intent
+        data = await state.get_data()
+        next_action = data.get("next_action")
+        course_id = data.get("course_id")
+
+        if next_action == "start_lesson" and course_id:
+            await call.message.answer(
+                text="📚 Avvalo kurs darajasini tanlang:",
+                reply_markup=course_levels(course_id=course_id),
+            )
+            return
+
+        # Default fallback: show user’s courses
+        courses = StudentCourse.objects.filter(user__chat_id=call.from_user.id)
+        if not courses.exists():
+            await call.message.answer("❗️ Kurslar mavjud emas.")
+            return
+
+        await state.update_data(current_course_index=0)
+        await send_my_course(call.message.chat.id, 0)
+        await state.set_state(User.browsing_my_courses)
+
+    except Exception as e:
+        logger.error(f"Error in recheck_channels: {e}")
+        await call.message.answer("Xatolik yuz berdi. Qayta urinib ko‘ring.")
+
+
+
+@dp.callback_query(F.data.startswith("themepage:"))
+async def paginate_themes(call: CallbackQuery):
+    _, _, page, level_id, course_ids = call.data.split(":", 4)
+    page = int(page)
+    level_id = int(level_id)
+    course_id_list = list(map(int, course_ids.split(",")))
+
+    keyboard = themes_attendance(course_id_list, call.from_user.id, level_id, page)
+    await call.message.edit_reply_markup(reply_markup=keyboard)
 
 
 
@@ -605,7 +687,7 @@ async def handle_select_level(call: CallbackQuery, state: FSMContext):
 
         await call.message.answer(
             text="📘 Endi mavzuni tanlang:",
-            reply_markup=themes_attendance(course.course.id, call.from_user.id, level_id)
+            reply_markup=themes_attendance([course.course.id], call.from_user.id, level_id)
         )
 
     except Exception as e:
@@ -697,34 +779,55 @@ async def handle_start_lesson(call: CallbackQuery, state: FSMContext):
 @dp.callback_query(lambda c: c.data.startswith("finish_theme_"))
 async def finishing_the_same(call: CallbackQuery, state: FSMContext):
     await call.message.edit_reply_markup(reply_markup=None)
+
     theme_id = call.data.split("_")[2]
-    if theme_id:
-        theme_att = ThemeAttendance.objects.filter(
-            theme__id=theme_id,
-            user__chat_id=call.from_user.id,
-        ).first()
 
-        theme = Theme.objects.filter(id=theme_id).first()
-        level = theme.level.first().id
-        if not theme_att:
-            call.message.answer(
-                text=f"👮🏻‍♂️ Siz {theme.name} mavzusini hali boshlamagansiz ⁉️",
-                reply_markup=themes_attendance(course_id=theme.course.id, user=theme_att.user,level_id=level)
+    theme = Theme.objects.filter(id=theme_id).first()
+    if not theme:
+        await call.message.answer("❌ Mavzu topilmadi.")
+        return
+
+    course_ids = list(theme.course.values_list("id", flat=True))
+    level = theme.course_type.first()
+    if not level:
+        await call.message.answer("❌ Kurs darajasi aniqlanmadi.")
+        return
+
+    theme_att = ThemeAttendance.objects.filter(
+        theme_id=theme_id,
+        user__chat_id=call.from_user.id,
+    ).first()
+
+    if not theme_att:
+        await call.message.answer(
+            text=f"👮🏻‍♂️ Siz {theme.name} mavzusini hali boshlamagansiz ⁉️",
+            reply_markup=themes_attendance(
+                course_id=course_ids,
+                user=call.from_user.id,
+                level_id=level.id
             )
-
-        theme_att.is_complete_test = True
-        theme_att.save()
-
-        call.message.answer(
-            text="✅ Siz mavzuni muvaffaqiyatli yakunladingiz!",
-            reply_markup=themes_attendance(course_id=theme.course.id, user=theme_att.user,level_id=level)
         )
+        return
+
+    theme_att.is_complete_test = True
+    theme_att.save()
+
+    await call.message.answer(
+        text="✅ Siz mavzuni muvaffaqiyatli yakunladingiz!",
+        reply_markup=themes_attendance(
+            course_id=course_ids,
+            user=call.from_user.id,
+            level_id=level.id
+        )
+    )
+
 
 
 @dp.callback_query(lambda c: c.data.startswith("theme_already_completed_"))
 async def finishing_the_same(call: CallbackQuery, state: FSMContext):
     await call.message.edit_reply_markup(reply_markup=None)
     course_id = call.data.split("_")[3]
+
 
     print(course_id)
 
@@ -735,8 +838,10 @@ async def finishing_the_same(call: CallbackQuery, state: FSMContext):
 
     await call.message.answer(
         text="Kursingizning mavzularidan birini tanlang.",
-        reply_markup=themes_attendance(course_id, user,level)
+        reply_markup=themes_attendance([course_id], user,level)
     )
+
+
 
 
 @dp.message(F.text == "👨‍🏫 Adminlar bilan aloqa")
@@ -761,3 +866,6 @@ async def contact_admins(message: Message):
     text_lines.append(f"👤 {tg_link}\n📱 {phone}\n")
 
     await message.answer("\n".join(text_lines), parse_mode="HTML")
+
+
+

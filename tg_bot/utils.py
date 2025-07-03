@@ -78,3 +78,17 @@ async def send_theme_material(message: Message, theme):
             await message.answer_document(document=input_file, caption="📄 Material yuklab olish")
     else:
         await message.answer_document(document=input_file, caption="📎 Material")
+
+
+def format_schreiben_result(data: dict) -> str:
+    return (
+        f"📝 *Schreiben natijalaringiz:*\n\n"
+        f"📘 *Daraja:* {data.get('level', '-')}\n"
+        f"🏗 *Tuzilishi (Aufbau):* {data.get('aufbau', 0)}/5\n"
+        f"✍️ *Grammatika (Sprachrichtigkeit):* {data.get('sprachrichtigkeit', 0)}/5\n"
+        f"🧠 *So'z boyligi (Wortschatz):* {data.get('wortschatz', 0)}/5\n"
+        f"✅ *Topshiriqni bajarish (Aufgabenbearbeitung):* {data.get('aufgabenbearbeitung', 0)}/5\n"
+        f"📊 *Umumiy ball:* {data.get('gesamtpunktzahl', 0)}/20\n"
+        f"🎖 *Baholash:* {data.get('bewertung', '-')}\n\n"
+        f"💬 *Izoh (o‘zbek tilida):*\n_{data.get('comment', '')}_"
+    )
