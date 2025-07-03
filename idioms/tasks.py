@@ -10,29 +10,30 @@ from .models import Idioms
 bot = TelegramBot()
 logger = logging.getLogger(__name__)
 
-
+import random
 @shared_task
 def check_daily_tasks():
-    idioms = Idioms.objects.all()
-
     now = datetime.now().time()
     one_minute_ago = (datetime.now() - timedelta(minutes=1)).time()
 
-    for idiom in idioms:
-        time = idiom.time
+    # Filter idioms scheduled for now (roughly)
+    current_idioms = Idioms.objects.filter(time__gte=one_minute_ago, time__lte=now)
 
-        if one_minute_ago <= time <= now:
+    if not current_idioms.exists():
+        logger.info("No idioms scheduled at this time.")
+        return
 
-            students = CustomUser.objects.all()
+    students = CustomUser.objects.exclude(chat_id=None)
 
-            for student in students:
-                text = f"""
-                📘 <b>Kun hikmati</b>
+    for student in students:
+        idiom = random.choice(list(current_idioms))
 
-                <i>{idiom.text}</i>
+        text = idiom.text
 
-                """.strip()
-                # 💡 < b > Meaning < / b >: {idiom.meaning}
-                bot.send_message(student.chat_id, text=text)
+        try:
+            bot.send_message(student.chat_id, text=text, parse_mode="HTML")
+        except Exception as e:
+            logger.error(f"Failed to send idiom to user {student.id}: {e}")
 
-    logger.info("Completed checking daily tasks for expiration.")
+    logger.info("✅ Sent daily idioms to all users.")
+
