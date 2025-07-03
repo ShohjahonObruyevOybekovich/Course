@@ -97,7 +97,7 @@ def themes_attendance(course_id: list, user_id: int, level_id: str, page=1):
     themes_qs = Theme.objects.filter(
         course__id__in=course_id,
         course_type__id=level_id
-    ).distinct()
+    ).order_by("created_at").distinct()
 
     total_themes = themes_qs.count()
     total_pages = ceil(total_themes / page_size)
