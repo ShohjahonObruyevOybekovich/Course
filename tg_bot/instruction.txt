@@ -15,13 +15,195 @@
          - Aufgabenbearbeitung (Task completion)
 
     3. **Total the Score** and assign a **Bewertung (Evaluation Level)**:
-       - 0–7: "Sehr schwach"
-       - 8–12: "Schwach"
-       - 13–16: "Gut"
-       - 17–20: "Sehr gut"
+       - 0–2: "Sehr schwach"
+       - 2–3: "Schwach"
+       - 3–4: "Gut"
+       - 4–5: "Sehr gut"
 
     4. **Generate Feedback**:
        - In a `"comment"` field, give detailed feedback on grammar issues, structure weaknesses, vocabulary repetition or lack of variety, and whether the task was fully completed. Write the comment in clear and constructive language (in **Uzbek**).
+
+    5. **Checking - schreiben**:
+       - In checking use mostly the rules of exams and try to make point lower because of the example course and give point by given level. Use createri like:
+
+    """
+        A1 Niveau - Sprechenteil
+        1.	Aufbau:
+        0: Keine Struktur, unklare Aussagen
+        1: Sehr schwache Struktur, kaum erkennbare Abschnitte
+        2: Einfache Äußerungen, kaum Zusammenhang
+        3: Grundstruktur vorhanden, aber unklar
+        4: Einfache und klare Struktur, aber mit Lücken
+        5: Klare Struktur mit einfachen Einleitung, Hauptteil und Schluss
+        2.	Sprachrichtigkeit:
+        0: Sehr viele Fehler, kaum verständlich
+        1: Fast alles grammatikalisch falsch
+        2: Viele Fehler in einfachen Sätzen
+        3: Grundlegende Grammatik mit vielen Fehlern
+        4: Einfache Sätze weitgehend korrekt
+        5: Weitgehend korrekte Grundgrammatik mit wenigen Fehlern
+        3.	Wortschatz:
+        0: Sehr wenig Wortschatz, viele Wiederholungen
+        1: Sehr begrenzt, oft unverständlich
+        2: Unzureichend für das Thema
+        3: Einfacher Wortschatz, häufige Wiederholungen
+        4: Passender, aber einfacher Wortschatz
+        5: Vielfältiger, einfacher Wortschatz, der das Thema anspricht
+        4.	Aufgabenbearbeitung:
+        0: Thema nicht verstanden
+        1: Sehr kurz, kaum Anforderungen erfüllt
+        2: Teilweise erfüllt, aber unklar
+        3: Relevante Punkte angesprochen, aber unvollständig
+        4: Alle Punkte angesprochen, aber einfach
+        5: Alle Anforderungen gut umgesetzt, klare Aussagen
+
+
+        A2 Niveau - Sprechenteil
+        1.	Aufbau:
+        0: Keine Struktur, unklare Aussagen
+        1: Sehr schwache Struktur, keine klaren Abschnitte
+        2: Einleitung und Hauptteil vermischt oder minimal
+        3: Einfache Struktur vorhanden, aber wenig klar
+        4: Klarer Aufbau mit kleinen logischen Fehlern
+        5: Gut strukturierte Präsentation mit Einleitung, Hauptteil und Schluss
+        2.	Sprachrichtigkeit:
+        0: Sehr viele Fehler, kaum verständlich
+        1: Fast alles grammatikalisch falsch
+        2: Viele Fehler in einfachen Sätzen
+        3: Grundlegende Grammatik mit vielen Fehlern
+        4: Präsens und Perfekt teilweise korrekt
+        5: Weitgehend korrekte Grundgrammatik
+        3.	Wortschatz:
+        0: Sehr wenig Wortschatz, viele Wiederholungen
+        1: Sehr begrenzt und unverständlich
+        2: Unzureichend für das Thema
+        3: Einfacher Wortschatz mit Wiederholungen
+        4: Passender Wortschatz mit kleinen Fehlern
+        5: Vielfältiger, einfacher Wortschatz
+        4.	Aufgabenbearbeitung:
+        0: Thema nicht verstanden
+        1: Sehr kurz, kaum Anforderungen erfüllt
+        2: Teilweise erfüllt
+        3: Relevante Punkte mit Lücken
+        4: Alle Punkte vorhanden, vereinfacht
+        5: Alle Anforderungen gut umgesetzt
+
+
+        B1 Niveau - Sprechenteil
+        1.	Aufbau:
+        0: Keine Struktur, Sätze ohne Zusammenhang
+        1: Sehr schlecht aufgebaut, keine klaren Abschnitte
+        2: Einleitung, Hauptteil und Schluss gemischt
+        3: Struktur vorhanden, aber mit Fehlern
+        4: Guter Aufbau mit klaren Abschnitten
+        5: Klar und logisch strukturierter Vortrag
+        2.	Sprachrichtigkeit:
+        0: Sehr viele Fehler, unverständlich
+        1: Viele Grammatikfehler, einfache Strukturen
+        2: Fehlerreich, aber verständlich
+        3: Einige Nebensätze und Konnektoren korrekt
+        4: Größtenteils korrekt mit komplexeren Sätzen
+        5: Sehr gute Grammatik mit Variation
+        3.	Wortschatz:
+        0: Sehr eingeschränkter Wortschatz
+        1: Unzureichend für Kommunikation
+        2: Teilweise unpassend oder falsch
+        3: Passender, aber einfacher Wortschatz
+        4: Guter Wortschatz mit einzelnen idiomatischen Ausdrücken
+        5: Vielfältiger und präziser Wortschatz
+        4.	Aufgabenbearbeitung:
+        0: Aufgabe nicht erkannt
+        1: Anforderungen ignoriert
+        2: Nur teilweise erfüllt
+        3: Alle Punkte vorhanden, aber einfach
+        4: Aufgabe vollständig und sinnvoll bearbeitet
+        5: Kreativ, vollständig und gut durchdacht
+
+        Bewertungsskala
+        Die Bewertungsskala bleibt gleich:
+           - 0–2: "Sehr schwach"
+           - 2–3: "Schwach"
+           - 3–4: "Gut"
+           - 4–5: "Sehr gut"
+    """
+    6. **Checking - sprechen**:
+        - In checking use mostly the rules of exams and try to make point lower because of the example course and give point by given level. Use createri like:
+        """
+          "A2": {
+            "Aufbau": {
+              "0": "Keine Struktur, unklarer Text",
+              "1": "Sehr schwache Struktur, keine Abschnitte",
+              "2": "Einleitung und Hauptteil vermischt oder minimal",
+              "3": "Einfache Struktur vorhanden, aber wenig klar",
+              "4": "Klarer Aufbau mit kleinen logischen Fehlern",
+              "5": "Gut strukturierter Text mit Einleitung, Hauptteil und Schluss"
+            },
+            "Sprachrichtigkeit": {
+              "0": "Sehr viele Fehler, kaum verständlich",
+              "1": "Fast alles grammatikalisch falsch",
+              "2": "Viele Fehler in einfachen Sätzen",
+              "3": "Grundlegende Grammatik mit vielen Fehlern",
+              "4": "Präsens und Perfekt teilweise korrekt",
+              "5": "Weitgehend korrekte Grundgrammatik"
+            },
+            "Wortschatz": {
+              "0": "Sehr wenig Wortschatz, viele Wiederholungen",
+              "1": "Sehr begrenzt und unverständlich",
+              "2": "Unzureichend für Thema",
+              "3": "Einfacher Wortschatz mit Wiederholungen",
+              "4": "Passender Wortschatz mit kleinen Fehlern",
+              "5": "Vielfältiger, einfacher Wortschatz"
+            },
+            "Aufgabenbearbeitung": {
+              "0": "Thema nicht verstanden",
+              "1": "Sehr kurz, kaum Anforderungen erfüllt",
+              "2": "Teilweise erfüllt",
+              "3": "Relevante Punkte mit Lücken",
+              "4": "Alle Punkte vorhanden, vereinfacht",
+              "5": "Alle Anforderungen gut umgesetzt"
+            }
+          },
+          "B1": {
+            "Aufbau": {
+              "0": "Keine Struktur, Sätze ohne Zusammenhang",
+              "1": "Sehr schlecht aufgebaut, keine Abschnitte",
+              "2": "Einleitung, Hauptteil und Schluss gemischt",
+              "3": "Struktur vorhanden, aber mit Fehlern",
+              "4": "Guter Aufbau mit klaren Abschnitten",
+              "5": "Klar und logisch strukturierter Text"
+            },
+            "Sprachrichtigkeit": {
+              "0": "Sehr viele Fehler, unverständlich",
+              "1": "Viele Grammatikfehler, einfache Strukturen",
+              "2": "Fehlerreich, aber verständlich",
+              "3": "Einige Nebensätze und Konnektoren korrekt",
+              "4": "Größtenteils korrekt mit komplexeren Sätzen",
+              "5": "Sehr gute Grammatik mit Variation"
+            },
+            "Wortschatz": {
+              "0": "Sehr eingeschränkter Wortschatz",
+              "1": "Unzureichend für Kommunikation",
+              "2": "Teilweise unpassend oder falsch",
+              "3": "Passender, aber einfacher Wortschatz",
+              "4": "Guter Wortschatz mit einzelnen idiomatischen Ausdrücken",
+              "5": "Vielfältiger und präziser Wortschatz"
+            },
+            "Aufgabenbearbeitung": {
+              "0": "Aufgabe nicht erkannt",
+              "1": "Anforderungen ignoriert",
+              "2": "Nur teilweise erfüllt",
+              "3": "Alle Punkte vorhanden, aber einfach",
+              "4": "Aufgabe vollständig und sinnvoll bearbeitet",
+              "5": "Kreativ, vollständig und gut durchdacht"
+            }
+          },
+          "Bewertung": {
+           - 0–2: "Sehr schwach"
+           - 2–3: "Schwach"
+           - 3–4: "Gut"
+           - 4–5: "Sehr gut"
+          }
+        """
 
     # Output Format (JSON)
 
@@ -33,7 +215,7 @@
       "sprachrichtigkeit": 0-5,
       "wortschatz": 0-5,
       "aufgabenbearbeitung": 0-5,
-      "gesamtpunktzahl": 0-20,
+      "gesamtpunktzahl": 0-5,
       "bewertung": "Sehr schwach" | "Schwach" | "Gut" | "Sehr gut",
       "comment": "Uzbek tilida foydali izoh..."
     }}
