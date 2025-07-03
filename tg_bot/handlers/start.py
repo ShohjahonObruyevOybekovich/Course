@@ -435,16 +435,13 @@ async def send_my_course(chat_id: int, index: int, message_to_edit=None):
 
     # Check for attached photo
     has_photo = bool(course.photo and course.photo.file and os.path.exists(course.photo.file.path))
-    photo_path = course.photo.file.path if has_photo else None
+    photo_path = course.photo.file.path
+    photo = FSInputFile(photo_path)
 
-    print(photo_path)
 
     async def send_as_photo():
         try:
-            input_file = FSInputFile(photo_path)
-
-            print(input_file)
-            await bot.send_photo(chat_id, input_file, caption=caption, reply_markup=keyboard, parse_mode="HTML")
+            await bot.send_photo(chat_id, photo, caption=caption, reply_markup=keyboard, parse_mode="HTML")
         except Exception as e:
             print("Photo sending error:", e)
             await bot.send_message(chat_id, f"{caption}\n\n(Rasmni yuklab bo'lmadi)", reply_markup=keyboard, parse_mode="HTML")
