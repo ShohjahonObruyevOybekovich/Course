@@ -9,6 +9,7 @@ from aiogram.fsm.context import FSMContext
 
 from studentcourse.models import UserTasks
 from tg_bot.ai import GptFunctions
+from tg_bot.buttons.reply import user_menu
 from tg_bot.state.main import Theme_State
 from tg_bot.utils import format_schreiben_result
 from theme.models import Theme
@@ -44,8 +45,8 @@ async def schreiben(call: CallbackQuery, state: FSMContext):
         await call.message.answer("Ushbu mavzu uchun schreiben topshirig'i topilmadi.")
 
 
-
-
+import asyncio  # ensure this is imported at the top
+from tg_bot.buttons.inline import course_levels
 
 @dp.message(Theme_State.schreiben)
 async def user_lang_handler(message: Message, state: FSMContext):
@@ -55,26 +56,39 @@ async def user_lang_handler(message: Message, state: FSMContext):
     user = CustomUser.objects.filter(chat_id=message.from_user.id).first()
 
     if not theme_id:
-        return await message.answer("Mavzu aniqlanmadi. Iltimos, qaytadan urinib ko'ring.")
+        return await message.answer("⚠️ Mavzu aniqlanmadi. Iltimos, qaytadan urinib ko'ring.")
 
     theme = Theme.objects.filter(id=theme_id).first()
     if not theme:
-        return await message.answer("Mavzu topilmadi.")
+        return await message.answer("❌ Mavzu topilmadi.")
+
     first_type = theme.course_type.first()
     if first_type:
-        await message.answer(f"Bu mavzuning darajasi: {first_type.name}")
+        await message.answer(f"📘 Bu mavzuning darajasi: <b>{first_type.name}</b>", parse_mode="HTML")
     else:
-        await message.answer("Bu mavzuga bog'langan kurs darajasi topilmadi.")
-    user_answer = message.text
-    full_prompt = f"Mavzu: {theme.schreiben} va Javob : {user_answer},{first_type}"
+        await message.answer("⚠️ Bu mavzuga bog'langan kurs darajasi topilmadi.")
 
+    user_answer = message.text
+    full_prompt = f"Mavzu: {theme.schreiben}\nJavob: {user_answer}\nKurs darajasi: {first_type.name if first_type else 'Nomaʼlum'}"
+
+    # ⏳ Show loading animation
+    loading_msg = await message.answer("✍️ Matningiz qabul qilindi. AI baholamoqda...")
+    await asyncio.sleep(0.8)
+    await loading_msg.edit_text("🧠 AI baholamoqda..")
+    await asyncio.sleep(0.8)
+    await loading_msg.edit_text("🧠 AI baholamoqda...")
+
+    # 🎯 Get GPT response
     intent_result = await gpt.prompt_to_json(str(message.from_user.id), full_prompt)
     ic(intent_result)
 
+    await loading_msg.edit_text("✅ AI bahosi tayyor!")
+
+    # 📝 Format and send result
     response_text = format_schreiben_result(intent_result)
 
     ball = intent_result.get("gesamtpunktzahl")
-    has_done = UserTasks.objects.filter(user=user).exists()
+    has_done = UserTasks.objects.filter(user=user, choice="Schreiben", theme=theme).exists()
 
     if ball is not None and not has_done:
         UserTasks.objects.create(
@@ -86,8 +100,13 @@ async def user_lang_handler(message: Message, state: FSMContext):
         user.balance += ball
         user.save()
 
-        response_text += f"\n💸 Vazifa uchun ball: {ball}"
+        response_text += f"\n\n💸 <b>Vazifa uchun ball:</b> <code>{ball}</code>"
+        response_text += f"\n📈 <b>Jami ballaringiz:</b> <code>{user.balance}</code>"
 
-    await message.answer(text=response_text, parse_mode="Markdown")
+    await message.answer(
+        text=response_text,
+        reply_markup=course_levels(course_id=theme.course.all().first().id),
+        parse_mode="HTML"
+    )
 
     await state.clear()

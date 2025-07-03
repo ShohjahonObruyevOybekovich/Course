@@ -2,7 +2,7 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
 from decouple import config
 
 from course.models import Course
-from studentcourse.models import StudentCourse
+from studentcourse.models import StudentCourse, UserTasks
 from theme.models import Theme, ThemeAttendance
 from transaction.models import Transaction
 
@@ -191,40 +191,55 @@ def course_levels(course_id):
 
 
 def get_theme_buttons(theme_id: str, user_chat_id: int) -> InlineKeyboardMarkup:
-    # Check if theme is already completed
     theme_att = ThemeAttendance.objects.filter(
         user__chat_id=user_chat_id,
         theme__id=theme_id
     ).first()
 
-    print(theme_att.theme.id)
+    has_sprechen = UserTasks.objects.filter(
+        user__chat_id=user_chat_id,
+        choice="Sprichen",
+        theme__id=theme_id
+    ).first()
 
+    has_schreiben = UserTasks.objects.filter(
+        user__chat_id=user_chat_id,
+        choice="Schreiben",
+        theme__id=theme_id
+    ).first()
+
+    # ✅ Over button logic
     if theme_att and theme_att.is_complete_test:
+        course_id = theme_att.theme.course.first().id if theme_att.theme and theme_att.theme.course.exists() else "0"
         over_button = InlineKeyboardButton(
             text="✅ Dars bajarilgan",
-            callback_data=f"theme_already_completed_{theme_att.theme.course.id}"
+            callback_data=f"theme_already_completed_{course_id}"
         )
     else:
         over_button = InlineKeyboardButton(
             text="✅ Darsni tugatdim",
             callback_data=f"finish_theme_{theme_id}"
         )
-    schreiben = InlineKeyboardButton(
-        text = "📝 Schreiben topshirish",
-        callback_data=f"schreiben_{theme_id}"
-    )
+
+    # ✅ Sprechen button
     sprechen = InlineKeyboardButton(
-        text="🗣 Sprechen topshirish",
-        callback_data=f"sprechen_{theme_id}"
+        text="🗣 Sprechen topshirish" if not has_sprechen else f"🗣 ✅ {has_sprechen.ball} ball",
+        callback_data=f"sprechen_{theme_id}" if not has_sprechen else "no_action"
+    )
+
+    # ✅ Schreiben button
+    schreiben = InlineKeyboardButton(
+        text="📝 Schreiben topshirish" if not has_schreiben else f"📝 ✅ {has_schreiben.ball} ball",
+        callback_data=f"schreiben_{theme_id}" if not has_schreiben else "no_action"
     )
 
     back_button = InlineKeyboardButton(text="🔙 Ortga", callback_data="back")
 
     return InlineKeyboardMarkup(
         inline_keyboard=[
-            [schreiben, sprechen],  # One row with two buttons
-            [over_button],  # One row with one button
-            [back_button]  # One row with one button
+            [schreiben, sprechen],
+            [over_button],
+            [back_button]
         ]
     )
 

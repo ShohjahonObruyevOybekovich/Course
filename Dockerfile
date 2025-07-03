@@ -1,13 +1,14 @@
-FROM python:3.13.0-alpine
+FROM python:3.11-slim
 
 WORKDIR /usr/src/app
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-RUN apk add --no-cache ffmpeg gcc musl-dev libffi-dev python3-dev
+RUN apt-get update && apt-get install -y \ffmpeg
+RUN pip install praat-parselmouth
 
-COPY r.txt ./
-RUN pip install --no-cache-dir -r r.txt
+COPY ./r.txt /usr/src/app/r.txt
+RUN pip install -r r.txt
 
 COPY . .

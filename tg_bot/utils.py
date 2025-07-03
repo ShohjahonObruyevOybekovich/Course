@@ -58,37 +58,52 @@ import mimetypes
 from aiogram.types import InputFile,Message
 
 async def send_theme_material(message: Message, theme):
-    if not theme.materials or not theme.materials.file:
+    materials = theme.materials.all()
+
+    if not materials.exists():
         return
 
-    file_path = theme.materials.file.path  # assumes file is stored locally
-    file_url = theme.materials.file.url
+    for material in materials:
+        if not material.file:
+            continue
 
-    mime_type, _ = mimetypes.guess_type(file_path)
-    input_file = InputFile(file_path)
+        file_path = material.file.path
+        mime_type, _ = mimetypes.guess_type(file_path)
+        input_file = InputFile(file_path)
 
-    if mime_type:
-        if mime_type.startswith("image/"):
-            await message.answer_photo(photo=input_file, caption="🖼 Rasm material")
-        elif mime_type.startswith("video/"):
-            await message.answer_video(video=input_file, caption="🎥 Video material")
-        elif mime_type.startswith("audio/"):
-            await message.answer_audio(audio=input_file, caption="🎧 Audio material")
+        if mime_type:
+            if mime_type.startswith("image/"):
+                await message.answer_photo(photo=input_file, caption="🖼 Rasm material")
+            elif mime_type.startswith("video/"):
+                await message.answer_video(video=input_file, caption="🎥 Video material")
+            elif mime_type.startswith("audio/"):
+                await message.answer_audio(audio=input_file, caption="🎧 Audio material")
+            else:
+                await message.answer_document(document=input_file, caption="📄 Material yuklab olish")
         else:
-            await message.answer_document(document=input_file, caption="📄 Material yuklab olish")
-    else:
-        await message.answer_document(document=input_file, caption="📎 Material")
+            await message.answer_document(document=input_file, caption="📎 Material")
 
 
 def format_schreiben_result(data: dict) -> str:
     return (
         f"📝 *Schreiben natijalaringiz:*\n\n"
-        f"📘 *Daraja:* {data.get('level', '-')}\n"
         f"🏗 *Tuzilishi (Aufbau):* {data.get('aufbau', 0)}/5\n"
         f"✍️ *Grammatika (Sprachrichtigkeit):* {data.get('sprachrichtigkeit', 0)}/5\n"
         f"🧠 *So'z boyligi (Wortschatz):* {data.get('wortschatz', 0)}/5\n"
         f"✅ *Topshiriqni bajarish (Aufgabenbearbeitung):* {data.get('aufgabenbearbeitung', 0)}/5\n"
-        f"📊 *Umumiy ball:* {data.get('gesamtpunktzahl', 0)}/20\n"
+        f"📊 *Umumiy ball:* {data.get('gesamtpunktzahl', 0)}/5\n"
         f"🎖 *Baholash:* {data.get('bewertung', '-')}\n\n"
-        f"💬 *Izoh (o‘zbek tilida):*\n_{data.get('comment', '')}_"
+        f"💬 *Izoh (o‘zbek tilida):*\n_{data.get('comment', '')}\n"
+    )
+
+def format_sriben_result(data: dict) -> str:
+    return (
+        f"📝 *Sprechen natijalaringiz:*\n\n"
+        f"🏗 *Tuzilishi (Aufbau):* {data.get('aufbau', 0)}/5\n"
+        f"✍️ *Grammatika (Sprachrichtigkeit):* {data.get('sprachrichtigkeit', 0)}/5\n"
+        f"🧠 *So'z boyligi (Wortschatz):* {data.get('wortschatz', 0)}/5\n"
+        f"✅ *Topshiriqni bajarish (Aufgabenbearbeitung):* {data.get('aufgabenbearbeitung', 0)}/5\n"
+        f"📊 *Umumiy ball:* {data.get('gesamtpunktzahl', 0)}/5\n"
+        f"🎖 *Baholash:* {data.get('bewertung', '-')}\n\n"
+        f"💬 *Izoh (o‘zbek tilida):*\n_{data.get('comment', '')}\n"
     )

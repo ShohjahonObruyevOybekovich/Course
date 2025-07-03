@@ -96,9 +96,9 @@ async def handle_customer_selection(message: Message, state: FSMContext):
         caption_text = "\n\n".join(
             "\n".join([
                 "📋 <b>Talabaning kursi</b>\n",
-                f"👤 <b>Talaba ismi:</b> {user.full_name or 'Noma\'lum'}",
-                f"📞 <b>Telefon raqami:</b> {user.phone or 'Noma\'lum'}",
-                f"🎯 <b>Kursi:</b> {course.course.name or 'Noma\'lum'}",
+                f"👤 <b>Talaba ismi:</b> {user.full_name}",
+                f"📞 <b>Telefon raqami:</b> {user.phone if user.phone else 'Nomaʼlum'}",
+                f"🎯 <b>Kursi:</b> {course.course.name if course.course.name else 'Nomaʼlum'}",
                 f"💵 <b>Kurs summasi:</b> {course.course.price or 0}",
                 f"⚙️ <b>Kurs holati:</b> {status_txt}",
                 f"🕒 <b>Sotib olgan vaqti:</b> {course.created_at.strftime('%d.%m.%Y %H:%M')}"

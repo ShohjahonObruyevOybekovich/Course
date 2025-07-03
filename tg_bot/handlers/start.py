@@ -324,17 +324,16 @@ async def handle_payment(message: Message, state: FSMContext):
             parse_mode="Markdown"
         )
         return
-
-    # Get photo or document
+    # Get file
     file_obj = None
     file_type = None
     if message.photo:
         file_obj = message.photo[-1]
-        file_type = "document" if message.document else "photo"
+        file_type = "photo"
     elif message.document:
         file_obj = message.document
-        file_type = "document" if message.document else "photo"
-    if not file_obj:
+        file_type = "document"
+    else:
         await message.answer("❗️To'lov chekini rasm yoki fayl sifatida yuboring.", reply_markup=back())
         return
 
@@ -344,35 +343,37 @@ async def handle_payment(message: Message, state: FSMContext):
     course_id = data.get("course")
     course = await Course.objects.filter(id=course_id).afirst()
 
+    if not course:
+        await message.answer("❌ Kurs topilmadi. Iltimos, qaytadan urinib ko'ring.")
+        await state.clear()
+        return
 
-    # Save Transaction
+    # Save transaction
     transaction = await Transaction.objects.acreate(
         user=user,
-        amount=course.price if course else 0,
+        amount=course.price,
         course=course,
         status="Pending",
         file=file_obj.file_id
     )
 
     # Notify admins
-    admins = CustomUser.objects.filter(role="Admin").all()
+    admins = await CustomUser.objects.filter(role="Admin").all()
+
     caption = "\n".join([
-        f"<b>Foydalanuvchi ismi:</b> {user.full_name or 'Noma\'lum'}",
-        f"<b>Telefon raqami:</b> {user.phone or 'Noma\'lum'}",
-        f"<b>Kurs nomi:</b> {course.name if course else 'Noma\'lum'}",
+        f"<b>Foydalanuvchi ismi:</b> {user.full_name if user.full_name else 'Nomaʼlum'}",
+        f"<b>Telefon raqami:</b> {user.phone if user.phone else 'Nomaʼlum'}",
+        f"<b>Kurs nomi:</b> {course.name if course else 'Nomaʼlum'}",
         f"<b>Kurs summasi:</b> {course.price if course else '0'}",
         f"<b>Yuborilgan vaqti:</b> {datetime.now().strftime('%d.%m.%Y %H:%M')}"
     ])
-
-    file_id = file_obj.file_id
-    file_type = "document" if message.document else "photo"
 
     for admin in admins:
         try:
             if file_type == "document":
                 await bot.send_document(
                     chat_id=admin.chat_id,
-                    document=file_id,
+                    document=file_obj.file_id,
                     caption=caption,
                     parse_mode="HTML",
                     reply_markup=admin_accept(chat_id=message.from_user.id)
@@ -380,12 +381,11 @@ async def handle_payment(message: Message, state: FSMContext):
             else:
                 await bot.send_photo(
                     chat_id=admin.chat_id,
-                    photo=file_id,
+                    photo=file_obj.file_id,
                     caption=caption,
                     parse_mode="HTML",
                     reply_markup=admin_accept(chat_id=message.from_user.id)
                 )
-
         except Exception as e:
             print(f"Failed to send to admin {admin.chat_id}: {e}")
 
@@ -393,7 +393,8 @@ async def handle_payment(message: Message, state: FSMContext):
         "✅ To'lov cheki qabul qilindi. Tekshiruvdan so‘ng sizga xabar beramiz.",
         reply_markup=user_menu()
     )
-    course = StudentCourse.objects.create(
+
+    await StudentCourse.objects.acreate(
         user=user,
         course=course,
     )
