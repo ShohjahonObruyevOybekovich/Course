@@ -1,21 +1,17 @@
-from unittest.mock import call
-
+from aiogram.fsm.context import FSMContext
+from aiogram.types import Message, CallbackQuery
 from icecream import ic
 
 from account.models import CustomUser
 from dispatcher import dp
-from aiogram.types import Message, BufferedInputFile, CallbackQuery
-from aiogram.fsm.context import FSMContext
-
 from studentcourse.models import UserTasks
 from tg_bot.ai import GptFunctions
-from tg_bot.buttons.reply import user_menu
 from tg_bot.state.main import Theme_State
 from tg_bot.utils import format_schreiben_result
 from theme.models import Theme
 
-
 gpt = GptFunctions()
+
 
 @dp.callback_query(lambda c: c.data.startswith("schreiben_"))
 async def schreiben(call: CallbackQuery, state: FSMContext):
@@ -47,6 +43,7 @@ async def schreiben(call: CallbackQuery, state: FSMContext):
 
 import asyncio  # ensure this is imported at the top
 from tg_bot.buttons.inline import course_levels
+
 
 @dp.message(Theme_State.schreiben)
 async def user_lang_handler(message: Message, state: FSMContext):

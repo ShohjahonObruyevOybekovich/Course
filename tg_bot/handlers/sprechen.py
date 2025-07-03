@@ -1,25 +1,22 @@
+import asyncio
 import os
-import tempfile
 import subprocess
+import tempfile
 
-from openai import OpenAI  # ✅ Updated import for new API
 import parselmouth  # For pitch/intonation analysis
 from aiogram import Bot, F, types
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery
 from icecream import ic
+from openai import OpenAI  # ✅ Updated import for new API
 
 from account.models import CustomUser
 from dispatcher import dp, TOKEN
+from studentcourse.models import UserTasks
 from tg_bot.ai import GptFunctions
 from tg_bot.buttons.reply import user_menu
-from tg_bot.state.main import Theme_State
 from tg_bot.utils import format_sriben_result
 from theme.models import Theme
-import asyncio
-from studentcourse.models import UserTasks
-
-
 
 # ✅ Instantiate OpenAI client
 client = OpenAI(api_key=os.getenv("AI_TOKEN"))
