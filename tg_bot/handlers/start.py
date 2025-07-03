@@ -649,15 +649,25 @@ async def recheck_channels(call: CallbackQuery, state: FSMContext):
 
 
 
-@dp.callback_query(F.data.startswith("themepage:"))
-async def paginate_themes(call: CallbackQuery):
-    _, _, page, level_id, course_ids = call.data.split(":", 4)
-    page = int(page)
-    level_id = int(level_id)
-    course_id_list = list(map(int, course_ids.split(",")))
+@dp.callback_query(lambda c: c.data.startswith("theme_page:"))
+async def handle_theme_page(call: CallbackQuery, state: FSMContext):
+    try:
+        page = int(call.data.split(":")[1])
+        data = await state.get_data()
+        course_id = data.get("course_id")
+        level_id = data.get("level_id")
 
-    keyboard = themes_attendance(course_id_list, call.from_user.id, level_id, page)
-    await call.message.edit_reply_markup(reply_markup=keyboard)
+        if not course_id or not level_id:
+            await call.message.answer("❗️ Ma'lumotlar topilmadi. Iltimos, qayta urinib ko'ring.")
+            return
+
+        markup = themes_attendance([course_id], call.from_user.id, level_id, page=page)
+        await call.message.edit_reply_markup(reply_markup=markup)
+
+    except Exception as e:
+        logger.error(f"Error in handle_theme_page: {e}")
+        await call.message.answer("❌ Xatolik yuz berdi.")
+
 
 
 

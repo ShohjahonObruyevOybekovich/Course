@@ -5,6 +5,9 @@ from course.models import Course
 from studentcourse.models import StudentCourse, UserTasks
 from theme.models import Theme, ThemeAttendance
 from transaction.models import Transaction
+from math import ceil
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from theme.models import Theme, ThemeAttendance
 
 
 def degree():
@@ -49,7 +52,6 @@ def admin_accept(chat_id):
     return InlineKeyboardMarkup(inline_keyboard=[[accept], [cancel]])
 
 
-
 def my_course_navigation_buttons(index: int, total: int, course_id: int, user):
     left = InlineKeyboardButton(text="⬅️", callback_data=f"my_left_{index}")
     right = InlineKeyboardButton(text="➡️", callback_data=f"my_right_{index}")
@@ -86,8 +88,8 @@ def my_course_navigation_buttons(index: int, total: int, course_id: int, user):
 
     return InlineKeyboardMarkup(inline_keyboard=keyboard)
 
-from math import ceil
-def themes_attendance(course_id: list, user, level_id, page=1):
+
+def themes_attendance(course_id: list, user_id: int, level_id: str, page=1):
     page_size = 18
     start_index = (page - 1) * page_size
     end_index = start_index + page_size
@@ -99,7 +101,6 @@ def themes_attendance(course_id: list, user, level_id, page=1):
 
     total_themes = themes_qs.count()
     total_pages = ceil(total_themes / page_size)
-
     themes = themes_qs[start_index:end_index]
 
     keyboard = []
@@ -107,7 +108,7 @@ def themes_attendance(course_id: list, user, level_id, page=1):
 
     for i, theme in enumerate(themes, start=start_index + 1):
         attendance = ThemeAttendance.objects.filter(
-            user=user,
+            user__chat_id=user_id,
             theme=theme,
             is_attendance=True,
             is_complete_test=True
@@ -127,24 +128,23 @@ def themes_attendance(course_id: list, user, level_id, page=1):
     if row:
         keyboard.append(row)
 
-    # Add pagination navigation
+    # Pagination buttons with short callback_data
     nav_row = []
     if page > 1:
-
-        print(len(f"themepage:{page - 1}:{level_id}:{course_id[0]}"))
         nav_row.append(InlineKeyboardButton(
-            text="⬅️ Previous",
-            callback_data=f"themepage:{page - 1}:{level_id}:{course_id[0]}"
+            text="⬅️ Oldingi",
+            callback_data=f"theme_page:{page - 1}"
         ))
     if page < total_pages:
         nav_row.append(InlineKeyboardButton(
-            text="Next ➡️",
-            callback_data=f"themepage:{page + 1}:{level_id}:{course_id[0]}"
+            text="Keyingi ➡️",
+            callback_data=f"theme_page:{page + 1}"
         ))
 
     if nav_row:
         keyboard.append(nav_row)
 
+    # Back button
     keyboard.append([
         InlineKeyboardButton(text="⬅️ Orqaga", callback_data=f"start_lesson_{course_id[0]}")
     ])
