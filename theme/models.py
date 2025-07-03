@@ -13,8 +13,7 @@ class Theme(BaseModel):
     course_type: "CourseType" = models.ManyToManyField("course.CourseType", related_name="courses_related_themes",
                                                        verbose_name="Kursning darajalari")
 
-    materials: "File" = models.ForeignKey("upload.File", on_delete=models.SET_NULL,
-                                          null=True, blank=True,related_name="themes_materials")
+    materials: "File" = models.ManyToManyField("upload.File", related_name="themes_materials")
     link = models.URLField(null=True, blank=True)
 
     sprechen = models.TextField(null=True, blank=True,verbose_name="Sprechen mavzusi")
