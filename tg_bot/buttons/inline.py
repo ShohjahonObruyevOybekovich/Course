@@ -130,6 +130,8 @@ def themes_attendance(course_id: list, user, level_id, page=1):
     # Add pagination navigation
     nav_row = []
     if page > 1:
+
+        print(len(f"themepage:{page - 1}:{level_id}:{course_id[0]}"))
         nav_row.append(InlineKeyboardButton(
             text="⬅️ Previous",
             callback_data=f"themepage:{page - 1}:{level_id}:{course_id[0]}"
