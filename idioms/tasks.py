@@ -31,7 +31,7 @@ def check_daily_tasks():
         text = idiom.text
 
         try:
-            bot.send_message(student.chat_id, text=text, parse_mode="HTML")
+            bot.send_message(student.chat_id, text=f"💡 {text}", parse_mode="HTML")
         except Exception as e:
             logger.error(f"Failed to send idiom to user {student.id}: {e}")
 
