@@ -22,6 +22,8 @@ from tg_bot.state.main import User
 from tg_bot.utils import format_phone_number, check_user_in_channel, send_theme_material
 from theme.models import ThemeAttendance, Theme, ThemeExamples
 from transaction.models import Transaction
+from aiogram.types import FSInputFile, InputMediaPhoto
+import os
 
 bot = Bot(token=TOKEN)
 
@@ -324,17 +326,16 @@ async def handle_payment(message: Message, state: FSMContext):
             parse_mode="Markdown"
         )
         return
-
-    # Get photo or document
+    # Get file
     file_obj = None
     file_type = None
     if message.photo:
         file_obj = message.photo[-1]
-        file_type = "document" if message.document else "photo"
+        file_type = "photo"
     elif message.document:
         file_obj = message.document
-        file_type = "document" if message.document else "photo"
-    if not file_obj:
+        file_type = "document"
+    else:
         await message.answer("❗️To'lov chekini rasm yoki fayl sifatida yuboring.", reply_markup=back())
         return
 
@@ -344,35 +345,37 @@ async def handle_payment(message: Message, state: FSMContext):
     course_id = data.get("course")
     course = await Course.objects.filter(id=course_id).afirst()
 
+    if not course:
+        await message.answer("❌ Kurs topilmadi. Iltimos, qaytadan urinib ko'ring.")
+        await state.clear()
+        return
 
-    # Save Transaction
+    # Save transaction
     transaction = await Transaction.objects.acreate(
         user=user,
-        amount=course.price if course else 0,
+        amount=course.price,
         course=course,
         status="Pending",
         file=file_obj.file_id
     )
 
     # Notify admins
-    admins = CustomUser.objects.filter(role="Admin").all()
+    admins = await CustomUser.objects.filter(role="Admin").all()
+
     caption = "\n".join([
-        f"<b>Foydalanuvchi ismi:</b> {user.full_name or 'Noma\'lum'}",
-        f"<b>Telefon raqami:</b> {user.phone or 'Noma\'lum'}",
-        f"<b>Kurs nomi:</b> {course.name if course else 'Noma\'lum'}",
+        f"<b>Foydalanuvchi ismi:</b> {user.full_name if user.full_name else 'Nomaʼlum'}",
+        f"<b>Telefon raqami:</b> {user.phone if user.phone else 'Nomaʼlum'}",
+        f"<b>Kurs nomi:</b> {course.name if course else 'Nomaʼlum'}",
         f"<b>Kurs summasi:</b> {course.price if course else '0'}",
         f"<b>Yuborilgan vaqti:</b> {datetime.now().strftime('%d.%m.%Y %H:%M')}"
     ])
-
-    file_id = file_obj.file_id
-    file_type = "document" if message.document else "photo"
 
     for admin in admins:
         try:
             if file_type == "document":
                 await bot.send_document(
                     chat_id=admin.chat_id,
-                    document=file_id,
+                    document=file_obj.file_id,
                     caption=caption,
                     parse_mode="HTML",
                     reply_markup=admin_accept(chat_id=message.from_user.id)
@@ -380,12 +383,11 @@ async def handle_payment(message: Message, state: FSMContext):
             else:
                 await bot.send_photo(
                     chat_id=admin.chat_id,
-                    photo=file_id,
+                    photo=file_obj.file_id,
                     caption=caption,
                     parse_mode="HTML",
                     reply_markup=admin_accept(chat_id=message.from_user.id)
                 )
-
         except Exception as e:
             print(f"Failed to send to admin {admin.chat_id}: {e}")
 
@@ -393,7 +395,8 @@ async def handle_payment(message: Message, state: FSMContext):
         "✅ To'lov cheki qabul qilindi. Tekshiruvdan so‘ng sizga xabar beramiz.",
         reply_markup=user_menu()
     )
-    course = StudentCourse.objects.create(
+
+    await StudentCourse.objects.acreate(
         user=user,
         course=course,
     )
@@ -412,85 +415,88 @@ async def my_courses(message: Message, state: FSMContext):
     await state.set_state(User.browsing_my_courses)
 
 
+
 async def send_my_course(chat_id: int, index: int, message_to_edit=None):
     courses = list(StudentCourse.objects.filter(user__chat_id=chat_id))
+    if index < 0 or index >= len(courses):
+        await bot.send_message(chat_id, "❗️ Noto‘g‘ri kurs indexi.")
+        return
+
     student_course = courses[index]
     course = student_course.course
+    user = CustomUser.objects.filter(chat_id=chat_id).first()
 
     caption = (
         f"<b>{course.name}</b>\n\n"
         f"{course.description or ''}\n\n"
         f"💰 Narxi: {course.price} so'm"
     )
-    user = CustomUser.objects.filter(chat_id=chat_id).first()
-    keyboard = my_course_navigation_buttons(index, len(courses), course.id,user=user)
+    keyboard = my_course_navigation_buttons(index, len(courses), course.id, user=user)
 
-    if course.photo and course.photo.file:
+    # Check for attached photo
+    has_photo = bool(course.photo and course.photo.file and os.path.exists(course.photo.file.path))
+    photo_path = course.photo.file.path if has_photo else None
+
+    print(photo_path)
+
+    async def send_as_photo():
         try:
-            photo_path = course.photo.file.path
-            photo = FSInputFile(photo_path)
+            input_file = FSInputFile(photo_path)
 
-            if message_to_edit:
-                try:
-                    if message_to_edit.photo:
-                        # Edit photo message
-                        await bot.edit_message_media(
-                            chat_id=chat_id,
-                            message_id=message_to_edit.message_id,
-                            media=InputMediaPhoto(media=photo, caption=caption, parse_mode="HTML"),
-                            reply_markup=keyboard
-                        )
-                    else:
-                        # Delete text message and send photo
-                        await message_to_edit.delete()
-                        await bot.send_photo(chat_id, photo, caption=caption, reply_markup=keyboard, parse_mode="HTML")
-                except Exception as e:
-                    await message_to_edit.delete()
-                    await bot.send_photo(chat_id, photo, caption=caption, reply_markup=keyboard, parse_mode="HTML")
-            else:
-                await bot.send_photo(chat_id, photo, caption=caption, reply_markup=keyboard, parse_mode="HTML")
-
+            print(input_file)
+            await bot.send_photo(chat_id, input_file, caption=caption, reply_markup=keyboard, parse_mode="HTML")
         except Exception as e:
-            if message_to_edit:
-                try:
-                    if message_to_edit.photo:
-                        await message_to_edit.delete()
-                        await bot.send_message(chat_id, f"{caption}\n\n(Rasmni yuklab bo'lmadi)", reply_markup=keyboard,
-                                               parse_mode="HTML")
-                    else:
-                        await bot.edit_message_text(
-                            chat_id=chat_id,
-                            message_id=message_to_edit.message_id,
-                            text=f"{caption}\n\n(Rasmni yuklab bo'lmadi)",
-                            reply_markup=keyboard,
-                            parse_mode="HTML"
-                        )
-                except Exception as edit_error:
-                    await message_to_edit.delete()
-                    await bot.send_message(chat_id, f"{caption}\n\n(Rasmni yuklab bo'lmadi)", reply_markup=keyboard,
-                                           parse_mode="HTML")
+            print("Photo sending error:", e)
+            await bot.send_message(chat_id, f"{caption}\n\n(Rasmni yuklab bo'lmadi)", reply_markup=keyboard, parse_mode="HTML")
+
+    async def edit_as_photo():
+        try:
+            input_file = FSInputFile(photo_path)
+            await bot.edit_message_media(
+                chat_id=chat_id,
+                message_id=message_to_edit.message_id,
+                media=InputMediaPhoto(media=input_file, caption=caption, parse_mode="HTML"),
+                reply_markup=keyboard
+            )
+        except Exception as e:
+            print("Edit photo failed:", e)
+            await message_to_edit.delete()
+            await send_as_photo()
+
+    async def edit_as_text(extra_caption=""):
+        try:
+            await bot.edit_message_text(
+                chat_id=chat_id,
+                message_id=message_to_edit.message_id,
+                text=f"{caption}{extra_caption}",
+                reply_markup=keyboard,
+                parse_mode="HTML"
+            )
+        except Exception as e:
+            print("Edit text failed:", e)
+            await message_to_edit.delete()
+            await bot.send_message(chat_id, f"{caption}{extra_caption}", reply_markup=keyboard, parse_mode="HTML")
+
+    # Handle sending or editing
+    if has_photo:
+        if message_to_edit:
+            if message_to_edit.photo:
+                await edit_as_photo()
             else:
-                await bot.send_message(chat_id, f"{caption}\n\n(Rasmni yuklab bo'lmadi)", reply_markup=keyboard,
-                                       parse_mode="HTML")
+                await message_to_edit.delete()
+                await send_as_photo()
+        else:
+            await send_as_photo()
     else:
         if message_to_edit:
-            try:
-                if message_to_edit.photo:
-                    await message_to_edit.delete()
-                    await bot.send_message(chat_id, caption, reply_markup=keyboard, parse_mode="HTML")
-                else:
-                    await bot.edit_message_text(
-                        chat_id=chat_id,
-                        message_id=message_to_edit.message_id,
-                        text=caption,
-                        reply_markup=keyboard,
-                        parse_mode="HTML"
-                    )
-            except Exception as e:
+            if message_to_edit.photo:
                 await message_to_edit.delete()
                 await bot.send_message(chat_id, caption, reply_markup=keyboard, parse_mode="HTML")
+            else:
+                await edit_as_text()
         else:
             await bot.send_message(chat_id, caption, reply_markup=keyboard, parse_mode="HTML")
+
 
 
 @dp.callback_query(lambda c: c.data.startswith(("my_left_", "my_right_", "my_payment_", "my_back")))

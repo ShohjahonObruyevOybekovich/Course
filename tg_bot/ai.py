@@ -20,10 +20,7 @@ class GptFunctions:
         with open(file_path, "r", encoding="utf-8") as f:
             template = f.read()
 
-        return template.format(
-            today=timezone.now().strftime("%d/%m/%Y"),
-            documents="N/A"
-        )
+        return template
 
     async def prompt_to_json(self, user_id, text: str):
         instruction = self.load_instruction()
