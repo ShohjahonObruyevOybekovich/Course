@@ -360,7 +360,7 @@ async def handle_payment(message: Message, state: FSMContext):
     )
 
     # Notify admins
-    admins = await CustomUser.objects.filter(role="Admin").all()
+    admins = CustomUser.objects.filter(role="Admin").all()
 
     caption = "\n".join([
         f"<b>Foydalanuvchi ismi:</b> {user.full_name if user.full_name else 'Nomaʼlum'}",
