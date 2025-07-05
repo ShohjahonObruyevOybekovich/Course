@@ -37,10 +37,12 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
     "http://127.0.0.1:8000",
     "https://online.eduzoneuz.uz",
-    "https://edu-zone-test.vercel.app"
+    "https://edu-zone-test.vercel.app",
+    "https://course.eduzoneuz.uz"
 ]
 CSRF_TRUSTED_ORIGINS = [
-    "https://online.eduzoneuz.uz"
+    "https://online.eduzoneuz.uz",
+    "https://course.eduzoneuz.uz"
 ]
 # Application definition
 
