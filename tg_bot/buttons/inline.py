@@ -128,7 +128,7 @@ def themes_attendance(course_id: list, user_id: int, level_id: str, page=1):
     if row:
         keyboard.append(row)
 
-    # Pagination buttons with short callback_data
+    # Pagination buttons
     nav_row = []
     if page > 1:
         nav_row.append(InlineKeyboardButton(
