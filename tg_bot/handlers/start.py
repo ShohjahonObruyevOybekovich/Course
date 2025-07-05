@@ -217,7 +217,7 @@ async def handle_course_navigation(call: CallbackQuery, state: FSMContext):
 
 
     elif call.data.startswith("payment_"):
-        await call.message.edit_reply_markup(reply_markup=None)
+        await call.message.delete()
         course_id = str(call.data.split("_")[1])
 
         await state.update_data(course=course_id)
@@ -545,16 +545,18 @@ async def handle_my_course_navigation(call: CallbackQuery, state: FSMContext):
         await call.answer(f"To'lov holati: {status}", show_alert=True)
 
     elif call.data == "my_back":
+        await call.message.delete()
         await call.message.edit_reply_markup(reply_markup=None)
         await call.message.answer("🔙 Asosiy menyuga qaytdingiz.", reply_markup=user_menu())
         await state.clear()
 
 
 
-@dp.callback_query(lambda c: c.data.startswith("start_lesson_"))
+@dp.callback_query(lambda call: call.data.startswith("start_lesson_"))
 async def handle_start_lesson(call: CallbackQuery, state: FSMContext):
+    await call.message.delete()
+
     try:
-        await call.message.edit_reply_markup(reply_markup=None)
 
         # 🔁 Step 1: Check forced channel join
         channels = Channel.objects.all()
@@ -605,6 +607,7 @@ async def handle_start_lesson(call: CallbackQuery, state: FSMContext):
 
 @dp.callback_query(lambda c: c.data == "check_channels")
 async def recheck_channels(call: CallbackQuery, state: FSMContext):
+    await call.message.delete()
     try:
         user_id = call.from_user.id
         channels = Channel.objects.all()
@@ -612,8 +615,11 @@ async def recheck_channels(call: CallbackQuery, state: FSMContext):
 
         for channel in channels:
             joined = await check_user_in_channel(user_id, channel.username, bot)
+            print(joined)
+
             if not joined:
                 not_joined.append(channel)
+                print(not_joined)
 
         if not_joined:
             await call.answer("❌ Hali hamma kanallarga obuna emassiz.", show_alert=True)
@@ -654,6 +660,9 @@ async def handle_theme_page(call: CallbackQuery, state: FSMContext):
     try:
         page = int(call.data.split(":")[1])
         data = await state.get_data()
+
+        logger.info(f"FSM State Data: {data}")
+
         course_id = data.get("course_id")
         level_id = data.get("level_id")
 
@@ -669,43 +678,44 @@ async def handle_theme_page(call: CallbackQuery, state: FSMContext):
         await call.message.answer("❌ Xatolik yuz berdi.")
 
 
-
-
 @dp.callback_query(lambda c: c.data.startswith(("select_level_", "go_back")))
 async def handle_select_level(call: CallbackQuery, state: FSMContext):
     await call.message.edit_reply_markup(reply_markup=None)
 
     if call.data == "go_back":
-        await call.message.answer("Siz menu bulimiga qaytingiz!",reply_markup=user_menu())
+        await call.message.answer("Siz menu bulimiga qaytingiz!", reply_markup=user_menu())
+        await call.message.delete()
         await state.clear()
         return
 
     try:
         parts = call.data.split("_")
         level_id = parts[2]
-        print("level",level_id)
+        print("level", level_id)
 
         course = StudentCourse.objects.filter(
             user__chat_id=call.from_user.id,
             course__course_type__id=level_id
         ).first()
 
-        print("course",course.course.id)
-
         if not course:
-            await call.message.answer("❌ Kurs aniqlanmadi.",reply_markup=course_levels(course_id=course.course.id))
+            await call.message.answer("❌ Kurs aniqlanmadi.", reply_markup=course_levels(course_id="fallback"))
             return
 
-        await state.update_data(level_id=level_id)
+        course_id = str(course.course.id)  # ✅ ensure it's a string
+
+        # ✅ FIX HERE: Store BOTH course_id and level_id into state
+        await state.update_data(course_id=course_id, level_id=level_id)
 
         await call.message.answer(
             text="📘 Endi mavzuni tanlang:",
-            reply_markup=themes_attendance([course.course.id], call.from_user.id, level_id)
+            reply_markup=themes_attendance([course_id], call.from_user.id, level_id)
         )
 
     except Exception as e:
         logger.error(f"Error in handle_select_level: {e}")
         await call.message.answer("❌ Xatolik yuz berdi. Iltimos, qayta urinib ko'ring.")
+
 
 
 @dp.callback_query(lambda c: c.data.startswith("lesson_"))
@@ -816,7 +826,7 @@ async def finishing_the_same(call: CallbackQuery, state: FSMContext):
             text=f"👮🏻‍♂️ Siz {theme.name} mavzusini hali boshlamagansiz ⁉️",
             reply_markup=themes_attendance(
                 course_id=course_ids,
-                user=call.from_user.id,
+                user_id=call.from_user.id,
                 level_id=level.id
             )
         )
@@ -829,7 +839,7 @@ async def finishing_the_same(call: CallbackQuery, state: FSMContext):
         text="✅ Siz mavzuni muvaffaqiyatli yakunladingiz!",
         reply_markup=themes_attendance(
             course_id=course_ids,
-            user=call.from_user.id,
+            user_id=call.from_user.id,
             level_id=level.id
         )
     )
