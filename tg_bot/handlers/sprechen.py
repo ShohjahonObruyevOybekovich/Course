@@ -137,9 +137,13 @@ async def handle_voice(message: Message, state: FSMContext):
     await loading_msg.edit_text("✅ Tahlil yakunlandi!")
 
     await message.answer(f"🗣 *Sizning nutqingiz:*\n`{text}`", parse_mode="Markdown")
+    theme_id = data.get("theme_id")
+    theme = Theme.objects.filter(id=theme_id).first()
 
+    theme_sprechen = theme.sprechen
     # 🧠 GPT feedback
     prompt = (
+        f"Speach theme : {theme_sprechen}\n"
         f"User's transcribed German speech: \"{text}\"\n"
         f"Repeated words: {repetitions}\n"
         f"Pitch analysis: average pitch = {pitch['avg_pitch']}, variation = {pitch['variation']}\n\n"
@@ -148,8 +152,7 @@ async def handle_voice(message: Message, state: FSMContext):
     )
     feedback = await gpt.prompt_to_json(str(user_id), prompt)
 
-    theme_id = data.get("theme_id")
-    theme = Theme.objects.filter(id=theme_id).first()
+
     user = CustomUser.objects.filter(chat_id=user_id).first()
 
     formate = ""
