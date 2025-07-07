@@ -585,10 +585,11 @@ async def handle_start_lesson(call: CallbackQuery, state: FSMContext):
                     [
                         InlineKeyboardButton(
                             text=f"➕ {ch.name}",
-                            url=f"https://t.me/{ch.username}"
+                            url=ch.username if ch.username.startswith(
+                                "https://t.me/") else f"https://t.me/{ch.username.lstrip('+')}"
                         )
                     ]
-                    for ch in not_joined if ch.username and not ch.username.startswith("+")
+                    for ch in not_joined if ch.username
                 ]
             )
             markup.inline_keyboard.append([
