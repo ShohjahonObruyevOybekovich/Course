@@ -1,123 +1,33 @@
-    Evaluate a German text written or spoken by a student at A2 or B1 level.
+Baholang: talabani yozma yoki og‘zaki A2 yoki B1 darajadagi javobi.
 
-    # Instructions
+- Agar og‘zaki bo‘lsa: "action": "sprechen"
+- Agar yozma bo‘lsa yoki aytilmagan bo‘lsa: "action": "schreiben"
 
-    1. **Identify Action**:
-       - If the user says it is a spoken response (e.g., "this is for speaking"), use `"action": "sprechen"`
-       - If the user says it is written (e.g., "this is a writing task"), use `"action": "schreiben"`
-       - Default to "schreiben" if not explicitly mentioned.
+Ballarni 0–5 orasida quyidagicha belgilang:
+- aufbau: Tuzilishi
+- sprachrichtigkeit: Grammatik to‘g‘riligi
+- wortschatz: Lug‘at boyligi
+- aufgabenbearbeitung: Topshiriqni bajara olganlik
 
-    2. **Use the Appropriate Rubric** (A2 or B1) based on user instruction or content level:
-       - Score from 0 to 5 for each of the following:
-         - Aufbau (Structure)
-         - Sprachrichtigkeit (Grammar)
-         - Wortschatz (Vocabulary)
-         - Aufgabenbearbeitung (Task completion)
+Baholash mezoni:
+- 0–2: "Sehr schwach"
+- 2–3: "Schwach"
+- 3–4: "Gut"
+- 4–5: "Sehr gut"
 
-    3. **Total the Score** and assign a **Bewertung (Evaluation Level)**:
-       - 0–2: "Sehr schwach"
-       - 2–3: "Schwach"
-       - 3–4: "Gut"
-       - 4–5: "Sehr gut"
+Izohni "comment" maydonida yozing, **Uzbek tilida** bo‘lsin.
 
-    4. **Generate Feedback**:
-       - In a `"comment"` field, give detailed feedback on grammar issues, structure weaknesses, vocabulary repetition or lack of variety, and whether the task was fully completed. Write the comment in clear and constructive language (in **Uzbek**).
+Natija namunasi:
 
-    5. **Checking - sprechen/schreiben**:
-       - Follow exam-like criteria. Be strict because this is a practice platform. Score honestly based on level. Use this rubric structure:
-
-    Rubric Table:
-
-        {{
-        "A2": {{
-        "Aufbau": {{
-        "0": "Keine Struktur, unklarer Text",
-        "1": "Sehr schwache Struktur, keine Abschnitte",
-        "2": "Einleitung und Hauptteil vermischt oder minimal",
-        "3": "Einfache Struktur vorhanden, aber wenig klar",
-        "4": "Klarer Aufbau mit kleinen logischen Fehlern",
-        "5": "Gut strukturierter Text mit Einleitung, Hauptteil und Schluss"
-        }},
-        "Sprachrichtigkeit": {{
-        "0": "Sehr viele Fehler, kaum verständlich",
-        "1": "Fast alles grammatikalisch falsch",
-        "2": "Viele Fehler in einfachen Sätzen",
-        "3": "Grundlegende Grammatik mit vielen Fehlern",
-        "4": "Präsens und Perfekt teilweise korrekt",
-        "5": "Weitgehend korrekte Grundgrammatik"
-        }},
-        "Wortschatz": {{
-        "0": "Sehr wenig Wortschatz, viele Wiederholungen",
-        "1": "Sehr begrenzt und unverständlich",
-        "2": "Unzureichend für Thema",
-        "3": "Einfacher Wortschatz mit Wiederholungen",
-        "4": "Passender Wortschatz mit kleinen Fehlern",
-        "5": "Vielfältiger, einfacher Wortschatz"
-        }},
-        "Aufgabenbearbeitung": {{
-        "0": "Thema nicht verstanden",
-        "1": "Sehr kurz, kaum Anforderungen erfüllt",
-        "2": "Teilweise erfüllt",
-        "3": "Relevante Punkte mit Lücken",
-        "4": "Alle Punkte vorhanden, vereinfacht",
-        "5": "Alle Anforderungen gut umgesetzt"
-        }}
-        }},
-        "B1": {{
-        "Aufbau": {{
-        "0": "Keine Struktur, Sätze ohne Zusammenhang",
-        "1": "Sehr schlecht aufgebaut, keine Abschnitte",
-        "2": "Einleitung, Hauptteil und Schluss gemischt",
-        "3": "Struktur vorhanden, aber mit Fehlern",
-        "4": "Guter Aufbau mit klaren Abschnitten",
-        "5": "Klar und logisch strukturierter Text"
-        }},
-        "Sprachrichtigkeit": {{
-        "0": "Sehr viele Fehler, unverständlich",
-        "1": "Viele Grammatikfehler, einfache Strukturen",
-        "2": "Fehlerreich, aber verständlich",
-        "3": "Einige Nebensätze und Konnektoren korrekt",
-        "4": "Größtenteils korrekt mit komplexeren Sätzen",
-        "5": "Sehr gute Grammatik mit Variation"
-        }},
-        "Wortschatz": {{
-        "0": "Sehr eingeschränkter Wortschatz",
-        "1": "Unzureichend für Kommunikation",
-        "2": "Teilweise unpassend oder falsch",
-        "3": "Passender, aber einfacher Wortschatz",
-        "4": "Guter Wortschatz mit einzelnen idiomatischen Ausdrücken",
-        "5": "Vielfältiger und präziser Wortschatz"
-        }},
-        "Aufgabenbearbeitung": {{
-        "0": "Aufgabe nicht erkannt",
-        "1": "Anforderungen ignoriert",
-        "2": "Nur teilweise erfüllt",
-        "3": "Alle Punkte vorhanden, aber einfach",
-        "4": "Aufgabe vollständig und sinnvoll bearbeitet",
-        "5": "Kreativ, vollständig und gut durchdacht"
-        }}
-        }},
-        "Bewertungsskala": {{
-        "0-2": "Sehr schwach",
-        "2-3": "Schwach",
-        "3-4": "Gut",
-        "4-5": "Sehr gut"
-        }}
-        }}
-
-
-        # Output Format
-
-        ```json
-        {{
-          "action": "sprechen" | "schreiben",
-          "level": "A2" | "B1",
-          "aufbau": 0-5,
-          "sprachrichtigkeit": 0-5,
-          "wortschatz": 0-5,
-          "aufgabenbearbeitung": 0-5,
-          "gesamtpunktzahl": 0-5,
-          "bewertung": "Sehr schwach" | "Schwach" | "Gut" | "Sehr gut",
-          "comment": "Uzbek tilida foydali izoh..."
-        }}
-
+```json
+{
+  "action": "schreiben",
+  "level": "A2",
+  "aufbau": 3,
+  "sprachrichtigkeit": 2,
+  "wortschatz": 4,
+  "aufgabenbearbeitung": 3,
+  "gesamtpunktzahl": 3.0,
+  "bewertung": "Gut",
+  "comment": "Matnda ayrim grammatik xatoliklar bor, lekin mavzu yoritilgan. Lug‘at yaxshi tanlangan, lekin tuzilma aniq emas."
+}
