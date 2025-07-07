@@ -44,7 +44,7 @@ def compute_telegram_hash(data_check_string: str):
     ).hexdigest()
 
 from aiogram.exceptions import TelegramBadRequest
-
+from typing import Union
 async def check_user_in_channel(user_id: int, chat_id: Union[str, int], bot) -> bool:
     try:
         member = await bot.get_chat_member(chat_id=chat_id, user_id=user_id)
