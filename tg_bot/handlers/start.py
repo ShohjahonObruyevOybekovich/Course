@@ -564,7 +564,13 @@ async def handle_start_lesson(call: CallbackQuery, state: FSMContext):
         not_joined = []
 
         for channel in channels:
-            chat_id = f"@{channel.username}" if channel.username else channel.chat_id
+            if channel.username:
+                chat_id = f"@{channel.username}"
+            elif channel.chat_id:
+                chat_id = channel.chat_id
+            else:
+                continue  # skip channels with neither username nor chat_id
+
             joined = await check_user_in_channel(user_id, chat_id, bot)
             if not joined:
                 not_joined.append(channel)
@@ -603,6 +609,7 @@ async def handle_start_lesson(call: CallbackQuery, state: FSMContext):
         await call.message.answer("Xatolik yuz berdi. Qayta urinib ko‘ring.")
 
 
+
 @dp.callback_query(lambda c: c.data == "check_channels")
 async def recheck_channels(call: CallbackQuery, state: FSMContext):
     await call.message.delete()
@@ -612,7 +619,13 @@ async def recheck_channels(call: CallbackQuery, state: FSMContext):
         not_joined = []
 
         for channel in channels:
-            chat_id = f"@{channel.username}" if channel.username else channel.chat_id
+            if channel.username:
+                chat_id = f"@{channel.username}"
+            elif channel.chat_id:
+                chat_id = channel.chat_id
+            else:
+                continue
+
             joined = await check_user_in_channel(user_id, chat_id, bot)
             if not joined:
                 not_joined.append(channel)
@@ -621,7 +634,6 @@ async def recheck_channels(call: CallbackQuery, state: FSMContext):
             await call.answer("❌ Hali hamma kanallarga obuna emassiz.", show_alert=True)
             return
 
-        # ⏪ Retrieve saved intent
         data = await state.get_data()
         next_action = data.get("next_action")
         course_id = data.get("course_id")
@@ -633,7 +645,6 @@ async def recheck_channels(call: CallbackQuery, state: FSMContext):
             )
             return
 
-        # Fallback: Show user's courses
         courses = StudentCourse.objects.filter(user__chat_id=user_id)
         if not courses.exists():
             await call.message.answer("❗️ Kurslar mavjud emas.")
@@ -646,6 +657,7 @@ async def recheck_channels(call: CallbackQuery, state: FSMContext):
     except Exception as e:
         logger.error(f"Error in recheck_channels: {e}")
         await call.message.answer("Xatolik yuz berdi. Qayta urinib ko‘ring.")
+
 
 
 
