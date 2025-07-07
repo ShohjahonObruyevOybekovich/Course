@@ -564,16 +564,11 @@ async def handle_start_lesson(call: CallbackQuery, state: FSMContext):
         not_joined = []
 
         for channel in channels:
-            # Validate chat_id or username
-            if channel.username and not channel.username.startswith("+"):
-                chat_id = f"@{channel.username}"
-            elif channel.chat_id:
-                chat_id = channel.chat_id  # Use -100... form here
-            else:
-                print(f"⚠️ Channel {channel.name} has invalid username/chat_id.")
+            if not channel.chat_id:
+                print(f"⚠️ Channel {channel.name} missing chat_id.")
                 continue
 
-            joined = await check_user_in_channel(user_id, chat_id, bot)
+            joined = await check_user_in_channel(user_id, channel.chat_id, bot)
             if not joined:
                 not_joined.append(channel)
 
@@ -585,11 +580,10 @@ async def handle_start_lesson(call: CallbackQuery, state: FSMContext):
                     [
                         InlineKeyboardButton(
                             text=f"➕ {ch.name}",
-                            url=ch.username if ch.username.startswith(
-                                "https://t.me/") else f"https://t.me/{ch.username.lstrip('+')}"
+                            url=ch.invite_link  # ✅ Always a full valid invite link
                         )
                     ]
-                    for ch in not_joined if ch.username
+                    for ch in not_joined if ch.invite_link
                 ]
             )
             markup.inline_keyboard.append([
