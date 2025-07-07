@@ -564,12 +564,14 @@ async def handle_start_lesson(call: CallbackQuery, state: FSMContext):
         not_joined = []
 
         for channel in channels:
-            if channel.username:
+            # Validate chat_id or username
+            if channel.username and not channel.username.startswith("+"):
                 chat_id = f"@{channel.username}"
             elif channel.chat_id:
-                chat_id = channel.chat_id
+                chat_id = channel.chat_id  # Use -100... form here
             else:
-                continue  # skip channels with neither username nor chat_id
+                print(f"⚠️ Channel {channel.name} has invalid username/chat_id.")
+                continue
 
             joined = await check_user_in_channel(user_id, chat_id, bot)
             if not joined:
@@ -580,8 +582,13 @@ async def handle_start_lesson(call: CallbackQuery, state: FSMContext):
 
             markup = InlineKeyboardMarkup(
                 inline_keyboard=[
-                    [InlineKeyboardButton(text=f"➕ {ch.name}", url=f"https://t.me/{ch.username}")]
-                    for ch in not_joined if ch.username
+                    [
+                        InlineKeyboardButton(
+                            text=f"➕ {ch.name}",
+                            url=f"https://t.me/{ch.username}"
+                        )
+                    ]
+                    for ch in not_joined if ch.username and not ch.username.startswith("+")
                 ]
             )
             markup.inline_keyboard.append([
@@ -619,11 +626,12 @@ async def recheck_channels(call: CallbackQuery, state: FSMContext):
         not_joined = []
 
         for channel in channels:
-            if channel.username:
+            if channel.username and not channel.username.startswith("+"):
                 chat_id = f"@{channel.username}"
             elif channel.chat_id:
                 chat_id = channel.chat_id
             else:
+                print(f"⚠️ Channel {channel.name} has invalid username/chat_id.")
                 continue
 
             joined = await check_user_in_channel(user_id, chat_id, bot)
