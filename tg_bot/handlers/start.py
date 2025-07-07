@@ -552,32 +552,32 @@ async def handle_my_course_navigation(call: CallbackQuery, state: FSMContext):
 
 
 
+
 @dp.callback_query(lambda call: call.data.startswith("start_lesson_"))
 async def handle_start_lesson(call: CallbackQuery, state: FSMContext):
     await call.message.delete()
-
     try:
+        user_id = call.from_user.id
+        course_id = call.data.split("_")[2]
 
-        # 🔁 Step 1: Check forced channel join
         channels = Channel.objects.all()
         not_joined = []
 
         for channel in channels:
-            joined = await check_user_in_channel(call.from_user.id, channel.username, bot)
+            chat_id = f"@{channel.username}" if channel.username else channel.chat_id
+            joined = await check_user_in_channel(user_id, chat_id, bot)
             if not joined:
                 not_joined.append(channel)
 
-        course_id = call.data.split("_")[2]
-        ic(course_id)
-
         if not_joined:
-            # Save intent for later resume
             await state.update_data(next_action="start_lesson", course_id=course_id)
 
-            markup = InlineKeyboardMarkup(inline_keyboard=[
-                [InlineKeyboardButton(text=f"➕ {ch.name}", url=f"https://t.me/{ch.username}")]
-                for ch in not_joined
-            ])
+            markup = InlineKeyboardMarkup(
+                inline_keyboard=[
+                    [InlineKeyboardButton(text=f"➕ {ch.name}", url=f"https://t.me/{ch.username}")]
+                    for ch in not_joined if ch.username
+                ]
+            )
             markup.inline_keyboard.append([
                 InlineKeyboardButton(text="✅ Tekshirish", callback_data="check_channels")
             ])
@@ -588,11 +588,9 @@ async def handle_start_lesson(call: CallbackQuery, state: FSMContext):
             )
             return
 
-        user = CustomUser.objects.filter(chat_id=call.from_user.id).first()
-        ic(user)
-
+        user = CustomUser.objects.filter(chat_id=user_id).first()
         if not user:
-            await call.message.answer("User not found!")
+            await call.message.answer("❗️ Foydalanuvchi topilmadi.")
             return
 
         await call.message.answer(
@@ -614,20 +612,16 @@ async def recheck_channels(call: CallbackQuery, state: FSMContext):
         not_joined = []
 
         for channel in channels:
-            joined = await check_user_in_channel(user_id, channel.username, bot)
-            print(joined)
-
+            chat_id = f"@{channel.username}" if channel.username else channel.chat_id
+            joined = await check_user_in_channel(user_id, chat_id, bot)
             if not joined:
                 not_joined.append(channel)
-                print(not_joined)
 
         if not_joined:
             await call.answer("❌ Hali hamma kanallarga obuna emassiz.", show_alert=True)
             return
 
-        await call.message.delete()
-
-        # ⏪ Retrieve intent
+        # ⏪ Retrieve saved intent
         data = await state.get_data()
         next_action = data.get("next_action")
         course_id = data.get("course_id")
@@ -639,8 +633,8 @@ async def recheck_channels(call: CallbackQuery, state: FSMContext):
             )
             return
 
-        # Default fallback: show user’s courses
-        courses = StudentCourse.objects.filter(user__chat_id=call.from_user.id)
+        # Fallback: Show user's courses
+        courses = StudentCourse.objects.filter(user__chat_id=user_id)
         if not courses.exists():
             await call.message.answer("❗️ Kurslar mavjud emas.")
             return
@@ -652,6 +646,7 @@ async def recheck_channels(call: CallbackQuery, state: FSMContext):
     except Exception as e:
         logger.error(f"Error in recheck_channels: {e}")
         await call.message.answer("Xatolik yuz berdi. Qayta urinib ko‘ring.")
+
 
 
 
