@@ -1,301 +1,420 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uz">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Eduzone - Learn German with AI</title>
+  <title>Eduzone - AI yordamida Nemis tilini o'rganing</title>
   <link rel="icon" href="{% static 'images/eduzone-logo.jpg' %}" type="image/png" />
   <style>
-    body {
+    * {
+      box-sizing: border-box;
       margin: 0;
+      padding: 0;
+    }
+    body {
       font-family: 'Segoe UI', sans-serif;
-      background: #fff6f0;
+      background: #fff7f0;
       color: #333;
+      scroll-behavior: smooth;
+      line-height: 1.6;
     }
 
+    /* Header */
     header {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
+      background: white;
       padding: 1rem 2rem;
-      background: #fff;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
       position: sticky;
       top: 0;
-      z-index: 100;
+      z-index: 1000;
     }
-
-    header .logo {
+    .logo {
       display: flex;
       align-items: center;
       gap: 10px;
     }
-
-    header .logo img {
-      width: 50px;
-      height: auto;
+    .logo img {
+      height: 48px;
+      width: 48px;         /* make width same as height */
+      border-radius: 50%;  /* ✅ this makes it a circle */
+      object-fit: cover;   /* keeps it well-fitted */
+      border: 2px solid #ff5722; /* optional: border for contrast */
     }
-
-    header .logo span {
-      font-size: 1.5rem;
+    .logo span {
+      font-size: 1.8rem;
       font-weight: bold;
+      color: #ff5722;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      background: white;
+      padding: 1rem 2rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
     }
 
+    .idiom {
+      font-size: 0.95rem;
+      color: #444;
+      font-style: italic;
+      margin-left: 2rem;
+      max-width: 60%;
+    }
+
+    @media (max-width: 768px) {
+      .idiom {
+        margin-top: 0.5rem;
+        font-size: 0.85rem;
+        max-width: 100%;
+      }
+
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: transparent url('https://raw.githubusercontent.com/JulianLaval/canvas-stars/master/starfield.png') repeat;
+      animation: stars 100s linear infinite;
+      z-index: -1;
+      opacity: 0.25;
+    }
+
+    @keyframes stars {
+      from { background-position: 0 0; }
+      to { background-position: -10000px 10000px; }
+    }
+
+    /* Hero Section */
     main {
       display: flex;
-      flex-direction: column;
+      flex-direction: column-reverse;
       align-items: center;
-      text-align: center;
       padding: 4rem 2rem;
+      gap: 2rem;
+      text-align: center;
     }
 
     @media (min-width: 768px) {
       main {
         flex-direction: row;
-        justify-content: space-between;
+        justify-content: center; /* ✅ center content */
+        gap: 4rem;               /* ✅ spacing between text and image */
         text-align: left;
-        padding: 4rem 6rem;
       }
     }
 
     .intro {
       flex: 1;
-      max-width: 600px;
+      max-width: 520px;
     }
-
     .intro h1 {
       font-size: 2.5rem;
-      font-weight: 800;
+      color: #222;
       margin-bottom: 1rem;
     }
-
     .intro p {
       font-size: 1.1rem;
       color: #555;
       margin-bottom: 2rem;
     }
-
+    .intro p strong {
+      color: #e65100;
+    }
     .intro button {
-      background: #ff6600;
-      border: none;
-      padding: 0.8rem 2rem;
+      padding: 0.9rem 2rem;
+      background: linear-gradient(to right, #ff6f00, #ff8f00);
       color: white;
-      font-size: 1rem;
+      border: none;
       border-radius: 50px;
+      font-weight: bold;
       cursor: pointer;
-      transition: background 0.3s ease;
+      box-shadow: 0 5px 15px rgba(255, 111, 0, 0.3);
     }
-
     .intro button:hover {
-      background: #e05500;
+      background: linear-gradient(to right, #e65100, #ff7043);
     }
-
-    .hero-img {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      padding: 2rem;
-    }
-
     .hero-img img {
-      max-width: 100%;
-      border-radius: 1rem;
+      width: 100%;
+      max-width: 580px; /* 🔼 increased from 480px */
+      border-radius: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      transition: transform 0.3s ease;
     }
-
+    /* Features */
     .features {
-      background: #fff;
-      padding: 3rem 2rem;
       display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 2rem;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      padding: 4rem 2rem;
       max-width: 1200px;
       margin: auto;
     }
-
     .feature-box {
-      background: #fff3ec;
-      padding: 1.5rem;
+      background: #fff3e0;
+      padding: 2rem;
       border-radius: 1rem;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      text-align: center;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.05);
     }
-
     .feature-box h4 {
-      margin-top: 0;
+      color: #f4511e;
+      margin-bottom: 0.8rem;
     }
 
+    /* Lead Form Centered */
+    .lead-form-wrapper {
+      background: linear-gradient(135deg, #ffe0b2, #fff3e0);
+      padding: 4rem 2rem;
+      display: flex;
+      justify-content: center;
+    }
+    .lead-form {
+      background: white;
+      padding: 3rem 2rem;
+      border-radius: 1.2rem;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+    .lead-form h3 {
+      margin-bottom: 1.5rem;
+      font-size: 1.6rem;
+      color: #333;
+      text-align: center;
+    }
+    .lead-form input,
+    .lead-form textarea {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1.2rem;
+      border: 1px solid #ccc;
+      border-radius: 0.6rem;
+      font-size: 1rem;
+    }
+    .lead-form button {
+      background: #0288d1;
+      color: white;
+      border: none;
+      padding: 1rem;
+      width: 100%;
+      border-radius: 0.6rem;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .lead-form button:hover {
+      background: #0277bd;
+    }
+
+    /* Contact Details + Map */
     .contact-section {
       display: flex;
       flex-direction: column;
       gap: 2rem;
-      padding: 4rem 2rem;
       background: #fff;
+      padding: 4rem 2rem;
+      max-width: 1200px;
+      margin: auto;
     }
-
     @media (min-width: 768px) {
       .contact-section {
         flex-direction: row;
-        justify-content: center;
-        align-items: flex-start;
       }
     }
-
-    .contact-info {
+    .contact-card {
       flex: 1;
-      padding-right: 2rem;
-    }
-
-    .contact-info iframe {
-      width: 100%;
-      height: 200px;
-      border: none;
-      border-radius: 1rem;
-    }
-
-    .lead-form {
-      flex: 1;
-      background: #fff;
+      background: #fafafa;
       padding: 2rem;
       border-radius: 1rem;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-      max-width: 500px;
-      margin: auto;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.05);
     }
-
-    .lead-form h3 {
-      font-size: 1.5rem;
-      margin-bottom: 1.5rem;
-      color: #222;
-    }
-
-    .lead-form input,
-    .lead-form textarea {
-      width: 100%;
-      padding: 0.75rem 1rem;
+    .contact-card h3 {
       margin-bottom: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 0.4rem;
-      font-size: 1rem;
-      background: #fdfdfd;
+      font-size: 1.4rem;
+      color: #333;
     }
-
-    .lead-form button {
+    .contact-card a {
+      color: #0288d1;
+      text-decoration: none;
+    }
+    .contact-card iframe {
       width: 100%;
-      background: #007bff;
-      color: white;
-      padding: 0.85rem;
-      font-size: 1rem;
+      height: 280px;
+      margin-top: 1rem;
       border: none;
-      border-radius: 0.5rem;
-      cursor: pointer;
-      font-weight: 500;
-      transition: background-color 0.2s ease;
+      border-radius: 0.8rem;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.08);
     }
 
-    .lead-form button:hover {
-      background: #0056b3;
-    }
-
+    /* Footer */
     footer {
-      margin-top: 3rem;
-      text-align: center;
-      color: #aaa;
-      font-size: 0.9rem;
+      background: #f1f1f1;
       padding: 2rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #777;
     }
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #4caf50;
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      font-weight: 500;
+      font-size: 1rem;
+      opacity: 0;
+      transform: translateY(-20px);
+      pointer-events: none;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      z-index: 2000;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
   </style>
 </head>
 <body>
-  <header>
-    <div class="logo">
-      <img src="{% static 'images/eduzone-logo.jpg' %}" alt="Eduzone Logo" />
-      <span>Eduzone</span>
-    </div>
-    <nav>
-      <a href="#" style="margin-right: 1rem; text-decoration: none; color: #333;">Home</a>
-      <a href="#" style="text-decoration: none; color: #333;">Courses</a>
-    </nav>
-  </header>
+    <div id="toast" class="toast">Rahmat! Tez orada siz bilan bog'lanamiz.</div>
+    <header>
+      <div class="logo">
+        <img src="{% static 'images/eduzone-logo.jpg' %}" alt="Eduzone Logotipi" />
+        <span>Eduzone</span>
+      </div>
+      <div class="idiom">
+        <p>"Jede Sprache ist eine neue Sicht auf das Leben."</p>
+      </div>
+    </header>
 
-  <main>
-    <div class="intro">
-      <h1>Learn German Easily with AI Assistance</h1>
-      <p>Practice speaking, get evaluated instantly, and chat with your personal AI tutor directly in Telegram. Eduzone is your smart path to German fluency.</p>
-      <button onclick="window.open('https://t.me/edu_onlineuz_bot', '_blank')">Try the Telegram Bot</button>
-    </div>
-    <div class="hero-img">
-      <img src="{% static 'images/f5d5a403-072f-4518-b8f0-3d15d5c26514.png' %}" alt="Students learning" />
-    </div>
-  </main>
+    <main>
+      <div class="intro">
+        <h1>AI yordamida Nemis tilini oson o'rganing</h1>
+        <p>
+          Eduzone yordamida nemis tilini o‘rganish endi oson, qiziqarli va mukofotli!<br />
+          📱 Telegram bot orqali siz mini-o‘yinlar bilan so‘z yodlaysiz,<br />
+          🤖 Har bir darsda AI bilan <strong>gapirish (Sprechen)</strong> va <strong>yozish (Schreiben)</strong> mashqlari bajarasiz,<br />
+          🪙 Harakatlaringiz uchun <strong>coin</strong>lar yig‘asiz va <strong>sovg‘alar</strong> yutib olasiz — asosiy mukofot: <strong>iPhone</strong>!<br />
+          📺 Shuningdek, siz uchun maxsus <strong>private kanal</strong>, <strong>Telegram guruhlar</strong> va <strong>bepul videodarslar</strong> mavjud.<br />
+          👩‍🏫 Ustozlar bilan doimiy aloqada bo‘lib, bilimlaringizni mustahkamlaysiz.
+        </p>
+        <button onclick="window.open('https://t.me/edu_onlineuz_bot', '_blank')">Telegram botni sinab ko'ring</button>
+      </div>
+      <div class="hero-img">
+        <img src="{% static 'images/images_young.png' %}" alt="O'quvchilar" />
+      </div>
+    </main>
 
   <section class="features">
     <div class="feature-box">
-      <h4>Learn New Skills</h4>
-      <p>Use AI to practice grammar, vocabulary, and speaking interactively.</p>
+      <h4>AI orqali Yangi Ko'nikmalar</h4>
+      <p>Grammatika, so'z boyligi va suhbatni AI yordamida o'zlashtiring.</p>
     </div>
     <div class="feature-box">
-      <h4>Expert Tutors</h4>
-      <p>Our teachers and AI guide you together for faster improvement.</p>
+      <h4>Mutaxassis Ustozlar</h4>
+      <p>AI va tajribali ustozlar sizni birga rivojlantiradi.</p>
     </div>
     <div class="feature-box">
-      <h4>Telegram Integration</h4>
-      <p>Lessons and assessments right inside your Telegram app.</p>
+      <h4>Telegramga Integratsiya</h4>
+      <p>Barcha darslar va baholashlar bevosita Telegramda.</p>
     </div>
     <div class="feature-box">
-      <h4>Free Trial</h4>
-      <p>Start learning with a free AI-powered lesson today.</p>
+      <h4>Bepul Dars</h4>
+      <p>AI yordamida bepul dars bilan boshlang.</p>
     </div>
   </section>
 
-  <section class="contact-section">
-    <div class="contact-info">
-      <h3>Contact Information</h3>
-      <p><strong>Website:</strong> <a href="https://eduzone.uz" target="_blank">eduzone.uz</a></p>
-      <p><strong>Phone:</strong> <a href="tel:+998782000305">+998 78 200 0305</a></p>
-      <p><strong>Location:</strong> Tashkent, Uzbekistan</p>
-      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1793.5602811449403!2d69.22218683689643!3d41.29310534504913!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38ae8b28795248cf%3A0x7da174593fe30db7!2sEDU%20ZONE%20LC!5e1!3m2!1sru!2s!4v1751978547389!5m2!1sru!2s" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-    </div>
+  <section class="lead-form-wrapper">
+    <form class="lead-form" id="leadForm">
+      <h3>Biz bilan bog'laning</h3>
+      <input type="text" name="name" placeholder="Ismingiz" required />
+      <input type="text" name="phone" placeholder="Telefon raqamingiz" required />
+      <textarea name="message" rows="4" placeholder="Nega nemis tilini o'rganmoqchisiz?"></textarea>
+      <button type="submit">Yuborish</button>
+    </form>
+  </section>
 
-    <div class="lead-form">
-      <h3>Join Us</h3>
-      <form id="leadForm">
-        <input type="text" name="name" placeholder="Your Name" required />
-        <input type="text" name="phone" placeholder="Phone Number" required />
-        <textarea name="message" placeholder="Why are you interested in learning German?"></textarea>
-        <button type="submit">Submit Lead</button>
-      </form>
+  <section class="contact-section">
+    <div class="contact-card">
+      <h3>Bog'lanish uchun ma'lumotlar</h3>
+      <p><strong>Sayt:</strong> <a href="https://eduzone.uz" target="_blank">eduzone.uz</a></p>
+      <p><strong>Telefon:</strong> <a href="tel:+998782000305">+998 78 200 0305</a></p>
+      <p><strong>Manzil:</strong> Toshkent, O'zbekiston</p>
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1793.5602811449403!2d69.22218683689643!3d41.29310534504913!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38ae8b28795248cf%3A0x7da174593fe30db7!2sEDU%20ZONE%20LC!5e1!3m2!1sru!2s!4v1751978547389!5m2!1sru!2s" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
   </section>
 
   <footer>
-    &copy; <span id="year"></span> Eduzone. All rights reserved.
+    &copy; <span id="year"></span> Eduzone. Barcha huquqlar himoyalangan.
   </footer>
 
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
+    const idioms = [
+      "Har bir til — bu yangi dunyo.",
+      "Ko‘p til bilgan — ko‘p yurtdosh topadi.",
+      "Til — bilim kaliti.",
+      "Til o‘rganish — tafakkurni kengaytirishdir.",
+      "Yangi til — yangi imkoniyat.",
+      "Til bilgan — el biladi.",
+      "Har bir o‘rganilgan til — yangi hayotga eshik.",
+      "Til — qalb ko‘zgusi.",
+      "Til — madaniyat ko‘prigidir.",
+      "O‘zga tilni bilgan — o‘zini anglagan."
+    ];
+    document.querySelector(".idiom p").textContent = idioms[Math.floor(Math.random() * idioms.length)];
+
 
     document.getElementById("leadForm").addEventListener("submit", async function(e) {
       e.preventDefault();
       const form = new FormData(this);
       const data = Object.fromEntries(form);
 
+      const toast = document.getElementById("toast");
+
       try {
-        const res = await fetch("/api/leads/", {
+        const res = await fetch("/leads/", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data)
         });
-
         if (res.ok) {
-          alert("Thank you! We will contact you soon.");
+          toast.textContent = "✅ Rahmat! Tez orada siz bilan bog'lanamiz.";
+          toast.classList.add("show");
+
+          setTimeout(() => toast.classList.remove("show"), 4000); // hide after 4s
           this.reset();
         } else {
-          alert("Something went wrong. Please try again.");
+          toast.textContent = "❌ Xatolik yuz berdi. Iltimos, qayta urinib ko'ring.";
+          toast.classList.add("show");
+          setTimeout(() => toast.classList.remove("show"), 4000);
         }
-      } catch (err) {
-        alert("Error connecting to server.");
+      } catch {
+        toast.textContent = "⚠️ Serverga ulanib bo‘lmadi.";
+        toast.classList.add("show");
+        setTimeout(() => toast.classList.remove("show"), 4000);
       }
     });
+
   </script>
 </body>
 </html>
