@@ -1,72 +1,299 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>In-App Browser</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eduzone - Learn German with AI</title>
+  <link rel="icon" href="{% static 'images/eduzone-logo.jpg' %}" type="image/png" />
   <style>
     body {
       margin: 0;
-      padding: 16px;
-      background: #212121;
-      color: white;
-      font-family: system-ui;
+      font-family: 'Segoe UI', sans-serif;
+      background: #fff6f0;
+      color: #333;
     }
-    #webview {
-      width: 100%;
-      height: 90vh;
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    header .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    header .logo img {
+      width: 50px;
+      height: auto;
+    }
+
+    header .logo span {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+
+    @media (min-width: 768px) {
+      main {
+        flex-direction: row;
+        justify-content: space-between;
+        text-align: left;
+        padding: 4rem 6rem;
+      }
+    }
+
+    .intro {
+      flex: 1;
+      max-width: 600px;
+    }
+
+    .intro h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+
+    .intro p {
+      font-size: 1.1rem;
+      color: #555;
+      margin-bottom: 2rem;
+    }
+
+    .intro button {
+      background: #ff6600;
       border: none;
-      border-radius: 12px;
-      margin-top: 10px;
-    }
-    .url-input {
-      width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #444;
-      background: #333;
+      padding: 0.8rem 2rem;
       color: white;
+      font-size: 1rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .intro button:hover {
+      background: #e05500;
+    }
+
+    .hero-img {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .hero-img img {
+      max-width: 100%;
+      border-radius: 1rem;
+    }
+
+    .features {
+      background: #fff;
+      padding: 3rem 2rem;
+      display: grid;
+      gap: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .feature-box {
+      background: #fff3ec;
+      padding: 1.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+
+    .feature-box h4 {
+      margin-top: 0;
+    }
+
+    .contact-section {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      padding: 4rem 2rem;
+      background: #fff;
+    }
+
+    @media (min-width: 768px) {
+      .contact-section {
+        flex-direction: row;
+        justify-content: center;
+        align-items: flex-start;
+      }
+    }
+
+    .contact-info {
+      flex: 1;
+      padding-right: 2rem;
+    }
+
+    .contact-info iframe {
+      width: 100%;
+      height: 200px;
+      border: none;
+      border-radius: 1rem;
+    }
+
+    .lead-form {
+      flex: 1;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      max-width: 500px;
+      margin: auto;
+    }
+
+    .lead-form h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      color: #222;
+    }
+
+    .lead-form input,
+    .lead-form textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 0.4rem;
+      font-size: 1rem;
+      background: #fdfdfd;
+    }
+
+    .lead-form button {
+      width: 100%;
+      background: #007bff;
+      color: white;
+      padding: 0.85rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background-color 0.2s ease;
+    }
+
+    .lead-form button:hover {
+      background: #0056b3;
+    }
+
+    footer {
+      margin-top: 3rem;
+      text-align: center;
+      color: #aaa;
+      font-size: 0.9rem;
+      padding: 2rem;
     }
   </style>
 </head>
 <body>
-  <input
-    type="url"
-    class="url-input"
-    placeholder="Enter URL (e.g., https://wordwall.net)"
-    id="urlInput"
-  >
-  <button onclick="loadInApp()" style="margin-top: 10px; width: 100%; padding: 12px; background: #007AFF; color: white; border: none; border-radius: 8px;">
-    Open in Mini App
-  </button>
+  <header>
+    <div class="logo">
+      <img src="{% static 'images/eduzone-logo.jpg' %}" alt="Eduzone Logo" />
+      <span>Eduzone</span>
+    </div>
+    <nav>
+      <a href="#" style="margin-right: 1rem; text-decoration: none; color: #333;">Home</a>
+      <a href="#" style="text-decoration: none; color: #333;">Courses</a>
+    </nav>
+  </header>
 
-  <iframe id="webview" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+  <main>
+    <div class="intro">
+      <h1>Learn German Easily with AI Assistance</h1>
+      <p>Practice speaking, get evaluated instantly, and chat with your personal AI tutor directly in Telegram. Eduzone is your smart path to German fluency.</p>
+      <button onclick="window.open('https://t.me/edu_onlineuz_bot', '_blank')">Try the Telegram Bot</button>
+    </div>
+    <div class="hero-img">
+      <img src="{% static 'images/f5d5a403-072f-4518-b8f0-3d15d5c26514.png' %}" alt="Students learning" />
+    </div>
+  </main>
+
+  <section class="features">
+    <div class="feature-box">
+      <h4>Learn New Skills</h4>
+      <p>Use AI to practice grammar, vocabulary, and speaking interactively.</p>
+    </div>
+    <div class="feature-box">
+      <h4>Expert Tutors</h4>
+      <p>Our teachers and AI guide you together for faster improvement.</p>
+    </div>
+    <div class="feature-box">
+      <h4>Telegram Integration</h4>
+      <p>Lessons and assessments right inside your Telegram app.</p>
+    </div>
+    <div class="feature-box">
+      <h4>Free Trial</h4>
+      <p>Start learning with a free AI-powered lesson today.</p>
+    </div>
+  </section>
+
+  <section class="contact-section">
+    <div class="contact-info">
+      <h3>Contact Information</h3>
+      <p><strong>Website:</strong> <a href="https://eduzone.uz" target="_blank">eduzone.uz</a></p>
+      <p><strong>Phone:</strong> <a href="tel:+998782000305">+998 78 200 0305</a></p>
+      <p><strong>Location:</strong> Tashkent, Uzbekistan</p>
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1793.5602811449403!2d69.22218683689643!3d41.29310534504913!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38ae8b28795248cf%3A0x7da174593fe30db7!2sEDU%20ZONE%20LC!5e1!3m2!1sru!2s!4v1751978547389!5m2!1sru!2s" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+
+    <div class="lead-form">
+      <h3>Join Us</h3>
+      <form id="leadForm">
+        <input type="text" name="name" placeholder="Your Name" required />
+        <input type="text" name="phone" placeholder="Phone Number" required />
+        <textarea name="message" placeholder="Why are you interested in learning German?"></textarea>
+        <button type="submit">Submit Lead</button>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    &copy; <span id="year"></span> Eduzone. All rights reserved.
+  </footer>
 
   <script>
-    // Initialize Telegram WebApp
-    Telegram.WebApp.ready();
-    Telegram.WebApp.expand();
+    document.getElementById("year").textContent = new Date().getFullYear();
 
-    // Telegram's SECRET SAUCE to force in-app opening
-    function loadInApp() {
-      const url = document.getElementById('urlInput').value;
+    document.getElementById("leadForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const form = new FormData(this);
+      const data = Object.fromEntries(form);
 
-      // METHOD 1: Direct native navigation (works for whitelisted domains)
-      Telegram.WebApp.openLink(url, {
-        try_instant_view: true,
-        instant_view: true
-      });
+      try {
+        const res = await fetch("/api/leads/", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
 
-      // METHOD 2: Fallback to iframe (for non-whitelisted domains)
-      document.getElementById('webview').src = url;
-    }
-
-    // Block external redirects
-    window.addEventListener('blur', () => {
-      if(document.activeElement === document.getElementById('webview')) {
-        Telegram.WebApp.showAlert('Stay in app!');
-        window.focus();
+        if (res.ok) {
+          alert("Thank you! We will contact you soon.");
+          this.reset();
+        } else {
+          alert("Something went wrong. Please try again.");
+        }
+      } catch (err) {
+        alert("Error connecting to server.");
       }
     });
   </script>

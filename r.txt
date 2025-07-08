@@ -23,6 +23,7 @@ Django==5.2.1
 django-cors-headers==4.7.0
 django-jazzmin==3.0.1
 djangorestframework==3.16.0
+djangorestframework_simplejwt==5.5.0
 drf-yasg==1.21.10
 executing==2.2.0
 frozenlist==1.6.0
@@ -40,12 +41,14 @@ numpy==2.2.6
 openai==1.93.0
 packaging==25.0
 pandas==2.2.3
+praat-parselmouth==0.4.6
 prompt_toolkit==3.0.51
 propcache==0.3.1
 psycopg2-binary==2.9.10
 pydantic==2.11.5
 pydantic_core==2.33.2
 Pygments==2.19.1
+PyJWT==2.9.0
 python-dateutil==2.9.0.post0
 python-decouple==3.8
 pytz==2025.2
