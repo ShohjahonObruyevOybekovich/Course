@@ -269,80 +269,87 @@
       font-size: 0.9rem;
       color: #777;
     }
-    .toast {
+
+    /* Popup */
+    .final-popup {
+      display: none;
       position: fixed;
-      top: 20px;
-      right: 20px;
-      background: #4caf50;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(0, 0, 0, 0.7);
       color: white;
-      padding: 1rem 1.5rem;
+      padding: 2rem;
       border-radius: 8px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-      font-weight: 500;
-      font-size: 1rem;
-      opacity: 0;
-      transform: translateY(-20px);
-      pointer-events: none;
-      transition: opacity 0.4s ease, transform 0.4s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
       z-index: 2000;
     }
 
-    .toast.show {
-      opacity: 1;
-      transform: translateY(0);
-      pointer-events: auto;
+    .final-popup .popup-content {
+      text-align: center;
     }
 
+    .final-popup button {
+      margin-top: 1rem;
+      padding: 0.8rem 2rem;
+      background: #0288d1;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+    }
+
+    .final-popup button:hover {
+      background: #0277bd;
+    }
   </style>
 </head>
 <body>
-    <div id="toast" class="toast">Rahmat! Tez orada siz bilan bog'lanamiz.</div>
-    <header>
-      <div class="logo">
-        <img src="{% static 'images/eduzone-logo.jpg' %}" alt="Eduzone Logotipi" />
-        <span>Eduzone</span>
-      </div>
-      <div class="idiom">
-        <p>"Jede Sprache ist eine neue Sicht auf das Leben."</p>
-      </div>
-    </header>
+  <div id="toast" class="toast">Rahmat! Tez orada siz bilan bog'lanamiz.</div>
+  <header>
+    <div class="logo">
+      <img src="{% static 'images/eduzone-logo.jpg' %}" alt="Eduzone Logotipi" />
+      <span>Eduzone</span>
+    </div>
+    <div class="idiom">
+      <p>"Jede Sprache ist eine neue Sicht auf das Leben."</p>
+    </div>
+  </header>
 
     <main>
       <div class="intro">
-          <h1>BEPUL VEBINAR: Germaniyaga yo'l oching!</h1>
-              <p>
-                📅 <strong>30 - Iyul</strong> kuni!<br /><br />
-                Mavzu: <strong>0 dan Germaniyaga qonuniy ketish va daromad topish yo‘llari</strong><br /><br />
-                Ushbu bepul darsda siz vizalar, ish imkoniyatlari, ruxsatnomalar va Germaniyada qonuniy ishlash bo‘yicha muhim ma’lumotlarga ega bo‘lasiz.<br /><br />
-                <em>(Ishtirok etish uchun formani to‘ldiring!)</em>
-              </p>
-          <button onclick="window.open('https://t.me/edu_zoneuz', '_blank')">Telegram kanaliga o'tish</button>
+        <h1>BEPUL VEBINAR: Germaniyaga yo'l oching!</h1>
+        <p>
+          📅 <strong>30 - Iyul</strong> kuni!<br /><br />
+          Mavzu: <strong>0 dan Germaniyaga qonuniy ketish va daromad topish yo‘llari</strong><br /><br />
+          Ushbu bepul darsda siz vizalar, ish imkoniyatlari, ruxsatnomalar va Germaniyada qonuniy ishlash bo‘yicha muhim ma’lumotlarga ega bo‘lasiz.<br /><br />
+          <em>(Ishtirok etish uchun formani to‘ldiring!)</em>
+        </p>
+        <button onclick="scrollToLeadForm()">Nomer qoldirish</button>
       </div>
-
       <div class="hero-img">
         <img src="{% static 'images/team-eduzone.jpg' %}" alt="O'quvchilar" />
       </div>
     </main>
 
-    <section class="features">
-      <div class="feature-box">
-        <h4>30-Iyuldagi Bepul Vebinar</h4>
-        <p>Mavzu: Germaniyaga qonuniy ketish va daromad qilish yo‘llari. 0 dan boshlovchilar uchun oddiy va tushunarli tarzda.</p>
-      </div>
-      <div class="feature-box">
-        <h4>Amaliy Maslahatlar</h4>
-        <p>Vizalar, ish ruxsatnomasi, hujjatlar va Germaniyada qonuniy daromad topish bo‘yicha real tajribalar bilan bo‘lishamiz.</p>
-      </div>
-      <div class="feature-box">
-        <h4>Jonli Savol-Javob</h4>
-        <p>Vebinar davomida siz bevosita savol berishingiz va ekspertlardan shaxsiy maslahat olishingiz mumkin bo‘ladi.</p>
-      </div>
-      <div class="feature-box">
-        <h4>Ro‘yxatdan O‘tganlar Uchun Bonuslar</h4>
-        <p>Ishtirokchilar uchun maxsus materiallar, videodarslar va yopiq Telegram kanalga ulanish imkoniyati beriladi.</p>
-      </div>
-    </section>
-
+  <section class="features">
+    <div class="feature-box">
+      <h4>30-Iyuldagi Bepul Vebinar</h4>
+      <p>Mavzu: Germaniyaga qonuniy ketish va daromad qilish yo‘llari. 0 dan boshlovchilar uchun oddiy va tushunarli tarzda.</p>
+    </div>
+    <div class="feature-box">
+      <h4>Amaliy Maslahatlar</h4>
+      <p>Vizalar, ish ruxsatnomasi, hujjatlar va Germaniyada qonuniy daromad topish bo‘yicha real tajribalar bilan bo‘lishamiz.</p>
+    </div>
+    <div class="feature-box">
+      <h4>Jonli Savol-Javob</h4>
+      <p>Vebinar davomida siz bevosita savol berishingiz va ekspertlardan shaxsiy maslahat olishingiz mumkin bo‘ladi.</p>
+    </div>
+    <div class="feature-box">
+      <h4>Ro‘yxatdan O‘tganlar Uchun Bonuslar</h4>
+      <p>Ishtirokchilar uchun maxsus materiallar, videodarslar va yopiq Telegram kanalga ulanish imkoniyati beriladi.</p>
+    </div>
+  </section>
 
   <section class="lead-form-wrapper">
     <form class="lead-form" id="leadForm">
@@ -352,6 +359,16 @@
       <button type="submit">Yuborish</button>
     </form>
   </section>
+
+  <!-- Final Popup Section -->
+  <div id="finalPopup" class="final-popup">
+    <div class="popup-content">
+      <h3>Yakuniy bo'limga kirdingiz!</h3>
+      <p>Qo'shimcha ma'lumotlar uchun Telegram kanaliga qo'shiling.</p>
+      <button onclick="window.open('https://t.me/edu_zoneuz', '_blank')">Telegram kanaliga qo'shiling</button>
+      <button onclick="closePopup()">Yopish</button>
+    </div>
+  </div>
 
   <section class="contact-section">
     <div class="contact-card">
@@ -383,6 +400,9 @@
     ];
     document.querySelector(".idiom p").textContent = idioms[Math.floor(Math.random() * idioms.length)];
 
+    function scrollToLeadForm() {
+      document.getElementById('leadForm').scrollIntoView({ behavior: 'smooth' });
+    }
 
     document.getElementById("leadForm").addEventListener("submit", async function(e) {
       e.preventDefault();
@@ -401,6 +421,8 @@
           toast.textContent = "✅ Rahmat! Tez orada siz bilan bog'lanamiz.";
           toast.classList.add("show");
 
+          // Show final popup
+          document.getElementById("finalPopup").style.display = "block";
           setTimeout(() => toast.classList.remove("show"), 4000); // hide after 4s
           this.reset();
         } else {
@@ -415,6 +437,9 @@
       }
     });
 
+    function closePopup() {
+      document.getElementById("finalPopup").style.display = "none";
+    }
   </script>
 </body>
 </html>
