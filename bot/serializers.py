@@ -8,6 +8,5 @@ class LeadSerializer(serializers.ModelSerializer):
             "id",
             "name",
             "phone",
-            "message",
             "created_at",
         ]

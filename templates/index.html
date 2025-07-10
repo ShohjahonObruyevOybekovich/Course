@@ -12,12 +12,32 @@
       margin: 0;
       padding: 0;
     }
+
     body {
       font-family: 'Segoe UI', sans-serif;
       background: #fff7f0;
       color: #333;
       scroll-behavior: smooth;
       line-height: 1.6;
+    }
+    /* Button Style */
+    .intro button {
+      padding: 1.2rem 2.5rem; /* Increase the padding to make the button larger */
+      font-size: 1.2rem; /* Increase font size for better visibility */
+      background: linear-gradient(to right, #ff6f00, #ff8f00);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(255, 111, 0, 0.3);
+      transition: background 0.3s ease, transform 0.3s ease; /* Smooth transition for hover effect */
+    }
+
+    /* Hover effect */
+    .intro button:hover {
+      background: linear-gradient(to right, #e65100, #ff7043);
+      transform: scale(1.05); /* Slight button scaling effect */
     }
 
     /* Header */
@@ -32,34 +52,25 @@
       top: 0;
       z-index: 1000;
     }
+
     .logo {
       display: flex;
       align-items: center;
       gap: 10px;
     }
+
     .logo img {
       height: 48px;
-      width: 48px;         /* make width same as height */
-      border-radius: 50%;  /* ✅ this makes it a circle */
-      object-fit: cover;   /* keeps it well-fitted */
-      border: 2px solid #ff5722; /* optional: border for contrast */
+      width: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #ff5722;
     }
+
     .logo span {
       font-size: 1.8rem;
       font-weight: bold;
       color: #ff5722;
-    }
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      background: white;
-      padding: 1rem 2rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
     }
 
     .idiom {
@@ -111,8 +122,8 @@
     @media (min-width: 768px) {
       main {
         flex-direction: row;
-        justify-content: center; /* ✅ center content */
-        gap: 4rem;               /* ✅ spacing between text and image */
+        justify-content: center;
+        gap: 4rem;
         text-align: left;
       }
     }
@@ -121,19 +132,23 @@
       flex: 1;
       max-width: 520px;
     }
+
     .intro h1 {
       font-size: 2.5rem;
       color: #222;
       margin-bottom: 1rem;
     }
+
     .intro p {
       font-size: 1.1rem;
       color: #555;
       margin-bottom: 2rem;
     }
+
     .intro p strong {
       color: #e65100;
     }
+
     .intro button {
       padding: 0.9rem 2rem;
       background: linear-gradient(to right, #ff6f00, #ff8f00);
@@ -144,9 +159,11 @@
       cursor: pointer;
       box-shadow: 0 5px 15px rgba(255, 111, 0, 0.3);
     }
+
     .intro button:hover {
       background: linear-gradient(to right, #e65100, #ff7043);
     }
+
     .hero-img img {
       width: 100%;
       max-width: 640px;
@@ -154,6 +171,7 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
       transition: transform 0.3s ease;
     }
+
     /* Features */
     .features {
       display: grid;
@@ -163,6 +181,7 @@
       max-width: 1200px;
       margin: auto;
     }
+
     .feature-box {
       background: #fff3e0;
       padding: 2rem;
@@ -170,6 +189,7 @@
       text-align: center;
       box-shadow: 0 6px 16px rgba(0,0,0,0.05);
     }
+
     .feature-box h4 {
       color: #f4511e;
       margin-bottom: 0.8rem;
@@ -182,6 +202,7 @@
       display: flex;
       justify-content: center;
     }
+
     .lead-form {
       background: white;
       padding: 3rem 2rem;
@@ -190,12 +211,14 @@
       width: 100%;
       box-shadow: 0 8px 20px rgba(0,0,0,0.08);
     }
+
     .lead-form h3 {
       margin-bottom: 1.5rem;
       font-size: 1.6rem;
       color: #333;
       text-align: center;
     }
+
     .lead-form input,
     .lead-form textarea {
       width: 100%;
@@ -205,6 +228,7 @@
       border-radius: 0.6rem;
       font-size: 1rem;
     }
+
     .lead-form button {
       background: #0288d1;
       color: white;
@@ -216,6 +240,7 @@
       font-size: 1rem;
       cursor: pointer;
     }
+
     .lead-form button:hover {
       background: #0277bd;
     }
@@ -230,12 +255,7 @@
       max-width: 1200px;
       margin: auto;
     }
-    @media (max-width: 768px) {
-      .hero-img img {
-        max-width: 100%;
-        margin: 0 auto;
-      }
-    }
+
     .contact-card {
       flex: 1;
       background: #fafafa;
@@ -243,15 +263,18 @@
       border-radius: 1rem;
       box-shadow: 0 6px 16px rgba(0,0,0,0.05);
     }
+
     .contact-card h3 {
       margin-bottom: 1rem;
       font-size: 1.4rem;
       color: #333;
     }
+
     .contact-card a {
       color: #0288d1;
       text-decoration: none;
     }
+
     .contact-card iframe {
       width: 100%;
       height: 280px;
@@ -277,31 +300,72 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background-color: rgba(0, 0, 0, 0.7);
+      background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
       color: white;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      padding: 3rem 2rem; /* Padding for spacing */
+      border-radius: 12px; /* Rounded corners */
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
       z-index: 2000;
-    }
-
-    .final-popup .popup-content {
       text-align: center;
+      width: 80%;
+      max-width: 500px; /* Ensuring the width is limited on large screens */
     }
 
-    .final-popup button {
-      margin-top: 1rem;
-      padding: 0.8rem 2rem;
-      background: #0288d1;
+    /* Heading inside the popup */
+    .final-popup .popup-content h3 {
+      font-size: 1.8rem;
+      margin-bottom: 1.2rem;
+      color: #ff5722;
+      font-weight: bold;
+    }
+
+    .final-popup .popup-content p {
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+      color: #fff;
+      line-height: 1.6;
+    }
+
+    /* Button inside the popup */
+    .final-popup .popup-content button {
+      padding: 1rem 3rem; /* Making the button more prominent */
+      background: linear-gradient(45deg, #ff6f00, #ff8f00);
       color: white;
       border: none;
       border-radius: 50px;
+      font-size: 1.2rem;
       cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease, transform 0.3s ease;
     }
 
-    .final-popup button:hover {
-      background: #0277bd;
+    /* Hover effect for the button */
+    .final-popup .popup-content button:hover {
+      background: linear-gradient(45deg, #e65100, #ff7043);
+      transform: scale(1.05); /* Slight button scaling effect */
     }
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+      .final-popup {
+        padding: 2rem; /* Reduced padding on small screens */
+        width: 90%;
+        max-width: 400px; /* Ensuring the popup doesn't stretch too wide on mobile */
+      }
+
+      .final-popup .popup-content h3 {
+        font-size: 1.6rem;
+      }
+
+      .final-popup .popup-content p {
+        font-size: 1rem;
+      }
+
+      .final-popup .popup-content button {
+        font-size: 1rem;
+        padding: 0.8rem 2.5rem;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -320,7 +384,7 @@
       <div class="intro">
         <h1>BEPUL VEBINAR: Germaniyaga yo'l oching!</h1>
         <p>
-          📅 <strong>30 - Iyul</strong> kuni!<br /><br />
+          📅 <strong>20 - Iyul</strong> kuni!<br /><br />
           Mavzu: <strong>0 dan Germaniyaga qonuniy ketish va daromad topish yo‘llari</strong><br /><br />
           Ushbu bepul darsda siz vizalar, ish imkoniyatlari, ruxsatnomalar va Germaniyada qonuniy ishlash bo‘yicha muhim ma’lumotlarga ega bo‘lasiz.<br /><br />
           <em>(Ishtirok etish uchun formani to‘ldiring!)</em>
@@ -360,15 +424,15 @@
     </form>
   </section>
 
-  <!-- Final Popup Section -->
-  <div id="finalPopup" class="final-popup">
-    <div class="popup-content">
-      <h3>Yakuniy bo'limga kirdingiz!</h3>
-      <p>Qo'shimcha ma'lumotlar uchun Telegram kanaliga qo'shiling.</p>
-      <button onclick="window.open('https://t.me/edu_zoneuz', '_blank')">Telegram kanaliga qo'shiling</button>
-      <button onclick="closePopup()">Yopish</button>
+    <div id="finalPopup" class="final-popup">
+      <div class="popup-content">
+        <h3>So’ngi qadam qoldi&#33;</h3>
+        <p>Quyidagi tugmani bosib BEPUL dars bo’ladigan kanalga a’zo bo’ling!</p>
+        <button onclick="window.open('https://t.me/edu_zoneuz', '_blank')" class="join-button">
+          Telegram kanalga a’zo bo’lish ✅
+        </button>
+      </div>
     </div>
-  </div>
 
   <section class="contact-section">
     <div class="contact-card">
