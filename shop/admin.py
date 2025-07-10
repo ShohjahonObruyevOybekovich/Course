@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from shop.models import Product, Order
 
-# Register your models here.
+
 # admin.site.unregister(Product)
 # @admin.register(Product)
 # class ProductAdmin(admin.ModelAdmin):

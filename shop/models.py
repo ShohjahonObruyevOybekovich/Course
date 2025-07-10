@@ -10,8 +10,8 @@ class Product(BaseModel):
     price = models.FloatField(default=0)
     quantity = models.IntegerField(default=1)
     description = models.TextField()
-    def __str__(self):
-        return self.name
+    # def __str__(self):
+    #     return self.name
 
 class Order(BaseModel):
     product : "Product" = models.ForeignKey("shop.Product", on_delete=models.CASCADE, related_name="orders_product")
@@ -22,5 +22,5 @@ class Order(BaseModel):
         ("Cancelled", "Cancelled"),
         ("Accepted", "Accepted"),
     ],default="Pending",max_length=10,null=True,blank=True)
-    def __str__(self):
-        return self.product.name
+    # def __str__(self):
+    #     return self.product.name
