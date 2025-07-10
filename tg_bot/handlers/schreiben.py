@@ -42,7 +42,7 @@ async def schreiben(call: CallbackQuery, state: FSMContext):
 
 
 import asyncio  # ensure this is imported at the top
-from tg_bot.buttons.inline import course_levels
+from tg_bot.buttons.inline import course_levels, return_theme
 
 
 @dp.message(Theme_State.schreiben)
@@ -102,7 +102,7 @@ async def user_lang_handler(message: Message, state: FSMContext):
 
     await message.answer(
         text=response_text,
-        reply_markup=course_levels(course_id=theme.course.all().first().id),
+        reply_markup=return_theme(theme=theme.id),
         parse_mode="HTML"
     )
 

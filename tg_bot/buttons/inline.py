@@ -259,3 +259,13 @@ def order_accept(product,user):
             [accept_button], [cancel_button]
         ]
     )
+
+def return_theme(theme):
+    theme = InlineKeyboardButton(
+        text="↩️ Mavzuga qaytish", callback_data=f"lesson_{theme.id}"
+    )
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [theme],
+        ]
+    )

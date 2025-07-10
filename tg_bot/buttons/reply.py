@@ -26,7 +26,7 @@ def user_menu():
 
 def admin():
     k1 = KeyboardButton(text="👥 O'quvchilar ro‘yxati")
-    # k2 = KeyboardButton(text="📊 Hisobotlar")
+    k2 = KeyboardButton(text="📊 Hisobotlar")
 
     return ReplyKeyboardMarkup(
         keyboard=[[k1]],
