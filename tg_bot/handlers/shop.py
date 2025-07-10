@@ -15,7 +15,7 @@ bot = Bot(token=TOKEN)
 
 PRODUCTS_PER_PAGE = 1  # show one product per page like a slide
 
-@dp.message(lambda message: message.text == "🎢 Shop")
+@dp.message(lambda message: message.text == "🛒 Shop")
 async def show_products_menu(message: Message, state: FSMContext):
     await state.set_state(Products_State.products)
     await show_products_page(message.chat.id, page=1)
