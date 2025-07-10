@@ -149,9 +149,9 @@
     }
     .hero-img img {
       width: 100%;
-      max-width: 580px; /* 🔼 increased from 480px */
+      max-width: 640px;
       border-radius: 1.5rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
       transition: transform 0.3s ease;
     }
     /* Features */
@@ -230,9 +230,10 @@
       max-width: 1200px;
       margin: auto;
     }
-    @media (min-width: 768px) {
-      .contact-section {
-        flex-direction: row;
+    @media (max-width: 768px) {
+      .hero-img img {
+        max-width: 100%;
+        margin: 0 auto;
       }
     }
     .contact-card {
@@ -309,46 +310,48 @@
     <main>
       <div class="intro">
         <h1>AI yordamida Nemis tilini oson o'rganing</h1>
-        <p>
-          Eduzone yordamida nemis tilini o‘rganish endi oson, qiziqarli va mukofotli!<br />
-          📱 Telegram bot orqali siz mini-o‘yinlar bilan so‘z yodlaysiz,<br />
-          🤖 Har bir darsda AI bilan <strong>gapirish (Sprechen)</strong> va <strong>yozish (Schreiben)</strong> mashqlari bajarasiz,<br />
-          🪙 Harakatlaringiz uchun <strong>coin</strong>lar yig‘asiz va <strong>sovg‘alar</strong> yutib olasiz — asosiy mukofot: <strong>iPhone</strong>!<br />
-          📺 Shuningdek, siz uchun maxsus <strong>private kanal</strong>, <strong>Telegram guruhlar</strong> va <strong>bepul videodarslar</strong> mavjud.<br />
-          👩‍🏫 Ustozlar bilan doimiy aloqada bo‘lib, bilimlaringizni mustahkamlaysiz.
-        </p>
+            <p>
+              <strong>BEPUL DARS</strong><br />
+              📅 30 - Iyul kuni!<br />
+              <br />
+              Mavzu: 0 dan Germaniyaga qonuniy ketish va daromad ko‘rish yo‘llari!<br />
+              <br />
+              Bunday unikal content siz uchun albatta foydali bo‘ladi.<br />
+              <br />
+              <em>(BEPUL DARSni qo‘lga kiritish uchun formani to‘ldiring)</em>
+            </p>
         <button onclick="window.open('https://t.me/edu_onlineuz_bot', '_blank')">Telegram botni sinab ko'ring</button>
       </div>
       <div class="hero-img">
-        <img src="{% static 'images/images_young.png' %}" alt="O'quvchilar" />
+        <img src="{% static 'images/team-eduzone.jpg' %}" alt="O'quvchilar" />
       </div>
     </main>
 
-  <section class="features">
-    <div class="feature-box">
-      <h4>AI orqali Yangi Ko'nikmalar</h4>
-      <p>Grammatika, so'z boyligi va suhbatni AI yordamida o'zlashtiring.</p>
-    </div>
-    <div class="feature-box">
-      <h4>Mutaxassis Ustozlar</h4>
-      <p>AI va tajribali ustozlar sizni birga rivojlantiradi.</p>
-    </div>
-    <div class="feature-box">
-      <h4>Telegramga Integratsiya</h4>
-      <p>Barcha darslar va baholashlar bevosita Telegramda.</p>
-    </div>
-    <div class="feature-box">
-      <h4>Bepul Dars</h4>
-      <p>AI yordamida bepul dars bilan boshlang.</p>
-    </div>
-  </section>
+    <section class="features">
+      <div class="feature-box">
+        <h4>30-Iyuldagi Bepul Vebinar</h4>
+        <p>Mavzu: Germaniyaga qonuniy ketish va daromad qilish yo‘llari. 0 dan boshlovchilar uchun oddiy va tushunarli tarzda.</p>
+      </div>
+      <div class="feature-box">
+        <h4>Amaliy Maslahatlar</h4>
+        <p>Vizalar, ish ruxsatnomasi, hujjatlar va Germaniyada qonuniy daromad topish bo‘yicha real tajribalar bilan bo‘lishamiz.</p>
+      </div>
+      <div class="feature-box">
+        <h4>Jonli Savol-Javob</h4>
+        <p>Vebinar davomida siz bevosita savol berishingiz va ekspertlardan shaxsiy maslahat olishingiz mumkin bo‘ladi.</p>
+      </div>
+      <div class="feature-box">
+        <h4>Ro‘yxatdan O‘tganlar Uchun Bonuslar</h4>
+        <p>Ishtirokchilar uchun maxsus materiallar, videodarslar va yopiq Telegram kanalga ulanish imkoniyati beriladi.</p>
+      </div>
+    </section>
+
 
   <section class="lead-form-wrapper">
     <form class="lead-form" id="leadForm">
       <h3>Biz bilan bog'laning</h3>
       <input type="text" name="name" placeholder="Ismingiz" required />
       <input type="text" name="phone" placeholder="Telefon raqamingiz" required />
-      <textarea name="message" rows="4" placeholder="Nega nemis tilini o'rganmoqchisiz?"></textarea>
       <button type="submit">Yuborish</button>
     </form>
   </section>
