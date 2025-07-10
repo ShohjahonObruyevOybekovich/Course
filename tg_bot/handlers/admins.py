@@ -7,6 +7,7 @@ from icecream import ic
 
 from account.models import CustomUser
 from dispatcher import dp, TOKEN
+from shop.models import Product, Order
 from studentcourse.models import StudentCourse
 from tg_bot.buttons.inline import start_btn
 from tg_bot.buttons.reply import phone_number_btn, results, admin, user_menu
@@ -211,3 +212,4 @@ async def reject_order(call: CallbackQuery):
              f"{product.price} tanga balansingizga qaytarildi.",
         reply_markup=user_menu()
     )
+

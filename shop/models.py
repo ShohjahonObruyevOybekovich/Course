@@ -5,7 +5,7 @@ from command.models import BaseModel
 from upload.models import File
 
 class Product(BaseModel):
-    photo : "File" = models.ManyToManyField("upload.File", related_name="product")
+    photo : "File" = models.ForeignKey("upload.File",on_delete=models.SET_NULL,null=True,blank=True, related_name="product")
     name = models.CharField(max_length=100)
     price = models.FloatField(default=0)
     quantity = models.IntegerField(default=1)

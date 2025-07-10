@@ -25,7 +25,6 @@ bot = Bot(token=TOKEN)
 gpt = GptFunctions()
 
 
-
 def stt(path_to_audio: str) -> dict:
     try:
         with open(path_to_audio, "rb") as audio_file:
@@ -38,7 +37,6 @@ def stt(path_to_audio: str) -> dict:
     except Exception as e:
         ic(e)
         return {"text": ""}
-
 
 
 def analyze_pitch(path: str) -> dict:
@@ -63,7 +61,6 @@ def detect_repetition(text: str) -> list:
     return [words[i] for i in range(len(words) - 1) if words[i] == words[i + 1]]
 
 
-
 @dp.callback_query(lambda call: call.data.startswith("sprechen_"))
 async def voice_callback_handler(call: CallbackQuery, state: FSMContext):
     await call.message.edit_reply_markup(reply_markup=None)
@@ -79,7 +76,7 @@ async def voice_callback_handler(call: CallbackQuery, state: FSMContext):
 
     theme_sprechen = theme.sprechen
     if theme_sprechen:
-        await state.update_data(sprechen=theme_sprechen, sprechen_active=True,theme_id=theme.id)
+        await state.update_data(sprechen=theme_sprechen, sprechen_active=True, theme_id=theme.id)
 
         text = f"*{theme_sprechen}* mavzusidagi sprechen uchun uz ovozli xabaringizni yuboring 👇"
         await call.message.answer(text, parse_mode="Markdown")
@@ -87,8 +84,9 @@ async def voice_callback_handler(call: CallbackQuery, state: FSMContext):
         await call.message.answer("Ushbu mavzu uchun sprechen topshirig'i topilmadi.")
 
 
+from tg_bot.buttons.inline import return_theme
 
-from tg_bot.buttons.inline import course_levels
+
 @dp.message(F.content_type == types.ContentType.VOICE)
 async def handle_voice(message: Message, state: FSMContext):
     data = await state.get_data()
@@ -152,7 +150,6 @@ async def handle_voice(message: Message, state: FSMContext):
     )
     feedback = await gpt.prompt_to_json(str(user_id), prompt)
 
-
     user = CustomUser.objects.filter(chat_id=user_id).first()
 
     formate = ""
@@ -173,10 +170,8 @@ async def handle_voice(message: Message, state: FSMContext):
 
     await message.answer(
         text=formate + motivational,
-        reply_markup=course_levels(course_id=theme.course.all().first().id),
+        reply_markup=return_theme(theme.id),
         parse_mode="HTML"
     )
 
     await state.clear()
-
-
