@@ -15,7 +15,7 @@ def results():
 def user_menu():
     course = KeyboardButton(text="📝 Kurslar")
     my_courses = KeyboardButton(text="📝 Mening kurslarim")
-    shop = KeyboardButton(text="🎢 Shop")
+    shop = KeyboardButton(text="🛒 Shop")
     informs = KeyboardButton(text="👨‍🏫 Adminlar bilan aloqa")
     return ReplyKeyboardMarkup(keyboard=[
         [course,my_courses],
