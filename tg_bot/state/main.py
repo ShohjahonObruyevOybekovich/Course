@@ -23,3 +23,9 @@ class Materials_State(StatesGroup):
     category = State()
     file = State()
     title = State()
+
+
+class MaterialState(StatesGroup):
+    selecting_category = State()
+    viewing_material_list = State()
+    file = State()

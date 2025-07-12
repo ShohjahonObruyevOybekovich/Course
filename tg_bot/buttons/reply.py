@@ -6,7 +6,7 @@ from idioms.models import MaterialsCategories
 def phone_number_btn():
     return ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text = "Raqamni yuborish 📞",
                                                          request_contact=True) ]] ,
-                               resize_keyboard=True)
+                               resize_keyboard=True,one_time_keyboard=True)
 
 def results():
     return ReplyKeyboardMarkup(keyboard=[[
@@ -42,7 +42,8 @@ def back():
     k1 = KeyboardButton(text="🔙 Ortga")
     return ReplyKeyboardMarkup(
         keyboard=[[k1]],
-        resize_keyboard=True
+        resize_keyboard=True,
+        one_time_keyboard=True
     )
 
 
@@ -53,17 +54,15 @@ def materials_category():
     row = []
 
     for i, item in enumerate(category, 1):
-        row.append(KeyboardButton(text=item.name))
+        row.append(KeyboardButton(text=item.category))
         if i % 2 == 0:
             keyboard.append(row)
             row = []
 
-    # Agar oxirgi tugma juft bo'lmasa, uni ham qo'shamiz
     if row:
         keyboard.append(row)
 
-
+    # Orqaga tugmasi
     keyboard.append([KeyboardButton(text="🔙 Ortga")])
-    keyboard.append(back)
 
-    return ReplyKeyboardMarkup(keyboard=keyboard, resize_keyboard=True)
+    return ReplyKeyboardMarkup(keyboard=keyboard, resize_keyboard=True,one_time_keyboard=True)
