@@ -54,8 +54,7 @@ async def show_products_page(chat_id: int, page: int,call: CallbackQuery = None)
         f"⭐️ <b>{product.name}</b>\n\n"
         f"{product.description}\n\n"
         f"📦 Qolgan: <b>{remaining}</b> / {product.quantity}\n"
-        f"💰 Narxi: <b>{product.price} so'm</b>\n"
-        f"📅 <i>1 yillik foydalanish uchun</i>"
+        f"💰 Narxi: <b>{product.price} ball</b>\n"
     )
     keyboard = build_product_detail_markup(product_id=str(product.id), current_page=page, total_pages=total_pages)
 
@@ -82,7 +81,7 @@ async def handle_page_navigation(call: CallbackQuery):
 
 @dp.callback_query(lambda call: call.data.startswith("buy_"))
 async def buy_product(call: CallbackQuery):
-    await call.answer()
+    await call.message.delete()
     product_id = call.data.split("_")[1]
     product = Product.objects.filter(id=product_id).first()
     user = CustomUser.objects.filter(chat_id=call.from_user.id).first()
@@ -119,7 +118,7 @@ async def buy_product(call: CallbackQuery):
             f"👨‍🏫 Talaba <b>{user.full_name}</b>\n"
             f"📲 Nomeri <b>{user.phone}</b>\n"
             f"📝 <b>{product.name}</b>\n\n"
-            f"💰 Narxi: <b>{product.price}</b> tanga\n"
+            f"💰 Narxi: <b>{product.price}</b> ball\n"
             f"📦 Qolgan: <b>{remaining}</b> / {product.quantity}\n"
             f"📝 Tavsif:\n{product.description}"
         )
