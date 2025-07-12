@@ -13,10 +13,11 @@ from account.models import CustomUser
 from channel.models import Channel
 from course.models import Course
 from dispatcher import dp, TOKEN
+from idioms.models import MaterialsCategories, Materials
 from studentcourse.models import StudentCourse
 from tg_bot.buttons.inline import course_navigation_buttons, admin_accept, my_course_navigation_buttons, \
     get_theme_buttons, themes_attendance, start_btn, course_levels
-from tg_bot.buttons.reply import phone_number_btn, results, admin, user_menu, back
+from tg_bot.buttons.reply import phone_number_btn, results, admin, user_menu, back, materials_category
 from tg_bot.buttons.text import start_txt, natija_txt
 from tg_bot.state.main import User
 from tg_bot.utils import format_phone_number, check_user_in_channel, send_theme_material
@@ -902,3 +903,94 @@ async def contact_admins(message: Message):
 
 
 
+@dp.message(lambda msg: msg.text == "🎁 Qo'shimcha materiallar")
+async def examples(message: Message, state: FSMContext):
+    await message.answer(
+        text="Quyidagi kategoriyalardan birini tanlang:",
+        reply_markup=materials_category()
+    )
+    await state.set_state("selecting_category")
+
+
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+
+@dp.message(lambda msg: True, state="selecting_category")
+async def select_category(message: Message, state: FSMContext):
+    if message.text == "🔙 Ortga":
+        await message.answer("Bosh menyuga qaytdingiz.", reply_markup=user_menu())
+        await state.clear()
+        return
+
+    category_name = message.text.strip()
+
+    try:
+        category = MaterialsCategories.objects.get(category=category_name)
+    except MaterialsCategories.DoesNotExist:
+        await message.answer("❌ Bunday kategoriya mavjud emas.")
+        return
+
+    materials = Materials.objects.filter(choice=category).order_by("-created_at")
+
+    if not materials.exists():
+        await message.answer("❗ Bu kategoriyada hech qanday material mavjud emas.")
+        return
+
+    # Statega kategoriya ID ni saqlaymiz
+    await state.update_data(category_id=category.id)
+
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text=f"{i+1}. {m.title}", callback_data=f"material:{m.id}")]
+        for i, m in enumerate(materials)
+    ])
+    keyboard.inline_keyboard.append([InlineKeyboardButton(text="⬅️ Ortga", callback_data="back_to_list")])
+
+    await message.answer(f"📂 *{category.category}* kategoriyasidagi materiallar:", reply_markup=keyboard, parse_mode="Markdown")
+    await state.set_state("viewing_material_list")
+
+@dp.callback_query(lambda c: c.data.startswith("material:"), state="viewing_material_list")
+async def show_selected_material(callback_query, state: FSMContext):
+    material_id = int(callback_query.data.split(":")[1])
+    try:
+        material = Materials.objects.filter(id=material_id).first()
+        category_type = material.choice.type
+        caption = f"📌 {material.title}"
+
+        if category_type == "Video":
+            await callback_query.message.answer_video(video=material.telegram_id, caption=caption)
+        elif category_type == "Audio":
+            await callback_query.message.answer_audio(audio=material.telegram_id, caption=caption)
+        elif category_type == "Document":
+            await callback_query.message.answer_document(document=material.telegram_id, caption=caption)
+        elif category_type == "Image":
+            await callback_query.message.answer_photo(photo=material.telegram_id, caption=caption)
+        else:
+            await callback_query.message.answer(f"{caption}\n\n❓ Noma'lum fayl turi.")
+
+        # Back button to go to the list again
+        keyboard = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="⬅️ Ortga", callback_data="back_to_list")]
+        ])
+        await callback_query.message.answer("⬅️ Materiallar ro'yxatiga qaytish:", reply_markup=keyboard)
+
+    except Materials.DoesNotExist:
+        await callback_query.message.answer("❌ Material topilmadi.")
+
+
+@dp.callback_query(lambda c: c.data == "back_to_list", state="viewing_material_list")
+async def back_to_material_list(callback_query, state: FSMContext):
+    data = await state.get_data()
+    category_id = data.get("category_id")
+
+    try:
+        category = MaterialsCategories.objects.get(id=category_id)
+        materials = Materials.objects.filter(choice=category).order_by("-created_at")
+
+        keyboard = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text=f"{i+1}. {m.title}", callback_data=f"material:{m.id}")]
+            for i, m in enumerate(materials)
+        ])
+        keyboard.inline_keyboard.append([InlineKeyboardButton(text="⬅️ Ortga", callback_data="back_to_list")])
+
+        await callback_query.message.answer(f"📂 *{category.category}* kategoriyasidagi materiallar:", reply_markup=keyboard, parse_mode="Markdown")
+    except:
+        await callback_query.message.answer("❌ Ro'yxatga qaytishda xatolik.")

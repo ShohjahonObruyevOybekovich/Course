@@ -18,3 +18,8 @@ class Theme_State(StatesGroup):
 
 class Products_State(StatesGroup):
     products = State()
+
+class Materials_State(StatesGroup):
+    category = State()
+    file = State()
+    title = State()

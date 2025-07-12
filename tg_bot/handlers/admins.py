@@ -1,18 +1,20 @@
 from aiogram import Bot, F
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, \
-    InlineQuery, InlineQueryResultArticle, InputTextMessageContent, CallbackQuery
+    InlineQuery, InlineQueryResultArticle, InputTextMessageContent, CallbackQuery, ReplyKeyboardMarkup, KeyboardButton
 from asgiref.sync import sync_to_async
+from django.core.exceptions import ObjectDoesNotExist
 from icecream import ic
 
 from account.models import CustomUser
 from dispatcher import dp, TOKEN
+from idioms.models import MaterialsCategories, Materials
 from shop.models import Product, Order
 from studentcourse.models import StudentCourse
 from tg_bot.buttons.inline import start_btn
-from tg_bot.buttons.reply import phone_number_btn, results, admin, user_menu
+from tg_bot.buttons.reply import phone_number_btn, results, admin, user_menu, materials_category
 from tg_bot.buttons.text import start_txt, natija_txt
-from tg_bot.state.main import User
+from tg_bot.state.main import User, Materials_State
 from tg_bot.utils import format_phone_number
 from transaction.models import Transaction
 
@@ -214,3 +216,133 @@ async def reject_order(call: CallbackQuery):
         reply_markup=user_menu()
     )
 
+
+
+# Step 1: Boshlanish
+@dp.message(lambda msg: msg.text == "⚙️ Materiallar yuklash")
+async def materiallar(message: Message, state: FSMContext):
+    await message.answer(
+        text="Avval materiallar categoryasini tanlang:",
+        reply_markup=materials_category()
+    )
+    await state.set_state(Materials_State.category)
+
+
+# Step 2: Kategoriya tanlash
+@dp.message(Materials_State.category)
+async def category(message: Message, state: FSMContext):
+    if message.text == "🔙 Ortga":
+        await message.answer(
+            text="Admin bo'limiga qaytdingiz.",
+            reply_markup=admin()
+        )
+        await state.clear()
+        return
+
+    try:
+        MaterialsCategories.objects.get(category=message.text)
+    except MaterialsCategories.DoesNotExist:
+        await message.answer("❌ Bunday kategoriya mavjud emas. Qayta tanlang.")
+        return
+
+    await state.update_data(category=message.text)
+
+    await message.answer(
+        text="Endi file yoki video, audio ni yuboring 👇",
+        reply_markup=ReplyKeyboardMarkup(
+            keyboard=[[KeyboardButton(text="🔙 Ortga")]],
+            resize_keyboard=True
+        )
+    )
+
+    await state.set_state(Materials_State.file)
+
+
+# Step 3: Fayl qabul qilish va validatsiya
+@dp.message(Materials_State.file)
+async def file_handler(message: Message, state: FSMContext):
+    if message.text == "🔙 Ortga":
+        await message.answer(
+            text="Admin bo'limiga qaytdingiz.",
+            reply_markup=admin()
+        )
+        await state.clear()
+        return
+
+    if not (message.document or message.video or message.audio or message.photo):
+        await message.answer("❌ Faqat video, audio yoki fayl yuboring. Rasm va matn qabul qilinmaydi.")
+        return
+
+    data = await state.get_data()
+    category_name = data.get("category")
+
+    try:
+        category = MaterialsCategories.objects.get(category=category_name)
+    except ObjectDoesNotExist:
+        await message.answer("❌ Kategoriya topilmadi. Qaytadan urinib ko'ring.")
+        return
+
+    expected_type = category.type
+    file_type = None
+    file_id = None
+
+    if message.video:
+        file_type = "Video"
+        file_id = message.video.file_id
+    elif message.audio:
+        file_type = "Audio"
+        file_id = message.audio.file_id
+    elif message.document:
+        file_type = "Document"
+        file_id = message.document.file_id
+    elif message.photo:
+        file_type = "Image"
+        file_id = message.photo[-1].file_id
+
+    if file_type != expected_type:
+        await message.answer(f"❌ Bu kategoriya faqat '{expected_type}' fayllarni qabul qiladi.")
+        return
+
+    # Fayl to'g'ri — vaqtincha saqlaymiz
+    await state.update_data(file_id=file_id)
+
+    await message.answer("📌 Endi material uchun sarlavha (title) yuboring:", reply_markup=ReplyKeyboardMarkup(
+        keyboard=[[KeyboardButton(text="🔙 Ortga")]], resize_keyboard=True
+    ))
+    await state.set_state(Materials_State.title)
+
+
+# Step 4: Title kiritish
+@dp.message(Materials_State.title)
+async def material_title_handler(message: Message, state: FSMContext):
+    if message.text == "🔙 Ortga":
+        await message.answer(
+            text="Admin bo'limiga qaytdingiz.",
+            reply_markup=admin()
+        )
+        await state.clear()
+        return
+
+    title = message.text.strip()
+    data = await state.get_data()
+
+    category_name = data.get("category")
+    file_id = data.get("file_id")
+
+    try:
+        category = MaterialsCategories.objects.get(category=category_name)
+    except MaterialsCategories.DoesNotExist:
+        await message.answer("❌ Kategoriya mavjud emas.")
+        await state.clear()
+        return
+
+    # DB ga yozish
+    Materials.objects.create(
+        title=title,
+        choice=category,
+        type="Telegram",
+        telegram_id=file_id,
+    )
+
+    await message.answer("✅ Material sarlavhasi bilan birga muvaffaqiyatli saqlandi.", reply_markup=admin())
+    await state.clear()

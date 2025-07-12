@@ -32,7 +32,7 @@ def start_btn(link):
 def course_navigation_buttons(index: int, total: int, course_id: int):
     left = InlineKeyboardButton(text="⬅️", callback_data=f"left_{index}")
     right = InlineKeyboardButton(text="➡️", callback_data=f"right_{index}")
-    examples = InlineKeyboardButton(text="📒 Darslardan parchalar",callback_data=f"examples_{course_id}")
+    # examples = InlineKeyboardButton(text="📒 Darslardan parchalar",callback_data=f"examples_{course_id}")
     payment = InlineKeyboardButton(text="💳 Sotib olish", callback_data=f"payment_{course_id}")
     back = InlineKeyboardButton(text="🔙 Ortga", callback_data="back")
 
@@ -40,7 +40,7 @@ def course_navigation_buttons(index: int, total: int, course_id: int):
 
     return InlineKeyboardMarkup(inline_keyboard=[
         nav_row,
-        [examples],
+        # [examples],
         [payment],
         [back],
     ])
