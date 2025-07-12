@@ -153,6 +153,7 @@ async def handle_admin_decision(callback: CallbackQuery):
         await callback.answer("🗑 To'lov bekor qilindi.")
 
 
+# shop order accept
 @dp.callback_query(lambda call: call.data.startswith("ac_"))
 async def approve_order(call: CallbackQuery):
     _, product_id, user_id = call.data.split("_")
@@ -182,7 +183,7 @@ async def approve_order(call: CallbackQuery):
         reply_markup=user_menu()
     )
 
-
+# shop order cancel
 @dp.callback_query(lambda call: call.data.startswith("can_"))
 async def reject_order(call: CallbackQuery):
     _, product_id, user_id = call.data.split("_")
