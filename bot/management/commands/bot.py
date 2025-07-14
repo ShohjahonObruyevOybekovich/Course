@@ -37,7 +37,7 @@ async def main():
         site = web.TCPSite(runner, host="0.0.0.0", port=8015)
         await site.start()
 
-        print("[Webhook] Bot webhook server started at http://0.0.0.0:8080")
+        print("[Webhook] Bot webhook server started at http://0.0.0.0:8015")
         await asyncio.Event().wait()
     except Exception as e:
         print(f"[Fatal Error] {type(e).__name__}: {e}")
