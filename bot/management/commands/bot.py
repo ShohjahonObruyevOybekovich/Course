@@ -34,7 +34,7 @@ async def main():
 
         runner = web.AppRunner(app)
         await runner.setup()
-        site = web.TCPSite(runner, host="0.0.0.0", port=8080)
+        site = web.TCPSite(runner, host="0.0.0.0", port=8000)
         await site.start()
 
         print("[Webhook] Bot webhook server started at http://0.0.0.0:8080")
