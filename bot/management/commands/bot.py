@@ -1,14 +1,17 @@
+import asyncio
 import logging
 import sys
 import traceback
 
-from aiogram.client.default import DefaultBotProperties
+from aiogram import Bot
 from aiogram.enums import ParseMode
+from aiogram.client.default import DefaultBotProperties
 from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
 from aiohttp import web
 from django.core.management import BaseCommand
 
 from bot.management.commands.set_webhook import BASE_URL
+from dispatcher import TOKEN, dp
 from tg_bot.handlers import *
 
 WEBHOOK_PATH = "/bot/webhook/"
