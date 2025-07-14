@@ -12,7 +12,7 @@ from django.core.management import BaseCommand
 
 from bot.management.commands.set_webhook import BASE_URL
 from dispatcher import TOKEN, dp
-from tg_bot.handlers import *
+from tg_bot import handlers
 
 WEBHOOK_PATH = "/bot/webhook/"
 WEBHOOK_URL = f"{BASE_URL}{WEBHOOK_PATH}"
