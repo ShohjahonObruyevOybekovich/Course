@@ -21,7 +21,7 @@ bot = Bot(TOKEN)
 
 @csrf_exempt
 async def telegram_webhook(request):
-    body = await request.body
+    body = request.body  # ✅ no await
     update = Update.model_validate_json(body.decode())
     await dp.feed_update(bot, update)
     return JsonResponse({"ok": True})
