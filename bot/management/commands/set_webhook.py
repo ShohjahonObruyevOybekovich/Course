@@ -10,7 +10,7 @@ BASE_URL = config("BASE_URL")
 
 async def set_webhook():
     async with Bot(TOKEN) as bot:
-        webhook_url = f"{BASE_URL}/bot/webhook/"
+        webhook_url = f"{BASE_URL}bot/webhook/"
         await bot.set_webhook(webhook_url)
 
 
