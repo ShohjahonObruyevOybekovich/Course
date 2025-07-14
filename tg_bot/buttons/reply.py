@@ -31,9 +31,10 @@ def user_menu():
 def admin():
     k1 = KeyboardButton(text="👥 O'quvchilar ro‘yxati")
     k2 = KeyboardButton(text="⚙️ Materiallar yuklash")
+    k3 = KeyboardButton(text="📒 Qo'shimcha Video yuklash")
 
     return ReplyKeyboardMarkup(
-        keyboard=[[k1],[k2]],
+        keyboard=[[k1,k2],[k3]],
         resize_keyboard=True
     )
 

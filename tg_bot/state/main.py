@@ -29,3 +29,10 @@ class MaterialState(StatesGroup):
     selecting_category = State()
     viewing_material_list = State()
     file = State()
+
+
+class CourseMaterials_State(StatesGroup):
+    video = State()
+    file_id = State()
+    name = State()
+    description = State()

@@ -1,0 +1,14 @@
+docker compose up -d --build
+
+
+
+python manage.py makemigrations
+python manage.py migrate
+
+python manage.py createsuperuser
+admin
+1
+
+ubuntu : find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+windows : Get-ChildItem -Recurse -Path .\ -Include "*.py" | Where-Object { $_.DirectoryName -like "*migrations*" -and $_.Name -ne "__init__.py" } | Remove-Item -Force
+

@@ -266,42 +266,34 @@ async def handle_course_navigation(call: CallbackQuery, state: FSMContext):
         else:
             await call.message.answer("❗️Kurs topilmadi.", reply_markup=user_menu())
 
-
     elif call.data.startswith("examples_"):
         await call.message.delete()
-
-        course_id = str(call.data.split("_")[1])
-        course = Course.objects.filter(id=course_id).first()
-
-        if not course:
-            await call.message.answer("❌ Kurs topilmadi.")
-            return
-
-        examples = ThemeExamples.objects.filter(course=course).all()
-
+        examples = ThemeExamples.objects.all()
         if not examples:
-            await call.message.answer("🚫 Bu kurs uchun misollar mavjud emas.")
+            await call.message.answer("🚫 Hozircha misollar mavjud emas.")
             return
-
+        bot = call.bot
         for theme in examples:
-            # Format the message
             text = f"📚 <b>{theme.name}</b>\n\n"
             if theme.description:
                 text += f"📝 {theme.description}\n\n"
-
             if theme.video:
-                text += "🎥 <b>Videolar:</b>\n"
-                for i, video in enumerate(theme.video.all(), start=1):
-                    text += f"  {i}. <a href='{video.url}'>Video {i}</a>\n"
-                text += "\n"
-
-            await call.message.answer(
-                text,
-                reply_markup=start_btn(link=theme.link),
-                parse_mode="HTML",
-                disable_web_page_preview=True
-            )
-
+                await bot.send_video(
+                    chat_id=call.message.chat.id,
+                    video=theme.video,
+                    caption=text,
+                    reply_markup=start_btn(link=theme.link),
+                    parse_mode="HTML",
+                    protect_content=True
+                )
+            else:
+                await bot.send_message(
+                    chat_id=call.message.chat.id,
+                    text=text,
+                    reply_markup=start_btn(link=theme.link),
+                    parse_mode="HTML",
+                    protect_content=True
+                )
 
     elif call.data == "back":
         await call.message.edit_reply_markup(reply_markup=None)

@@ -39,3 +39,4 @@ class Materials(BaseModel):
 
     def __str__(self):
         return self.choice.category
+

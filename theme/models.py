@@ -44,8 +44,7 @@ class ThemeAttendance(BaseModel):
 class ThemeExamples(BaseModel):
     name = models.CharField(max_length=100)
     description = models.TextField(null=True, blank=True)
-    video : "Video" = models.ManyToManyField("upload.Video",related_name="themes_examle_video")
-    course : "Course" = models.ManyToManyField("course.Course",related_name="themes_example_course")
+    video = models.CharField(max_length=100, null=True, blank=True)
     link = models.URLField(null=True, blank=True)
 
     def __str__(self):

@@ -12,10 +12,11 @@ from idioms.models import MaterialsCategories, Materials
 from shop.models import Product, Order
 from studentcourse.models import StudentCourse
 from tg_bot.buttons.inline import start_btn
-from tg_bot.buttons.reply import phone_number_btn, results, admin, user_menu, materials_category
+from tg_bot.buttons.reply import phone_number_btn, results, admin, user_menu, materials_category, back
 from tg_bot.buttons.text import start_txt, natija_txt
-from tg_bot.state.main import User, Materials_State
+from tg_bot.state.main import User, Materials_State, CourseMaterials_State
 from tg_bot.utils import format_phone_number
+from theme.models import ThemeExamples
 from transaction.models import Transaction
 
 bot = Bot(token=TOKEN)
@@ -346,3 +347,73 @@ async def material_title_handler(message: Message, state: FSMContext):
 
     await message.answer("✅ Material sarlavhasi bilan birga muvaffaqiyatli saqlandi.", reply_markup=admin())
     await state.clear()
+
+
+@dp.message(lambda msg: msg.text == "📒 Qo'shimcha Video yuklash")
+async def example_materials_handler(message: Message, state: FSMContext):
+    await message.answer(
+        text="Qo'shimcha videolarni yuboring 👇",
+        reply_markup=back()
+    )
+    await state.set_state(CourseMaterials_State.video)
+
+
+@dp.message(CourseMaterials_State.video)
+async def example_materials_video_handler(message: Message, state: FSMContext):
+    if message.text == "🔙 Ortga":
+        await message.answer("Admin bo'limiga qaytdingiz.",reply_markup=admin())
+        await state.clear()
+        return
+    if not (message.video):
+        await message.answer("❌ Faqat video yuboring. Rasm va matn qabul qilinmaydi.")
+        return
+
+    file_id = None
+    if message.video:
+        file_id = message.video.file_id
+        await state.update_data(file_id=file_id)
+
+    await message.answer(text="Endi video nomini yuboring 👇",reply_markup=back())
+    await state.set_state(CourseMaterials_State.name)
+
+
+@dp.message(CourseMaterials_State.name)
+async def example_materials_name_handler(message: Message, state: FSMContext):
+    if message.text == "🔙 Ortga":
+        await message.answer("Endi video nomini yuboring 👇",reply_markup=admin())
+        await state.set_state(CourseMaterials_State.video)
+        return
+
+    if message.text:
+        name = message.text.strip()
+        await state.update_data(name=name)
+
+    await message.answer("Endi video mazmunini yuboring 👇",reply_markup=back())
+    await state.set_state(CourseMaterials_State.description)
+
+
+@dp.message(CourseMaterials_State.description)
+async def example_materials_description_handler(message: Message, state: FSMContext):
+    if message.text == "🔙 Ortga":
+        await message.answer("Endi video mazmunini yuboring 👇", reply_markup=admin())
+        await state.set_state(CourseMaterials_State.description)
+        return
+
+    if message.text:
+        description = message.text.strip()
+
+        data = await state.get_data()
+        name = data.get("name")
+        description = message.text.strip()
+        file_id = data.get("file_id")
+        example = ThemeExamples.objects.create(
+            name=name,
+            description=description,
+            video=file_id,
+            link=None
+        )
+
+        if message:
+            await message.answer("📒 Qo'shimcha Video yuklash yakunlandi.",reply_markup=admin())
+    await state.clear()
+
