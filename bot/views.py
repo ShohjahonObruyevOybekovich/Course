@@ -2,7 +2,7 @@ import asyncio
 
 from aiogram import Bot
 from aiogram.types import Update
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 from rest_framework import status
@@ -19,16 +19,12 @@ class LandingPageView(TemplateView):
 
 bot = Bot(TOKEN)
 
-
 @csrf_exempt
-def telegram_webhook(request):
-    if request.method == "POST":
-        body = request.body.decode("utf-8")
-        update = Update.model_validate_json(body)
-
-        asyncio.create_task(dp.feed_update(bot, update))
-        return HttpResponse("ok")
-    return HttpResponse("invalid", status=405)
+async def telegram_webhook(request):
+    body = await request.body
+    update = Update.model_validate_json(body.decode())
+    await dp.feed_update(bot, update)
+    return JsonResponse({"ok": True})
 
 
 
