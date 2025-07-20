@@ -1061,15 +1061,12 @@ from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 async def developer_visitka(msg: Message):
     await msg.answer(
         text=(
-            "╔════════════════════╗\n"
-            "  👨‍💻 <b>Shohjahon Obruyev</b>\n"
-            "╚════════════════════╝\n\n"
-            "📞 <code>+998 94 802 51 01</code>\n"
-            "🔗 <a href='https://t.me/shokh_smee'>@shokh_smee</a>\n"
+            " 👨‍💻 <a href='https://t.me/shokh_smee'> Shohjahon Obruyev</a>\n\n"
+            "📞 <code>+998948025101</code>\n"
             "🌐 <i>Python • Django • Telegram Bots</i>\n\n"
             "💡 Loyiha, buyurtma yoki hamkorlik istaysizmi?\n"
             "Yozing — maslahat bepul!\n\n"
-            "💰 <a href='https://tirikchilik.uz/shokh_smee'>Donat orqali qo‘llab-quvvatlang</a>"
+            "💰 <a href='https://tirikchilik.uz/shokh_smee'>Donat orqali qo‘llab-quvvatlash</a>"
         ),
         parse_mode="HTML",
         reply_markup=InlineKeyboardMarkup(inline_keyboard=[
