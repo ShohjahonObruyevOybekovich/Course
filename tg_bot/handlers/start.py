@@ -1042,11 +1042,12 @@ async def back_to_material_list(callback: CallbackQuery, state: FSMContext):
 async def developer(msg: Message):
     await msg.answer(
         text=(
-            "Bot <b><i>Shohjahon Obruyev</i></b> tomonidan ishlab chiqildi\n"
-            "Bot haqida qo'shimcha takliflar uchun dasturchiga murojat qilishingiz mumkin 👉 "
-            "<a href='https://t.me/shokh_smee'>Dasturchi</a>\n\n"
-            "Buy me a coffee 👉 <a href='https://buymeacoffee.com/shokh_smee'>Tirikchilik😁</a>\n\n"
-            "Donat uchun 👉 <a href='https://tirikchilik.uz/shokh_smee'>Tirikchilik😁</a>"
+            "👨‍💻 <b>Dasturchi:</b> <i>Shohjahon Obruyev</i>\n"
+            "📞 <b>Aloqa:</b> <code>+998 94 802 51 01</code>\n\n"
+            "💡 Taklif va fikrlaringizni yuborishingiz mumkin:\n"
+            "🔗 <a href='https://t.me/shokh_smee'>@shokh_smee</a>\n\n"
+            "☕ <b>Bot foydalimi?</b> Donat qiling 👇\n"
+            "💰 <a href='https://tirikchilik.uz/shokh_smee'>tirikchilik.uz/shokh_smee</a>"
         ),
         reply_markup=user_menu(),
         parse_mode="HTML"
