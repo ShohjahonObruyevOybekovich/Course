@@ -1061,9 +1061,9 @@ from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 async def developer_visitka(msg: Message):
     await msg.answer(
         text=(
-            "╔══════════════════╗\n"
+            "╔════════════════════╗\n"
             "  👨‍💻 <b>Shohjahon Obruyev</b>\n"
-            "╚══════════════════╝\n\n"
+            "╚════════════════════╝\n\n"
             "📞 <code>+998 94 802 51 01</code>\n"
             "🔗 <a href='https://t.me/shokh_smee'>@shokh_smee</a>\n"
             "🌐 <i>Python • Django • Telegram Bots</i>\n\n"
