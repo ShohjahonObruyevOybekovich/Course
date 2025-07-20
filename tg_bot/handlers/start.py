@@ -1036,3 +1036,18 @@ async def back_to_material_list(callback: CallbackQuery, state: FSMContext):
                                       reply_markup=keyboard, parse_mode="Markdown")
     except:
         await callback.message.answer("❌ Ro'yxatga qaytishda xatolik.")
+
+
+@dp.message(lambda msg: msg.text == "/developer")
+async def developer(msg: Message):
+    await msg.answer(
+        text=(
+            "Bot <b><i>Shohjahon Obruyev</i></b> tomonidan ishlab chiqildi\n"
+            "Bot haqida qo'shimcha takliflar uchun dasturchiga murojat qilishingiz mumkin 👉 "
+            "<a href='https://t.me/shokh_smee'>Dasturchi</a>\n\n"
+            "Buy me a coffee 👉 <a href='https://buymeacoffee.com/shokh_smee'>Tirikchilik😁</a>\n\n"
+            "Donat uchun 👉 <a href='https://tirikchilik.uz/shokh_smee'>Tirikchilik😁</a>"
+        ),
+        reply_markup=user_menu(),
+        parse_mode="HTML"
+    )
