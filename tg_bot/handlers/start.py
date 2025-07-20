@@ -1043,7 +1043,7 @@ async def developer(msg: Message):
     await msg.answer(
         text=(
             "👨‍💻 <b>Dasturchi:</b> <i>Shohjahon Obruyev</i>\n"
-            "📞 <b>Aloqa:</b> <code>+998 94 802 51 01</code>\n\n"
+            "📞 <b>Aloqa:</b> <code>+998948025101</code>\n\n"
             "💡 Taklif va fikrlaringizni yuborishingiz mumkin:\n"
             "🔗 <a href='https://t.me/shokh_smee'>@shokh_smee</a>\n\n"
             "☕ <b>Bot foydalimi?</b> Donat qiling 👇\n"
