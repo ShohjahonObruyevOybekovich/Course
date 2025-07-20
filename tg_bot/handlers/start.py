@@ -1038,17 +1038,42 @@ async def back_to_material_list(callback: CallbackQuery, state: FSMContext):
         await callback.message.answer("❌ Ro'yxatga qaytishda xatolik.")
 
 
-@dp.message(lambda msg: msg.text == "/developer")
-async def developer(msg: Message):
+# @dp.message(lambda msg: msg.text == "/developer")
+# async def developer(msg: Message):
+#     await msg.answer(
+#         text=(
+#             "👨‍💻 <b>Dasturchi:</b> <i>Shohjahon Obruyev</i>\n"
+#             "📞 <b>Aloqa:</b> <code>+998948025101</code>\n\n"
+#             "💡 Taklif va fikrlaringizni yuborishingiz mumkin:\n"
+#             "🔗 <a href='https://t.me/shokh_smee'>@shokh_smee</a>\n\n"
+#             "☕ <b>Bot foydalimi?</b> Donat qiling 👇\n"
+#             "💰 <a href='https://tirikchilik.uz/shokh_smee'>tirikchilik.uz/shokh_smee</a>"
+#         ),
+#         reply_markup=user_menu(),
+#         parse_mode="HTML"
+#     )
+
+
+from aiogram import F
+from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
+
+@dp.message(F.text == "/developer")
+async def developer_visitka(msg: Message):
     await msg.answer(
         text=(
-            "👨‍💻 <b>Dasturchi:</b> <i>Shohjahon Obruyev</i>\n"
-            "📞 <b>Aloqa:</b> <code>+998948025101</code>\n\n"
-            "💡 Taklif va fikrlaringizni yuborishingiz mumkin:\n"
-            "🔗 <a href='https://t.me/shokh_smee'>@shokh_smee</a>\n\n"
-            "☕ <b>Bot foydalimi?</b> Donat qiling 👇\n"
-            "💰 <a href='https://tirikchilik.uz/shokh_smee'>tirikchilik.uz/shokh_smee</a>"
+            "╔══════════════════╗\n"
+            "  👨‍💻 <b>Shohjahon Obruyev</b>\n"
+            "╚══════════════════╝\n\n"
+            "📞 <code>+998 94 802 51 01</code>\n"
+            "🔗 <a href='https://t.me/shokh_smee'>@shokh_smee</a>\n"
+            "🌐 <i>Python • Django • Telegram Bots</i>\n\n"
+            "💡 Loyiha, buyurtma yoki hamkorlik istaysizmi?\n"
+            "Yozing — maslahat bepul!\n\n"
+            "💰 <a href='https://tirikchilik.uz/shokh_smee'>Donat orqali qo‘llab-quvvatlang</a>"
         ),
-        reply_markup=user_menu(),
-        parse_mode="HTML"
+        parse_mode="HTML",
+        reply_markup=InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="📨 Telegram orqali bog‘lanish", url="https://t.me/shokh_smee")],
+            [InlineKeyboardButton(text="☕ Donat qilish", url="https://tirikchilik.uz/shokh_smee")]
+        ])
     )
