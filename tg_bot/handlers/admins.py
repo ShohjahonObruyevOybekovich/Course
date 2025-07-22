@@ -272,6 +272,7 @@ async def start_chat_handler(call: CallbackQuery, state: FSMContext):
     await call.answer()
     user_id = int(call.data.split(":")[1])
 
+    print(user_id)
     user = CustomUser.objects.filter(chat_id=user_id).first()
     if not user:
         await call.message.answer("❌ Foydalanuvchi topilmadi.")
@@ -284,7 +285,7 @@ async def start_chat_handler(call: CallbackQuery, state: FSMContext):
         [InlineKeyboardButton(text="✍️ Javob yozish", callback_data=f"answer_chat:{call.from_user.id}")]
     ])
 
-    msg = await bot.send_message(
+    await bot.send_message(
         chat_id=user.chat_id,
         text=f"📩 Sizga admin <b>{call.from_user.full_name}</b> dan xabar bor.",
         reply_markup=markup,
@@ -314,6 +315,7 @@ async def handle_user_reply(message: Message, state: FSMContext):
     user = message.from_user
     user_text = message.text
 
+    # Admin chatiga yuboriladi
     sent_msg = await bot.send_message(
         chat_id=admin_chat_id,
         text=f"👤 <b>{user.full_name}</b> javob yozdi:",
@@ -328,9 +330,10 @@ async def handle_user_reply(message: Message, state: FSMContext):
     await message.answer("✅ Javobingiz yuborildi.")
     await state.clear()
 
-    # Set state for admin to reply back
-    await dp.fsm.storage.set_data(chat_id=admin_chat_id, user_id=admin_chat_id, data={"reply_to_chat_id": message.chat.id})
-    await dp.fsm.storage.set_state(chat_id=admin_chat_id, user_id=admin_chat_id, state=ChatState.waiting_admin_reply)
+    # Admin uchun kontekst o‘rnatamiz (context = FSMContext obj)
+    admin_ctx = dp.fsm.get_context(bot=bot, chat_id=admin_chat_id, user_id=admin_chat_id)
+    await admin_ctx.set_data({"reply_to_chat_id": message.chat.id})
+    await admin_ctx.set_state(ChatState.waiting_admin_reply)
 
 
 
@@ -342,6 +345,7 @@ async def handle_admin_reply(message: Message, state: FSMContext):
     admin = message.from_user
     admin_text = message.text
 
+    # Foydalanuvchiga yuboriladi
     sent_msg = await bot.send_message(
         chat_id=user_chat_id,
         text=f"👑 <b>{admin.full_name}</b> sizga yozdi:",
@@ -356,9 +360,10 @@ async def handle_admin_reply(message: Message, state: FSMContext):
     await message.answer("✅ Xabaringiz foydalanuvchiga yuborildi.")
     await state.clear()
 
-    # Userga javob holatini qayta tayyorlab qo‘yamiz
-    await dp.fsm.storage.set_data(chat_id=user_chat_id, user_id=user_chat_id, data={"reply_to_chat_id": message.chat.id})
-    await dp.fsm.storage.set_state(chat_id=user_chat_id, user_id=user_chat_id, state=ChatState.waiting_user_reply)
+    # User uchun qayta context ochamiz
+    user_ctx = dp.fsm.get_context(bot=bot, chat_id=user_chat_id, user_id=user_chat_id)
+    await user_ctx.set_data({"reply_to_chat_id": message.chat.id})
+    await user_ctx.set_state(ChatState.waiting_user_reply)
 
 
 
