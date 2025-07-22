@@ -45,7 +45,7 @@ async def handle_users(message: Message, state: FSMContext) -> None:
         text = "🔙 Ortga",
         callback_data="back_to_admin"
     )
-    inline_keyboard = InlineKeyboardMarkup(inline_keyboard=[[button][back]])
+    inline_keyboard = InlineKeyboardMarkup(inline_keyboard=[[button], [back]])
     await message.answer("👤 Talabalarni tanlang yoki qidiring:",
                          reply_markup=inline_keyboard)
 
