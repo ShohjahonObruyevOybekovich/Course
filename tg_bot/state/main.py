@@ -40,5 +40,8 @@ class CourseMaterials_State(StatesGroup):
 
 
 class ChatState(StatesGroup):
+    replyer = State()
+    admin_message = State()
+    waiting_message = State()
     waiting_user_reply = State()
     waiting_admin_reply = State()
