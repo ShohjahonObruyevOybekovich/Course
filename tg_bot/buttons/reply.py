@@ -35,7 +35,8 @@ def admin():
 
     return ReplyKeyboardMarkup(
         keyboard=[[k1,k2],[k3]],
-        resize_keyboard=True
+        resize_keyboard=True,
+        one_time_keyboard=True
     )
 
 

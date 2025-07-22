@@ -41,9 +41,20 @@ async def handle_users(message: Message, state: FSMContext) -> None:
         switch_inline_query_current_chat=""
         # This will be used to handle the button press
     )
-    inline_keyboard = InlineKeyboardMarkup(inline_keyboard=[[button]])
+    back = InlineKeyboardButton(
+        text = "🔙 Ortga",
+        callback_data="back_to_admin"
+    )
+    inline_keyboard = InlineKeyboardMarkup(inline_keyboard=[[button][back]])
     await message.answer("👤 Talabalarni tanlang yoki qidiring:",
                          reply_markup=inline_keyboard)
+
+
+@dp.callback_query(lambda c: c.data == "back_to_admin")
+async def back_to_admin_menu(callback: CallbackQuery, state: FSMContext):
+    await state.clear()
+    await callback.message.edit_text("🔙 Asosiy admin menyuga qaytdingiz.",reply_markup=admin())
+    return
 
 
 @dp.inline_query()
