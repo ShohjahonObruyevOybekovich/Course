@@ -17,6 +17,7 @@ class LandingPageView(TemplateView):
     template_name = "index.html"
 
 
+
 bot = Bot(TOKEN)
 
 @csrf_exempt
@@ -25,7 +26,7 @@ async def telegram_webhook(request):
         return HttpResponseBadRequest("Only POST allowed")
 
     try:
-        body = request.body
+        body = request.data
         update = Update.model_validate_json(body.decode())
     except Exception as e:
         return HttpResponseBadRequest(f"Invalid JSON: {e}")

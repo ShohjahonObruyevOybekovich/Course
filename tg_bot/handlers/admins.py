@@ -228,7 +228,7 @@ async def handle_course_selection(message: Message, state: FSMContext):
         return
 
     selected_course = courses[index]
-    student = CustomUser.objects.filter(id=user_id).first()
+    student = CustomUser.objects.filter(chat_id=user_id).first()
 
     if not student:
         await message.answer("❌ Talaba topilmadi.")
@@ -272,7 +272,7 @@ async def start_chat_handler(call: CallbackQuery, state: FSMContext):
     await call.answer()
     user_id = int(call.data.split(":")[1])
 
-    user = CustomUser.objects.filter(id=user_id).first()
+    user = CustomUser.objects.filter(chat_id=user_id).first()
     if not user:
         await call.message.answer("❌ Foydalanuvchi topilmadi.")
         return
@@ -305,6 +305,7 @@ async def user_pressed_reply(call: CallbackQuery, state: FSMContext):
     await state.update_data(reply_to_chat_id=admin_chat_id)
     await state.set_state(ChatState.waiting_user_reply)
 
+
 @dp.message(ChatState.waiting_user_reply)
 async def handle_user_reply(message: Message, state: FSMContext):
     data = await state.get_data()
@@ -330,6 +331,7 @@ async def handle_user_reply(message: Message, state: FSMContext):
     # Set state for admin to reply back
     await dp.fsm.storage.set_data(chat_id=admin_chat_id, user_id=admin_chat_id, data={"reply_to_chat_id": message.chat.id})
     await dp.fsm.storage.set_state(chat_id=admin_chat_id, user_id=admin_chat_id, state=ChatState.waiting_admin_reply)
+
 
 
 @dp.message(ChatState.waiting_admin_reply)
