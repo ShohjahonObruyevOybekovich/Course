@@ -48,24 +48,52 @@ async def handle_users(message: Message, state: FSMContext) -> None:
 
 @dp.inline_query()
 async def search_customers(inline_query: InlineQuery):
-    query = inline_query.query.strip()
-    user = CustomUser.objects.filter(role="User", full_name__icontains=query).all()
+    raw_query = inline_query.query.strip()
+
+    # Default pagination
+    page = 1
+    page_size = 50
+
+    if "#page=" in raw_query:
+        try:
+            query_part, page_str = raw_query.split("#page=")
+            page = int(page_str)
+            query = query_part.strip()
+        except Exception:
+            query = raw_query
+    else:
+        query = raw_query
+
+    offset = (page - 1) * page_size
+    users = CustomUser.objects.filter(role="User", full_name__icontains=query)[offset:offset + page_size]
 
     results = []
-    for installment in user:
+    for user in users:
         results.append(
             InlineQueryResultArticle(
-                id=str(installment.chat_id),
-                title=f"{installment.full_name} ({installment.phone})",
+                id=str(user.chat_id),
+                title=f"{user.full_name} ({user.phone})",
                 input_message_content=InputTextMessageContent(
-                    message_text=f"👤 Tanlangan talaba:\nID: {installment.chat_id} \n{installment.full_name} ({installment.phone})"
+                    message_text=f"👤 Tanlangan talaba:\nID: {user.chat_id} \n{user.full_name} ({user.phone})"
                 ),
-                description="Talaba haqida ma'lumotni ko'rish"
+                description="Talaba haqida ma'lumot"
             )
         )
 
-    await inline_query.answer(results, cache_time=0, is_personal=True)
+    # Add "Next page" dummy result
+    if users.count() == page_size:
+        results.append(
+            InlineQueryResultArticle(
+                id=f"next-page-{page + 1}",
+                title=f"➡️ Show more results (Page {page + 1})",
+                input_message_content=InputTextMessageContent(
+                    message_text=f"Type: <code>{query} #page={page + 1}</code>"
+                ),
+                description="Click to copy pagination query",
+            )
+        )
 
+    await inline_query.answer(results[:50], cache_time=0, is_personal=True)
 
 
 @dp.message(User.user)
