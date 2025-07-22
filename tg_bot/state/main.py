@@ -36,3 +36,9 @@ class CourseMaterials_State(StatesGroup):
     file_id = State()
     name = State()
     description = State()
+    select_course = State()
+
+
+class ChatState(StatesGroup):
+    waiting_user_reply = State()
+    waiting_admin_reply = State()

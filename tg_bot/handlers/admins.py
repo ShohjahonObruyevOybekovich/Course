@@ -4,17 +4,19 @@ from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, \
     InlineQuery, InlineQueryResultArticle, InputTextMessageContent, CallbackQuery, ReplyKeyboardMarkup, KeyboardButton
 from asgiref.sync import sync_to_async
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.timezone import now
 from icecream import ic
 
 from account.models import CustomUser
+from course.models import Course
 from dispatcher import dp, TOKEN
 from idioms.models import MaterialsCategories, Materials
 from shop.models import Product, Order
 from studentcourse.models import StudentCourse
-from tg_bot.buttons.inline import start_btn
+from tg_bot.buttons.inline import start_btn, admin_student_chat
 from tg_bot.buttons.reply import phone_number_btn, results, admin, user_menu, materials_category, back
 from tg_bot.buttons.text import start_txt, natija_txt
-from tg_bot.state.main import User, Materials_State, CourseMaterials_State
+from tg_bot.state.main import User, Materials_State, CourseMaterials_State, ChatState
 from tg_bot.utils import format_phone_number
 from theme.models import ThemeExamples
 from transaction.models import Transaction
@@ -37,9 +39,8 @@ async def admin_btn(message: Message):
 async def handle_users(message: Message, state: FSMContext) -> None:
     await state.set_state(User.user)
     button = InlineKeyboardButton(
-        text="Qidirish 🔍",  # Button text
+        text="Qidirish 🔍",
         switch_inline_query_current_chat=""
-        # This will be used to handle the button press
     )
     back = InlineKeyboardButton(
         text = "🔙 Ortga",
@@ -51,22 +52,22 @@ async def handle_users(message: Message, state: FSMContext) -> None:
 
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-@dp.message(F.text.startswith("loc:"))
-async def send_maps_button(message: Message):
-    try:
-        # coords = message.text[4:].strip().split(",")
-        lat, lon = float(39.954143), float(65.890482)
-        url = f"https://www.google.com/maps?q={lat},{lon}"
-
-        keyboard = InlineKeyboardMarkup(
-            inline_keyboard=[[
-                InlineKeyboardButton(text="📍 Ko'rish Google Maps’da", url=url)
-            ]]
-        )
-        await message.answer_location(latitude=lat, longitude=lon)
-        # await message.answer("Tanlangan lokatsiya:", reply_markup=keyboard)
-    except Exception:
-        await message.answer("❌ Noto‘g‘ri format. Foydalanish: loc:41.2995,69.2401")
+# @dp.message(F.text.startswith("loc:"))
+# async def send_maps_button(message: Message):
+#     try:
+#         # coords = message.text[4:].strip().split(",")
+#         lat, lon = float(39.954143), float(65.890482)
+#         url = f"https://www.google.com/maps?q={lat},{lon}"
+#
+#         keyboard = InlineKeyboardMarkup(
+#             inline_keyboard=[[
+#                 InlineKeyboardButton(text="📍 Ko'rish Google Maps’da", url=url)
+#             ]]
+#         )
+#         await message.answer_location(latitude=lat, longitude=lon)
+#         # await message.answer("Tanlangan lokatsiya:", reply_markup=keyboard)
+#     except Exception:
+#         await message.answer("❌ Noto‘g‘ri format. Foydalanish: loc:41.2995,69.2401")
 
 @dp.callback_query(lambda c: c.data == "back_to_admin")
 async def back_to_admin_menu(callback: CallbackQuery, state: FSMContext):
@@ -127,48 +128,237 @@ async def search_customers(inline_query: InlineQuery):
 
 @dp.message(User.user)
 async def handle_customer_selection(message: Message, state: FSMContext):
-
     parts = message.text.split()
     if "ID:" in parts:
-        phone_index = parts.index("ID:")
-        user_id: int = parts[phone_index + 1]
-        user = CustomUser.objects.filter(chat_id=user_id).first()
+        try:
+            phone_index = parts.index("ID:")
+            user_id: int = int(parts[phone_index + 1])
+        except (ValueError, IndexError):
+            await message.answer("❌ Noto‘g‘ri format. Iltimos, ID ni to‘g‘ri kiriting.")
+            return
 
+        user = CustomUser.objects.filter(chat_id=user_id).first()
         if not user:
             await message.answer("❌ Bunday foydalanuvchi topilmadi.")
             await state.clear()
             return
 
-        courses = StudentCourse.objects.filter(user=user).all()
-        if not courses:
-            await message.answer("❌ Talaba uchun hech qanday kurs topilmadi.")
-            await state.clear()
-            return
+        courses = StudentCourse.objects.filter(user=user)
+        if courses.exists():
+            transaction = Transaction.objects.filter(user=user).first()
+            status = transaction.status if transaction else None
+            status_txt = (
+                "To'lov kutilmoqda" if status == "Pending"
+                else "To'lov amalga oshirilgan" if status == "Accepted"
+                else "To'lov bekor qilingan" if status == "Rejected"
+                else "Holat mavjud emas"
+            )
 
-        transaction = Transaction.objects.filter(user=user).first()
-        status = transaction.status if transaction else None
-        status_txt = (
-            "To'lov kutilmoqda" if status == "Pending"
-            else "To'lov amalga oshirilgan" if status == "Accepted"
-            else "To'lov bekor qilingan" if status == "Rejected"
-            else "Holat mavjud emas"
-        )
+            caption_text = "\n\n".join(
+                "\n".join([
+                    "📋 <b>Talabaning kursi</b>\n",
+                    f"👤 <b>Talaba ismi:</b> {user.full_name}",
+                    f"📞 <b>Telefon raqami:</b> {user.phone or 'Nomaʼlum'}",
+                    f"🎯 <b>Kursi:</b> {course.course.name if course.course.name else 'Nomaʼlum'}",
+                    f"💵 <b>Kurs summasi:</b> {course.course.price or 0}",
+                    f"⚙️ <b>Kurs holati:</b> {status_txt}",
+                    f"🕒 <b>Sotib olgan vaqti:</b> {course.created_at.strftime('%d.%m.%Y %H:%M')}"
+                ])
+                for course in courses
+            )
 
-        caption_text = "\n\n".join(
-            "\n".join([
-                "📋 <b>Talabaning kursi</b>\n",
-                f"👤 <b>Talaba ismi:</b> {user.full_name}",
-                f"📞 <b>Telefon raqami:</b> {user.phone if user.phone else 'Nomaʼlum'}",
-                f"🎯 <b>Kursi:</b> {course.course.name if course.course.name else 'Nomaʼlum'}",
-                f"💵 <b>Kurs summasi:</b> {course.course.price or 0}",
-                f"⚙️ <b>Kurs holati:</b> {status_txt}",
-                f"🕒 <b>Sotib olgan vaqti:</b> {course.created_at.strftime('%d.%m.%Y %H:%M')}"
+            await message.answer(text=caption_text, reply_markup=admin(), parse_mode="HTML")
+
+        else:
+            # ❗ If student has no course, show general info
+            info_text = "\n".join([
+                "📋 <b>Talaba maʼlumotlari</b>",
+                f"🆔 <b>ID:</b> {user.id}",
+                f"💬 <b>Chat ID:</b> {user.chat_id}",
+                f"👤 <b>F.I.O:</b> {user.full_name}",
+                f"📞 <b>Telefon:</b> {user.phone or 'Nomaʼlum'}",
+                f"🕒 <b>Roʻyxatdan oʻtgan:</b> {user.created_at.strftime('%d.%m.%Y %H:%M')}"
             ])
-            for course in courses
-        )
 
-        await message.answer(text=caption_text, reply_markup=admin(), parse_mode="HTML")
+            await message.answer(text=info_text, reply_markup=admin_student_chat(user.chat_id), parse_mode="HTML")
+
         await state.clear()
+
+
+
+# Bosqich 1: Callback handler
+@dp.callback_query(lambda call: call.data.startswith("add_course:"))
+async def add_course_handler(call: CallbackQuery, state: FSMContext):
+    await call.message.delete()  # ❌ Inline buttonni o‘chirish
+
+    user_id = int(call.data.split(":")[1])
+    await state.update_data(user_id=user_id)  # 👈 user_id ni state ga saqlaymiz
+
+    # Kurslarni reply tanlashi uchun chiqaramiz
+    courses = Course.objects.all()
+    if not courses.exists():
+        await call.message.answer("❌ Hech qanday kurs mavjud emas.")
+        return
+
+    course_list = "\n".join(
+        [f"{i + 1}. {course.name} - {course.price} soʻm" for i, course in enumerate(courses)]
+    )
+    await call.message.answer(
+        f"<b>📚 Mavjud kurslar:</b>\n{course_list}\n\n"
+        "❗Iltimos, yuqoridagi kurslardan birining raqamini yuboring (masalan: <code>2</code>)",
+        parse_mode="HTML"
+    )
+    await state.set_state(CourseMaterials_State.select_course)
+
+
+# Bosqich 2: Kurs tanlash
+@dp.message(CourseMaterials_State.select_course)
+async def handle_course_selection(message: Message, state: FSMContext):
+    state_data = await state.get_data()
+    user_id = state_data.get("user_id")
+    if not user_id:
+        await message.answer("❌ Avval foydalanuvchi tanlang.")
+        return
+
+    courses = list(Course.objects.all())
+    index = int(message.text.strip()) - 1
+
+    if index < 0 or index >= len(courses):
+        await message.answer("❌ Noto‘g‘ri kurs raqami. Qaytadan urinib ko‘ring.")
+        return
+
+    selected_course = courses[index]
+    student = CustomUser.objects.filter(id=user_id).first()
+
+    if not student:
+        await message.answer("❌ Talaba topilmadi.")
+        await state.clear()
+        return
+
+    # 🔄 Yangi StudentCourse yaratamiz
+    StudentCourse.objects.create(
+        user=student,
+        course=selected_course,
+        created_at=now()
+    )
+
+    # 🎉 Foydalanuvchiga yuboriladi
+    await message.answer(
+        f"✅ <b>{student.full_name}</b> quyidagi kursga muvaffaqiyatli qo‘shildi:\n\n"
+        f"📚 <b>Kurs nomi:</b> {selected_course.name}\n"
+        f"💵 <b>Narxi:</b> {selected_course.price} so‘m",
+        parse_mode="HTML"
+    )
+
+    # 📨 Talabani o‘ziga yuboriladi
+    try:
+        await bot.send_message(
+            chat_id=student.chat_id,
+            text=(
+                f"🎉 Siz <b>{selected_course.name}</b> kursiga qo‘shildingiz!\n\n"
+                f"💰 Kurs narxi: {selected_course.price} so‘m\n"
+                f"🕒 Ro‘yxatdan o‘tgan vaqt: {now().strftime('%d.%m.%Y %H:%M')}"
+            ),
+            parse_mode="HTML"
+        )
+    except Exception as e:
+        await message.answer("⚠️ Foydalanuvchiga xabar yuborilmadi (chat_id yo‘q yoki bloklangan).")
+
+    await state.clear()
+
+
+@dp.callback_query(lambda call: call.data.startswith("start_chat:"))
+async def start_chat_handler(call: CallbackQuery, state: FSMContext):
+    await call.answer()
+    user_id = int(call.data.split(":")[1])
+
+    user = CustomUser.objects.filter(id=user_id).first()
+    if not user:
+        await call.message.answer("❌ Foydalanuvchi topilmadi.")
+        return
+
+    await state.clear()  # Clear any old state
+
+    # Userga yuborish
+    markup = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="✍️ Javob yozish", callback_data=f"answer_chat:{call.from_user.id}")]
+    ])
+
+    msg = await bot.send_message(
+        chat_id=user.chat_id,
+        text=f"📩 Sizga admin <b>{call.from_user.full_name}</b> dan xabar bor.",
+        reply_markup=markup,
+        parse_mode="HTML"
+    )
+
+    # Adminni ogohlantirish
+    await call.message.answer(f"🟢 Chat boshlatildi: {user.full_name}")
+
+
+@dp.callback_query(lambda call: call.data.startswith("answer_chat:"))
+async def user_pressed_reply(call: CallbackQuery, state: FSMContext):
+    await call.answer()
+    admin_chat_id = int(call.data.split(":")[1])
+    await call.message.delete()
+
+    await call.message.answer("✍️ Xabaringizni yozing:")
+    await state.update_data(reply_to_chat_id=admin_chat_id)
+    await state.set_state(ChatState.waiting_user_reply)
+
+@dp.message(ChatState.waiting_user_reply)
+async def handle_user_reply(message: Message, state: FSMContext):
+    data = await state.get_data()
+    admin_chat_id = data["reply_to_chat_id"]
+
+    user = message.from_user
+    user_text = message.text
+
+    sent_msg = await bot.send_message(
+        chat_id=admin_chat_id,
+        text=f"👤 <b>{user.full_name}</b> javob yozdi:",
+        parse_mode="HTML"
+    )
+    await bot.send_message(
+        chat_id=admin_chat_id,
+        text=user_text,
+        reply_to_message_id=sent_msg.message_id
+    )
+
+    await message.answer("✅ Javobingiz yuborildi.")
+    await state.clear()
+
+    # Set state for admin to reply back
+    await dp.fsm.storage.set_data(chat_id=admin_chat_id, user_id=admin_chat_id, data={"reply_to_chat_id": message.chat.id})
+    await dp.fsm.storage.set_state(chat_id=admin_chat_id, user_id=admin_chat_id, state=ChatState.waiting_admin_reply)
+
+
+@dp.message(ChatState.waiting_admin_reply)
+async def handle_admin_reply(message: Message, state: FSMContext):
+    data = await state.get_data()
+    user_chat_id = data["reply_to_chat_id"]
+
+    admin = message.from_user
+    admin_text = message.text
+
+    sent_msg = await bot.send_message(
+        chat_id=user_chat_id,
+        text=f"👑 <b>{admin.full_name}</b> sizga yozdi:",
+        parse_mode="HTML"
+    )
+    await bot.send_message(
+        chat_id=user_chat_id,
+        text=admin_text,
+        reply_to_message_id=sent_msg.message_id
+    )
+
+    await message.answer("✅ Xabaringiz foydalanuvchiga yuborildi.")
+    await state.clear()
+
+    # Userga javob holatini qayta tayyorlab qo‘yamiz
+    await dp.fsm.storage.set_data(chat_id=user_chat_id, user_id=user_chat_id, data={"reply_to_chat_id": message.chat.id})
+    await dp.fsm.storage.set_state(chat_id=user_chat_id, user_id=user_chat_id, state=ChatState.waiting_user_reply)
+
+
 
 
 @dp.callback_query(lambda c: c.data.startswith("accepted:") or c.data.startswith("cancelled:"))

@@ -46,6 +46,14 @@ def course_navigation_buttons(index: int, total: int, course_id: int):
     ])
 
 
+def admin_student_chat(chat_id):
+    add_course = InlineKeyboardButton(text="➕ Kurs qo‘shish", callback_data=f"add_course:{chat_id}")
+    start_chat = InlineKeyboardButton(text="💬 Maxfiy chat", callback_data=f"start_chat:{chat_id}")
+    back = InlineKeyboardButton(text="🔙 Ortga", callback_data="back")
+
+    return InlineKeyboardMarkup(inline_keyboard=[[add_course], [start_chat], [back]])
+
+
 def admin_accept(chat_id):
     accept = InlineKeyboardButton(text="✅ To'lovni tasdiqlash", callback_data=f"accepted:{chat_id}")
     cancel = InlineKeyboardButton(text = "🗑 To'lovni bekor qilish", callback_data=f"cancelled:{chat_id}")
