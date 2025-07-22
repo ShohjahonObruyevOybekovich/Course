@@ -63,8 +63,8 @@ async def send_maps_button(message: Message):
                 InlineKeyboardButton(text="📍 Ko'rish Google Maps’da", url=url)
             ]]
         )
-
-        await message.answer("Tanlangan lokatsiya:", reply_markup=keyboard)
+        await message.answer_location(latitude=lat, longitude=lon)
+        # await message.answer("Tanlangan lokatsiya:", reply_markup=keyboard)
     except Exception:
         await message.answer("❌ Noto‘g‘ri format. Foydalanish: loc:41.2995,69.2401")
 
