@@ -49,6 +49,24 @@ async def handle_users(message: Message, state: FSMContext) -> None:
     await message.answer("👤 Talabalarni tanlang yoki qidiring:",
                          reply_markup=inline_keyboard)
 
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+
+@dp.message(F.text.startswith("loc:"))
+async def send_maps_button(message: Message):
+    try:
+        # coords = message.text[4:].strip().split(",")
+        lat, lon = float(39.954143), float(65.890482)
+        url = f"https://www.google.com/maps?q={lat},{lon}"
+
+        keyboard = InlineKeyboardMarkup(
+            inline_keyboard=[[
+                InlineKeyboardButton(text="📍 Ko'rish Google Maps’da", url=url)
+            ]]
+        )
+
+        await message.answer("Tanlangan lokatsiya:", reply_markup=keyboard)
+    except Exception:
+        await message.answer("❌ Noto‘g‘ri format. Foydalanish: loc:41.2995,69.2401")
 
 @dp.callback_query(lambda c: c.data == "back_to_admin")
 async def back_to_admin_menu(callback: CallbackQuery, state: FSMContext):
