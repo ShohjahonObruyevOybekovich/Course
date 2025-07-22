@@ -218,7 +218,7 @@ async def handle_course_navigation(call: CallbackQuery, state: FSMContext):
 
 
     elif call.data.startswith("payment_"):
-        await call.message.delete()
+        # await call.message.delete()
         course_id = str(call.data.split("_")[1])
 
         await state.update_data(course=course_id)
