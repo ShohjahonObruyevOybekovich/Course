@@ -1,13 +1,14 @@
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
+from math import ceil
+from uuid import UUID
+
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import WebAppInfo
 from decouple import config
 
 from course.models import Course
 from studentcourse.models import StudentCourse, UserTasks
 from theme.models import Theme, ThemeAttendance
 from transaction.models import Transaction
-from math import ceil
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from theme.models import Theme, ThemeAttendance
 
 
 def degree():
@@ -32,7 +33,7 @@ def start_btn(link):
 def course_navigation_buttons(index: int, total: int, course_id: int):
     left = InlineKeyboardButton(text="⬅️", callback_data=f"left_{index}")
     right = InlineKeyboardButton(text="➡️", callback_data=f"right_{index}")
-    examples = InlineKeyboardButton(text="📒 Darslardan parchalar",callback_data=f"examples_{course_id}")
+    examples = InlineKeyboardButton(text="📒 Darslardan parchalar", callback_data=f"examples_{course_id}")
     payment = InlineKeyboardButton(text="💳 Sotib olish", callback_data=f"payment_{course_id}")
     back = InlineKeyboardButton(text="🔙 Ortga", callback_data="back")
 
@@ -56,7 +57,7 @@ def admin_student_chat(chat_id):
 
 def admin_accept(chat_id):
     accept = InlineKeyboardButton(text="✅ To'lovni tasdiqlash", callback_data=f"accepted:{chat_id}")
-    cancel = InlineKeyboardButton(text = "🗑 To'lovni bekor qilish", callback_data=f"cancelled:{chat_id}")
+    cancel = InlineKeyboardButton(text="🗑 To'lovni bekor qilish", callback_data=f"cancelled:{chat_id}")
     return InlineKeyboardMarkup(inline_keyboard=[[accept], [cancel]])
 
 
@@ -254,13 +255,12 @@ def get_theme_buttons(theme_id: str, user_chat_id: int) -> InlineKeyboardMarkup:
     )
 
 
-
-def order_accept(product,user):
+def order_accept(product, user):
     accept_button = InlineKeyboardButton(
-        text="✅ Tasdiqlash",callback_data=f"ac_{product.id}_{user.id}"
+        text="✅ Tasdiqlash", callback_data=f"ac_{product.id}_{user.id}"
     )
     cancel_button = InlineKeyboardButton(
-        text=":❌ Bekor qilish",callback_data=f"can_{product.id}_{user.id}"
+        text=":❌ Bekor qilish", callback_data=f"can_{product.id}_{user.id}"
     )
     return InlineKeyboardMarkup(
         inline_keyboard=[
@@ -270,11 +270,11 @@ def order_accept(product,user):
 
 
 def return_theme(theme):
-    theme = InlineKeyboardButton(
-        text="↩️ Mavzuga qaytish", callback_data=f"lesson_{theme.id}"
+    theme_id = theme if isinstance(theme, UUID) else theme.id
+
+    button = InlineKeyboardButton(
+        text="↩️ Mavzuga qaytish", callback_data=f"lesson_{theme_id}"
     )
     return InlineKeyboardMarkup(
-        inline_keyboard=[
-            [theme],
-        ]
+        inline_keyboard=[[button]]
     )

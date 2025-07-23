@@ -153,6 +153,9 @@ async def handle_voice(message: Message, state: FSMContext):
     user = CustomUser.objects.filter(chat_id=user_id).first()
 
     formate = ""
+
+    print(theme)
+
     if feedback:
         formate = format_sriben_result(feedback)
         ball = feedback.get("gesamtpunktzahl")
