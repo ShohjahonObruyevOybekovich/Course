@@ -9,7 +9,7 @@ from course.models import Course
 from studentcourse.models import StudentCourse, UserTasks
 from theme.models import Theme, ThemeAttendance
 from transaction.models import Transaction
-
+from urllib.parse import quote_plus
 
 def degree():
     payment_date = InlineKeyboardButton(text="✏️ Sanani o'zgartirish", callback_data="Sanani o'zgartirish")
@@ -285,4 +285,12 @@ def post_review_buttons():
         [InlineKeyboardButton(text="✏️ O'zgartirish", callback_data="edit_post")],
         [InlineKeyboardButton(text="✅ Yuborish", callback_data="send_post")],
         [InlineKeyboardButton(text="❌ O'chirish", callback_data="delete_post")]
+    ])
+
+
+def referral_buttons(ref_link: str):
+    text = "Zo‘r bot! Mana havola 👇"
+    share_url = f"https://t.me/share/url?url={quote_plus(ref_link)}&text={quote_plus(text)}"
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="📨 Do‘stga yuborish", url=share_url)]
     ])

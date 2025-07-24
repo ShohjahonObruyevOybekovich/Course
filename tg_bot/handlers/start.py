@@ -33,22 +33,44 @@ card_name = config("CARD_NAME")
 
 
 # /start handler
-@dp.message(F.text == "/start")
+@dp.message(F.text.startswith("/start"))
 async def command_start_handler(message: Message, state: FSMContext) -> None:
     await state.clear()
 
-    # 🔁 Step 2: User registration and role-based greeting
+    # 🔁 Referral code (agar mavjud bo‘lsa)
+    args = message.text.split(" ")
+    ref_code = args[1] if len(args) > 1 else None
+
     user = CustomUser.objects.filter(chat_id=message.from_user.id).first()
 
+    # 🆕 Yangi user ro'yxatdan o'tadi
     if not user:
-        CustomUser.objects.create(
+        referer = None
+        if ref_code:
+            referer = CustomUser.objects.filter(referral_code=ref_code).first()
+            if referer and referer.chat_id == message.from_user.id:
+                referer = None  # o'ziga o'zi referral qila olmaydi
+
+        new_user = CustomUser.objects.create(
             chat_id=message.from_user.id,
             full_name=message.from_user.full_name,
+            referred_by=referer
         )
+
+        if referer:
+            await message.bot.send_message(
+                referer.chat_id,
+                f"🎉 Yangi foydalanuvchi siz orqali qo‘shildi: {new_user.full_name}!"
+            )
+            await message.answer("🤝 Siz referral havola orqali kirgansiz. Rahmat!")
+        else:
+            await message.answer("👋 Xush kelibsiz!")
+
         await message.answer(start_txt)
         await state.set_state(User.full_name)
         return
 
+    # 🔐 ADMIN
     if user.role == "Admin":
         await message.answer(
             text="🔐 *Admin bo‘limiga hush kelibsiz!* 👋\nSizda to‘liq boshqaruv huquqlari mavjud.",
@@ -57,7 +79,6 @@ async def command_start_handler(message: Message, state: FSMContext) -> None:
         )
     else:
         await message.answer(natija_txt, reply_markup=user_menu())
-
 
 @dp.message(User.full_name)
 async def user_lang_handler(message: Message, state: FSMContext):

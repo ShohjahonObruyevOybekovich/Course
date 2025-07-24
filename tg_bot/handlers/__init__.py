@@ -4,3 +4,4 @@ from tg_bot.handlers.start import *
 from tg_bot.handlers.schreiben import *
 from tg_bot.handlers.sprechen import *
 from tg_bot.handlers.shop import *
+from tg_bot.handlers.referals import *
