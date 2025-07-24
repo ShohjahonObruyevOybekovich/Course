@@ -278,3 +278,11 @@ def return_theme(theme):
     return InlineKeyboardMarkup(
         inline_keyboard=[[button]]
     )
+
+
+def post_review_buttons():
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="✏️ O'zgartirish", callback_data="edit_post")],
+        [InlineKeyboardButton(text="✅ Yuborish", callback_data="send_post")],
+        [InlineKeyboardButton(text="❌ O'chirish", callback_data="delete_post")]
+    ])

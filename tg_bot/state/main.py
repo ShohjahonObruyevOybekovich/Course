@@ -45,3 +45,11 @@ class ChatState(StatesGroup):
     waiting_message = State()
     waiting_user_reply = State()
     waiting_admin_reply = State()
+
+
+
+class PostState(StatesGroup):
+    image = State()
+    body = State()
+    review = State()
+    editing = State()

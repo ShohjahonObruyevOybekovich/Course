@@ -1,4 +1,5 @@
 from aiogram import Bot, F
+from aiogram.exceptions import TelegramForbiddenError, TelegramBadRequest
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, \
     InlineQuery, InlineQueryResultArticle, InputTextMessageContent, CallbackQuery, ReplyKeyboardMarkup, KeyboardButton
@@ -13,10 +14,10 @@ from dispatcher import dp, TOKEN
 from idioms.models import MaterialsCategories, Materials
 from shop.models import Product, Order
 from studentcourse.models import StudentCourse
-from tg_bot.buttons.inline import start_btn, admin_student_chat
-from tg_bot.buttons.reply import phone_number_btn, results, admin, user_menu, materials_category, back
+from tg_bot.buttons.inline import start_btn, admin_student_chat, post_review_buttons
+from tg_bot.buttons.reply import phone_number_btn, results, admin, user_menu, materials_category, back, skip
 from tg_bot.buttons.text import start_txt, natija_txt
-from tg_bot.state.main import User, Materials_State, CourseMaterials_State, ChatState
+from tg_bot.state.main import User, Materials_State, CourseMaterials_State, ChatState, PostState
 from tg_bot.utils import format_phone_number
 from theme.models import ThemeExamples
 from transaction.models import Transaction
@@ -655,4 +656,181 @@ async def example_materials_description_handler(message: Message, state: FSMCont
         if message:
             await message.answer("📒 Qo'shimcha Video yuklash yakunlandi.",reply_markup=admin())
     await state.clear()
+
+
+
+@dp.message(lambda msg : msg.text == "✍️ Post yuborish")
+async def send_post(message: Message, state: FSMContext):
+    await message.answer(
+        text="Post yuborish uchun avallar post uchun biriktiriladigan rasm yoki video ni yuboring yoki utkazib yuborish ni bosing.",
+        reply_markup=skip()
+    )
+    await state.set_state(PostState.image)
+
+
+
+@dp.message(PostState.image)
+async def send_post_image(message: Message, state: FSMContext):
+    data = await state.get_data()
+
+    if message.text and message.text == "🌫 O'tkazib yuborish":
+        data["image"] = None
+        await state.update_data(image=None)
+        await message.answer("Endi post uchun matnni yuboring:")
+        await state.set_state(PostState.body)
+        return
+
+    elif message.photo:
+        photo = message.photo[-1]  # eng sifatli variant
+        file_id = photo.file_id
+        await state.update_data(image=file_id)
+        await message.answer("Rasm qabul qilindi ✅ Endi post matnini yuboring:")
+        await state.set_state(PostState.body)
+        return
+
+    elif message.video:
+        video = message.video
+        file_id = video.file_id
+        await state.update_data(image=file_id)
+        await message.answer("Video qabul qilindi ✅ Endi post matnini yuboring:")
+        await state.set_state(PostState.body)
+        return
+
+    else:
+        await message.answer("Faqat rasm yoki video yuboring. Yoki \"🌫 O'tkazib yuborish\" tugmasini bosing.")
+        # Holatni saqlaymiz, boshqa holatga o'tkazmaymiz
+
+
+@dp.message(PostState.body)
+async def get_post_body(message: Message, state: FSMContext):
+    await state.update_data(body=message.text)
+    data = await state.get_data()
+    image = data.get("image")
+    body = data.get("body")
+
+    if image is None:
+        await message.answer(body, reply_markup=post_review_buttons())
+    else:
+        try:
+            await message.bot.send_photo(
+                chat_id=message.chat.id,
+                photo=image,
+                caption=body,
+                reply_markup=post_review_buttons()
+            )
+        except:
+            await message.bot.send_video(
+                chat_id=message.chat.id,
+                video=image,
+                caption=body,
+                reply_markup=post_review_buttons()
+            )
+
+    await state.set_state(PostState.review)
+
+
+
+@dp.callback_query(F.data == "edit_post")
+async def edit_post(call: CallbackQuery, state: FSMContext):
+    await call.message.edit_reply_markup()
+    await call.message.answer("Nimani o'zgartirmoqchisiz?", reply_markup=InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="🖼 Rasm/Video", callback_data="edit_image")],
+        [InlineKeyboardButton(text="📝 Matn", callback_data="edit_body")],
+        [InlineKeyboardButton(text="↩️ Orqaga", callback_data="review_back")]
+    ]))
+    await state.set_state(PostState.editing)
+
+
+@dp.callback_query(F.data == "edit_image")
+async def edit_image_prompt(call: CallbackQuery, state: FSMContext):
+    await call.message.edit_reply_markup()
+    await call.message.answer("Yangi rasm yoki video yuboring.")
+    await state.set_state(PostState.image)
+
+
+@dp.callback_query(F.data == "edit_body")
+async def edit_body_prompt(call: CallbackQuery, state: FSMContext):
+    await call.message.edit_reply_markup()
+    await call.message.answer("Yangi matnni yuboring:")
+    await state.set_state(PostState.body)
+
+
+@dp.callback_query(F.data == "review_back")
+async def return_to_review(call: CallbackQuery, state: FSMContext):
+    data = await state.get_data()
+    image = data.get("image")
+    body = data.get("body")
+
+    await call.message.delete()
+
+    if image is None:
+        await call.message.answer(body, reply_markup=post_review_buttons())
+    else:
+        try:
+            await call.bot.send_photo(
+                chat_id=call.message.chat.id,
+                photo=image,
+                caption=body,
+                reply_markup=post_review_buttons()
+            )
+        except:
+            await call.bot.send_video(
+                chat_id=call.message.chat.id,
+                video=image,
+                caption=body,
+                reply_markup=post_review_buttons()
+            )
+
+    await state.set_state(PostState.review)
+
+
+@dp.callback_query(F.data == "send_post")
+async def send_final_post(call: CallbackQuery, state: FSMContext):
+    data = await state.get_data()
+    image = data.get("image")
+    body = data.get("body")
+
+    success_count = 0
+    failed_count = 0
+
+    users = CustomUser.objects.filter(is_blocked=False)  # faqat aktivlar
+
+    for user in users:
+        try:
+            if image is None:
+                await call.bot.send_message(chat_id=user.chat_id, text=body)
+            else:
+                try:
+                    await call.bot.send_photo(chat_id=user.chat_id, photo=image, caption=body)
+                except:
+                    await call.bot.send_video(chat_id=user.chat_id, video=image, caption=body)
+
+            success_count += 1
+
+        except (TelegramForbiddenError, TelegramBadRequest):
+            # user botni block qilgan yoki chat yo'q
+            failed_count += 1
+            CustomUser.objects.filter(chat_id=user.chat_id).update(is_blocked=True)
+
+        except Exception as e:
+            # boshqa xatoliklar
+            print(f"Failed to send to {user.chat_id}: {e}")
+            failed_count += 1
+
+    # Inline tugmalarni olib tashlash
+    await call.message.edit_reply_markup()
+
+    # Natija xabari
+    await call.message.answer(
+        f"✅ Post yuborildi!\n\n📬 Yuborilgan: {success_count} ta\n⛔️ Yuborilmadi (bloklangan yoki chat yo‘q): {failed_count} ta",reply_markup=admin()
+    )
+
+    await state.clear()
+
+
+@dp.callback_query(F.data == "delete_post")
+async def delete_post(call: CallbackQuery, state: FSMContext):
+    await state.clear()
+    await call.message.edit_reply_markup()
+    await call.message.answer("🗑 Post o'chirildi.",reply_markup=admin())
 

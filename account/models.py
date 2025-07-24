@@ -37,6 +37,8 @@ class CustomUser(AbstractUser):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
+    is_blocked = models.BooleanField(default=False, help_text="Is this user is blocked?")
+
     USERNAME_FIELD = 'phone'
     # REQUIRED_FIELDS = ['phone']
 
