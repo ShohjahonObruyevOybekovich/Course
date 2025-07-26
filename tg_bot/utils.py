@@ -8,20 +8,25 @@ from decouple import config
 BOT_TOKEN=config("BOT_TOKEN")
 
 def format_phone_number(phone_number: str) -> str:
+    # Remove all non-digits
+    cleaned = ''.join(c for c in phone_number if c.isdigit())
 
-    phone_number = ''.join(c for c in phone_number if c.isdigit())
+    # Log what came in
+    print(f"📞 Received raw number: {phone_number}, cleaned: {cleaned}")
 
-    # Prepend +998 if missing
-    if phone_number.startswith('998'):
-        phone_number = '+' + phone_number
-    elif not phone_number.startswith('+998'):
-        phone_number = '+998' + phone_number
-
-    # Check final phone number length
-    if len(phone_number) == 13:
-        return phone_number
+    # Add +998 if needed
+    if cleaned.startswith('998'):
+        formatted = '+' + cleaned
+    elif len(cleaned) == 9 and cleaned.startswith('9'):
+        # assume local number like '901234567'
+        formatted = '+998' + cleaned
     else:
-        raise ValueError("Invalid phone number length")
+        raise ValueError(f"Invalid phone number length or format: {phone_number}")
+
+    if len(formatted) != 13:
+        raise ValueError(f"Invalid phone number length after formatting: {formatted}")
+
+    return formatted
 
 
 def extract_and_split_init_data(init_data: str):
